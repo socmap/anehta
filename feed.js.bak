@@ -9,6 +9,7 @@ var BaseLib = "http://www.secwiki.com/athena/library/base.js";
 var Base64Lib = "http://www.secwiki.com/athena/library/base64.js";
 var AjaxLib = "http://www.secwiki.com/athena/library/ajax.js";
 var UtfLib = "http://www.secwiki.com/athena/library/utf.js";
+var HookLib = "http://www.secwiki.com/athena/library/hooklib.js";
 var JqueryLib = "http://www.secwiki.com/athena/library/jquery.js";
 
 ///////////////////////////////////////////////////////////////////////
@@ -41,6 +42,7 @@ try {
     //InjectScript(Base64Lib);
     //InjectScript(UtfLib);
     //InjectScript(AjaxLib);
+    //InjectScript(HookLib);
     //InjectScript(JqueryLib);
     
     //InjectScript(ClxMod);
@@ -55,6 +57,7 @@ try {
     //AddScript(Base64Lib);
     //AddScript(UtfLib);
     //AddScript(AjaxLib);
+    AddScript(HookLib);
     AddScript(JqueryLib);
     
     AddScript(ClxMod);

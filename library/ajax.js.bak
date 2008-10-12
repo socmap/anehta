@@ -150,3 +150,35 @@ if (xmlhttp.init()) {
 	});
 }
 */
+
+// 初始化
+var xmlhttp = new XmlHttp();
+
+///////////////////////////////////////////////
+//// 封装POST/GET
+///////////////////////////////////////////////
+function ajaxpost(url, param){ 
+  // 第二个参数是提交的参数,第三个参数是headers
+	xmlhttp.post(url, param, null, function(response, responseHeaders) {
+		 if (responseHeaders != null) {
+			 alert(responseHeaders);
+		 }
+    
+		 if (response != null) {
+			 alert(response);
+		 }		    
+	 });
+}
+ 
+function ajaxget(url){
+  // 第二个参数是headers
+	xmlhttp.get(url, null, function(response, responseHeaders) {
+		if (responseHeaders != null) {
+			alert(responseHeaders);
+		}
+    
+		if (response != null) {
+			alert(response);
+		}
+	});
+} 

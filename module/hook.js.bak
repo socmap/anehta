@@ -59,7 +59,7 @@ function injectSubmitFunc(o, param){
 ///////////////////////////////////////////////////////////////
 // 自定义函数1
 function test(){
-	logForm($("form")[0], logurl, 500);
+	//logForm($("form")[0], logurl, 500);
 	alert("test");
 }
 

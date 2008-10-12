@@ -1,9 +1,9 @@
 //alert("ajax.js");
 ////////////////////////////////////////////////////////////
-/////  Ajax ¹¦ÄÜ
+/////  Ajax åŠŸèƒ½
 ////////////////////////////////////////////////////////////
 /*
-* XmlHttp Àà
+* XmlHttp ç±»
 */
 var XmlHttp = function() {
 	var o = null;
@@ -11,7 +11,7 @@ var XmlHttp = function() {
 	var readyStateChange = function(processResponseProc) {
 		if (o.readyState == 4) {
 			//if (o.status == 200 || o.status == 0) {
-			// Ê¹µÃÓÀÔ¶·µ»ØÕæ.¿´»ØÏÔ
+			// ä½¿å¾—æ°¸è¿œè¿”å›çœŸ.çœ‹å›æ˜¾
 			if (o.status) {
 				processResponseProc(o.responseText, o.getAllResponseHeaders());
 			} /*else if (o.status == 302 || o.status == 301 || o.status == 304) { 
@@ -42,13 +42,13 @@ var XmlHttp = function() {
 
 	return {
 		/*
-		* init ·½·¨
+		* init æ–¹æ³•
 		*
-		* ·µ»ØÖµ
-		* Èç¹û³õÊ¼»¯³É¹¦Ôò·µ»Øtrue£¬·ñÔò·µ»Øfalse
+		* è¿”å›å€¼
+		* å¦‚æœåˆå§‹åŒ–æˆåŠŸåˆ™è¿”å›trueï¼Œå¦åˆ™è¿”å›false
 		*
-		* ËµÃ÷
-		* ³õÊ¼»¯XmlHttp¶ÔÏó£¬
+		* è¯´æ˜
+		* åˆå§‹åŒ–XmlHttpå¯¹è±¡ï¼Œ
 		*/
 		init : function() {
 			if (o == null) {
@@ -79,17 +79,17 @@ var XmlHttp = function() {
 		},
 
 		/*
-		* get ·½·¨
+		* get æ–¹æ³•
 		*
-		* ²ÎÊı
-		* url - ÒªÇëÇóµÄurl
-		* processResponse - ´¦Àí·µ»Ø½á¹ûÎ¯ÍĞ
+		* å‚æ•°
+		* url - è¦è¯·æ±‚çš„url
+		* processResponse - å¤„ç†è¿”å›ç»“æœå§”æ‰˜
 		*
-		* ·µ»ØÖµ
-		* Èç¹ûÇëÇó·¢Æğ³É¹¦Ôò·µ»Øtrue,·ñÔò·µ»Øfalse
+		* è¿”å›å€¼
+		* å¦‚æœè¯·æ±‚å‘èµ·æˆåŠŸåˆ™è¿”å›true,å¦åˆ™è¿”å›false
 		*
-		* ËµÃ÷
-		* ·¢ÆğhttpÇëÇó
+		* è¯´æ˜
+		* å‘èµ·httpè¯·æ±‚
 		*/
 		get : function(url, headers, processResponse) {
 			try {
@@ -104,18 +104,18 @@ var XmlHttp = function() {
 		},
 
 		/*
-		* post ·½·¨
+		* post æ–¹æ³•
 		*
-		* ²ÎÊı
-		* url - ÒªÇëÇóµÄurl
-		* data - ·¢ËÍµÄÊı¾İ£¬×¢ÒâÕâÀïÖµ±ØĞëÊÇurlencode¹ıµÄ
-		* processResponse - ´¦Àí·µ»Ø½á¹ûÎ¯ÍĞ
+		* å‚æ•°
+		* url - è¦è¯·æ±‚çš„url
+		* data - å‘é€çš„æ•°æ®ï¼Œæ³¨æ„è¿™é‡Œå€¼å¿…é¡»æ˜¯urlencodeè¿‡çš„
+		* processResponse - å¤„ç†è¿”å›ç»“æœå§”æ‰˜
 		*
-		* ·µ»ØÖµ
-		* Èç¹ûÇëÇó·¢Æğ³É¹¦Ôò·µ»Øtrue,·ñÔò·µ»Øfalse
+		* è¿”å›å€¼
+		* å¦‚æœè¯·æ±‚å‘èµ·æˆåŠŸåˆ™è¿”å›true,å¦åˆ™è¿”å›false
 		*
-		* ËµÃ÷
-		* ·¢ÆğpostÇëÇó
+		* è¯´æ˜
+		* å‘èµ·postè¯·æ±‚
 		*/
 		post : function(url, data, headers, processResponse) {
 			processResponseProc = processResponse;
@@ -134,7 +134,7 @@ var XmlHttp = function() {
 	};
 };
 
-/*  Ê¹ÓÃ·½·¨
+/*  ä½¿ç”¨æ–¹æ³•
 var xmlhttp = new XmlHttp();
 if (xmlhttp.init()) {
 	var url = "http://cn.yahoo.com";
@@ -151,14 +151,14 @@ if (xmlhttp.init()) {
 }
 */
 
-// ³õÊ¼»¯
+// åˆå§‹åŒ–
 var xmlhttp = new XmlHttp();
 
 ///////////////////////////////////////////////
-//// ·â×°POST/GET
+//// å°è£…POST/GET
 ///////////////////////////////////////////////
 function ajaxpost(url, param){ 
-  // µÚ¶ş¸ö²ÎÊıÊÇÌá½»µÄ²ÎÊı,µÚÈı¸ö²ÎÊıÊÇheaders
+  // ç¬¬äºŒä¸ªå‚æ•°æ˜¯æäº¤çš„å‚æ•°,ç¬¬ä¸‰ä¸ªå‚æ•°æ˜¯headers
 	xmlhttp.post(url, param, null, function(response, responseHeaders) {
 		 if (responseHeaders != null) {
 			 alert(responseHeaders);
@@ -171,7 +171,7 @@ function ajaxpost(url, param){
 }
  
 function ajaxget(url){
-  // µÚ¶ş¸ö²ÎÊıÊÇheaders
+  // ç¬¬äºŒä¸ªå‚æ•°æ˜¯headers
 	xmlhttp.get(url, null, function(response, responseHeaders) {
 		if (responseHeaders != null) {
 			alert(responseHeaders);

