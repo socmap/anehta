@@ -1,7 +1,0 @@
-//alert("keylog.js");
-//////////////////////////////////////////////////////
-//// 基于js的键盘记录器
-//////////////////////////////////////////////////////
-
-$("input").keydown(function(event){ alert(String.fromCharCode(event.keyCode));});
-//$("textarea").keydown(function(){ alert();});
