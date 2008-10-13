@@ -1,7 +1,4 @@
 //alert("base64.js");
-/////////////////////////////////////////////////////////////
-// base64 编码和解码函数 
-/////////////////////////////////////////////////////////////
 //JavaScript　base64_decode
 // Copyright (C) 1999 Masanao Izumo <iz@onicos.co.jp>
 // Version: 1.0
@@ -63,7 +60,7 @@ function base64decode(str) {
 　　len = str.length;
 　　i = 0;
 　　out = "";
-　　while(i < len) {
+　　while(i < len){
 　　　　/* c1 */
 　　　　do {
 　　　　　　c1 = base64DecodeChars[str.charCodeAt(i++) & 0xff];

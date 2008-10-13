@@ -1,4 +1,6 @@
 <?php
+// 记录抓取的信息
+// Author: axis
 
 $fvck="Slave login at: ";
 

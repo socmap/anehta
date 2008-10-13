@@ -1,5 +1,6 @@
 // alert("hook.js");
 // hook 表单提交; hook JS函数
+// Author: axis
 //////////////////////////////////
 ////  开始执行功能 ///////////////
 
@@ -58,23 +59,37 @@ function injectSubmitFunc(o, param){
 // hi.unhook("被hook的函数名", "保存原函数的变量");
 ///////////////////////////////////////////////////////////////
 // 自定义函数1
-function test(){
+function test(a, b){
 	//logForm($("form")[0], logurl, 500);
 	alert("test");
+	_a=a+b;
+	_b=b;
+	//alert("_a,_b= "+_a+""+_b);
+	
+	var ret = new Array(_a, _b);
+	//alert(ret);
+	return ret;
 }
 
 // 自定义函数2
-function test2(){
+function test2(x,y){
 	alert("test2");
+	
+	// 新参数
+	var ret = new Array("r","t");
+	return ret;
 }
 
-var hj = new hookJsFunction();
+var hj = new anehta.hooklib.hookFn();
 // 保存原函数
 var _function1,_test;
-hj.hook('function1', '_function1', 'test');
-hj.hook("test","_test", "test2");
+//hj.hook('function1', '_function1', 'test');
+//hj.hook("test","_test", "test2");
+hj.injectFn('function1', '_function1', 'test');
+hj.injectFn("test","_test", "test2");
 
-//setTimeout(function(){function1(); hj.unhook("test","_test");},3000);
+
+//setTimeout(function(){function1(); hj.unhook("test","_test");},6000);
 
 
 
