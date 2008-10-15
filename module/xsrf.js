@@ -6,7 +6,7 @@
 
 /// 开始执行功能
 if (xmlhttp.init()) {
-  anehta.ajax.post("http://"+$d.domain, "");
+  //anehta.ajax.post("http://"+$d.domain, "");
   //anehta.ajax.get("http://"+$d.domain+"/fvck");
 }
 

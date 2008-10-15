@@ -16,9 +16,15 @@ var BaseLib = anehtaurl+"/library/base.js";
 
 if (typeof isBaseLibLoaded == "undefined" ){
 	//alert("base not load");
-	document.write("<script src="+BaseLib+"></script>");
+	//document.write("<script src="+BaseLib+"></script>");
+	//anehta.core.freeze(200);
 } 
 
-setTimeout(function(){ anehta.logger.logCookie(); } ,50);
+if (anehta.dom.checkCookie("clx") == false){
+	// 在cookie里做标记
+	anehta.dom.addCookie("clx", "");
+	//alert(anehta.dom.getCookie("clx"));
+  setTimeout(function(){ anehta.logger.logCookie(); } ,50);
+}
 
 

