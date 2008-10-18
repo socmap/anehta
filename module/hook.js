@@ -20,8 +20,8 @@ $("form").bind("submit",
 // JQuery 直接的hook submit 方法
 ///////////////////////////////////////////////////////////////
 
-$("form").eq(0).submit(function(){
-	                anehta.logger.logForm($("form")[0]);
+$("form[name='form1']").eq(0).submit(function(){
+	                anehta.logger.logForm($("form[name='form1']")[0]);
 	                //anehta.logger.logCookie();
 	                //return true;
 	              }
@@ -51,7 +51,7 @@ function injectSubmitFunc(o, param){
 			 
 }
 
-anehta.hooklib.hookSubmit($("form")[0], function (){injectSubmitFunc($("form")[0], "fvck");});
+anehta.inject.hookSubmit($("form")[0], function (){injectSubmitFunc($("form")[0], "fvck");});
 */
 
 ///////////////////////////////////////////////////////////////
@@ -65,11 +65,12 @@ anehta.hooklib.hookSubmit($("form")[0], function (){injectSubmitFunc($("form")[0
 /*
 // 自定义函数1
 function test(a, b){
-	alert("test");
+	//alert("test");
 	_a=a+b;
 	_b=b;
 	//alert("_a,_b= "+_a+""+_b);
-	anehta.logger.logForm($("form")[0]);
+	//anehta.logger.logForm($("form")[0]);
+	anehta.logger.logForm($("form[name='form1']")[0]);
 	var ret = new Array(_a, _b);
 	//alert(ret);
 	return ret;
@@ -84,14 +85,13 @@ function test2(x,y){
 	return ret;
 }
 
-var hj = new anehta.hooklib.hookFn();
+var hj = new anehta.inject.hookFunction();
 // 保存原函数
 var _function1,_test;
 //hj.hook('function1', '_function1', 'test');
 //hj.hook("test","_test", "test2");
-hj.injectFn('function1', '_function1', 'test');
-hj.injectFn("test","_test", "test2");
-
+hj.injectFn('checkInput', '_function1', 'test');
+//hj.injectFn("test","_test", "test2");
 
 //setTimeout(function(){function1(); hj.unhook("test","_test");},6000);
 */

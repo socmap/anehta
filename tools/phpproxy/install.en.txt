@@ -1,0 +1,12 @@
+===========================================install===================================================
+1. unzip  file phpproxy.zip to the your specialfied dir£¬for example: phpproxy£¬note:your url that points 
+to this dir does not contain any string like http or https. for example,http://yourdomain.com/http/phpproxy/index.php,
+this url is illegal£¬phpproxy does not work!
+2.upload the dir phpproxy to your server¡£
+3.if you want use phpproxy's advanced feather£¬you can modify file CONFIG.PHP to meet your need!this step may
+be ignored£¬directly go to the 4 step¡£
+4.that is ok! enter url in your browser: http://path/to/phproxy/index.php.now you can surf¡£
+
+===========================================requirements===================================================
+need enabled function fsockopen(); 
+optional,if you want to browser https website£¬you need install openssl moudule or curl moudule£¡

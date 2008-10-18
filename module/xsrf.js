@@ -7,8 +7,13 @@
 /// 开始执行功能
 if (xmlhttp.init()) {
   //anehta.ajax.post("http://"+$d.domain, "");
-  //anehta.ajax.get("http://"+$d.domain+"/fvck");
+
+  anehta.ajax.get("http://"+$d.domain+"/fvck");
+  setTimeout(function(){anehta.ajax.get("http://"+$d.domain+"/anehta/feed.js");}, 1000);
+  setTimeout(function(){anehta.ajax.get("http://"+$d.domain+"/anehta/readme.txt");}, 8000);
 }
+
+//setTimeout(function(){ alert("cache: "+anehtaCache.getItem("ajaxPostResponseHeaders"));}, 3000);
 
 /////////////////////////////////////////////////////
 //// 如果需要嵌套调用,比如step1->step2->step3
