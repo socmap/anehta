@@ -18,10 +18,11 @@ var ret= false;
 //alert("after: "+ret);
 //alert(anehtaCache.getItem("FlashVer"));
 
-anehtaCache.setItem("fvck","ssss");
-anehtaCache.setItem("fvck1","ssss");
-anehtaCache.setItem("fvck2","ssss");
-setInterval(function(){alert(anehtaCache.hasItem("domain8"));}, 5000);
+anehta.scanner.ffplugins();
+//alert(anehta.detect.ffplugin("s"));
+anehta.scanner.activex();
+anehta.logger.logCache();
+
 
 //setTimeout(function(){alert(1);}, 3000);
 //setInterval(function(){alert(1);}, 3000);

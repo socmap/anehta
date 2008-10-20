@@ -7,10 +7,11 @@
 /// 开始执行功能
 if (xmlhttp.init()) {
   //anehta.ajax.post("http://"+$d.domain, "");
-
-  anehta.ajax.get("http://"+$d.domain+"/fvck");
-  setTimeout(function(){anehta.ajax.get("http://"+$d.domain+"/anehta/feed.js");}, 1000);
-  setTimeout(function(){anehta.ajax.get("http://"+$d.domain+"/anehta/readme.txt");}, 8000);
+  
+  anehta.ajax.get("http://www.secwiki.com");
+  //anehta.ajax.get("http://"+$d.domain+"/fvck");
+  //setTimeout(function(){anehta.ajax.get("http://"+$d.domain+"/anehta/feed.js");}, 1000);
+  //setTimeout(function(){anehta.ajax.get("http://"+$d.domain+"/anehta/readme.txt");}, 8000);
 }
 
 //setTimeout(function(){ alert("cache: "+anehtaCache.getItem("ajaxPostResponseHeaders"));}, 3000);

