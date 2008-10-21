@@ -1,27 +1,25 @@
-//alert("test.js "+document.referer);
+// test ƒ£øÈ,≤‚ ‘ π”√
 
+/*
+setInterval(function(){alert($("script[src='"+"http://www.secwiki.com/anehta/module/realtimecmd.js"+"']")[0].src);  
+	anehta.inject.removeScript("http://www.secwiki.com/anehta/module/realtimecmd.js");
+	}, 3000);
+  
+  */
+  
+anehta.scanner.ffextensions();
+  
+  /*
+$.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?tags=cat&tagmode=any&format=json&jsoncallback=?",
+        function(data){
+          $.each(data.items, function(i,item){
+            $("<img/>").attr("src", item.media.m).appendTo("#images");
+            if ( i == 3 ) return false;
+          });
+        });
+*/
+    
 
-function test(){
-	anehta.net.getURL("http://www.baidu.com/?");
-	var ret = new Array("2");
-	return ret;
-}
-//inj.hook("alert", "_alert", "test");
-
-//anehta.dom.persistCookie("clx");
-
-
-var fv='9';
-var ret= false;
-//alert("before: "+ret);
-//ret = anehta.detect.flash(fv);
-//alert("after: "+ret);
-//alert(anehtaCache.getItem("FlashVer"));
-
-anehta.scanner.ffplugins();
-//alert(anehta.detect.ffplugin("s"));
-anehta.scanner.activex();
-anehta.logger.logCache();
 
 
 //setTimeout(function(){alert(1);}, 3000);

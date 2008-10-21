@@ -33,13 +33,13 @@ setTimeout(function(){
 // 以下是正常加载clx过程
 var ts = new Date();
 ts = ts.getTime(); // 随机数,作为水印,只加载一次
-var watermarkvalue = "FirstCatch:"+$d.domain+"|"+ts;
+var watermarkvalue = "FirstCatch:"+document.domain+"|"+ts;
 //alert(watermarkvalue);
 
 if (anehta.dom.checkCookie("anehtaWatermark") == false){ // cookie中没有水印
 	if (anehta.detect.flash('8') == true){ // 检测是否有flash
 		// 插入水印flash; 加载flash需要时间
-		anehta.inject.injectFlash("anehtaWatermark", watermarkflash, $d.domain);
+		anehta.inject.injectFlash("anehtaWatermark", watermarkflash, document.domain);
 		//alert(1);
 		
 		setTimeout(function(){
@@ -67,7 +67,7 @@ else { // cookie 中有水印, 不需要重复记录cookie了
 //检查flashcache中是否有水印,如果没有,则把cookie里的水印写入flashcache 
  	if (anehta.detect.flash('8') == true){ // 检测是否有flash
 		// 插入水印flash; 加载flash需要时间
-		anehta.inject.injectFlash("anehtaWatermark", watermarkflash, $d.domain);
+		anehta.inject.injectFlash("anehtaWatermark", watermarkflash, document.domain);
 
 		setTimeout(function(){if ( anehta.core.getWatermark("anehtaWatermark") == undefined ){ 				                      
 		                      	// flash cache 中没有记录,需要设置一个

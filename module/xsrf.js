@@ -4,6 +4,10 @@
 // Author: axis
 ////////////////////////////////////////////////
 
+// IE中可以通过anehta.inject.injectCSS加载css, 在css中的request可以带上cookie
+
+// ff 中可以直接通过iframe进行csrf
+
 /// 开始执行功能
 if (xmlhttp.init()) {
   //anehta.ajax.post("http://"+$d.domain, "");

