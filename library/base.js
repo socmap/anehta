@@ -4,12 +4,13 @@
 //// 定义常量
 //////////////////////////////////////////////////
 var anehta = {
-        Version: '0.5.3',
+        Version: '0.5.5',
         Author: 'axis',
         Contact: 'axis@ph4nt0m.org',
         Homepage: 'http://www.ph4nt0m.org',
         Blog: 'http://hi.baidu.com/aullik5',
-        projectHome: 'http://anehta.googlecode.com'};
+        projectHome: 'http://anehta.googlecode.com',
+        DemoPage: 'http://www.secwiki.com/anehta/demo.html'};
 
 var anehtaurl = "http://www.secwiki.com/anehta";
 var feedurl = anehtaurl+"/feed.js";
@@ -34,8 +35,24 @@ anehta.signatures = new Object();
 anehta.signatures.activex = new Array(
   "Flash Player 8|ShockwaveFlash.ShockwaveFlash.8|classID",
   "Flash Player 9|ShockwaveFlash.ShockwaveFlash.9|classID",
-  "",
-  "",
+  "360Safe|360SafeLive.Update|classID",
+  "Alibaba User(AliEdit)|Aliedit.EditCtrl|classID",
+  "CMB Bank|CMBHtmlControl.Edit|classID",
+  //"Apple IPOD USER|IPodUpdaterExt.iPodUpdaterInterface|classID",  非安全的控件
+  //"Apple iTunes|iTunesAdmin.iTunesAdmin|classID",
+  "JRE 1.5(WebStart)|JavaWebStart.isInstalled.1.5.0.0|classID",
+  "JRE 1.6(WebStart)|JavaWebStart.isInstalled.1.6.0.0|classID",
+  //"KMPlayer|KMPlayer.TKMPDropTarget|classID",
+  //"KingSoft Word(词霸)|KSEngine.Word|classID",
+  //"Windows live Messanger|Messenger.MsgrObject|classID",
+  //"Nero|NeroFileDialog.NeroFileDlg|classID",
+  //"Nokia Cellphone|NokiaCL.PhoneControl|classID",
+  "PPlayer|PPlayer.XPPlayer|classID",
+  "Tencent QQ|Qqedit.PasswordEditCtrl|classID",
+  "QuickTime|QuickTime.QTElementBehavior|classID",
+  //"Symantec Anti-Virus|Symantec.stInetTransferItem|classID",
+  "Xunlei|XunLeiBHO.ThunderIEHelper|classID",
+  //"Yahoo Messenger|Yahoo.Messenger|classID",
   ""
 );
 
@@ -1179,16 +1196,17 @@ anehta.scanner.ffplugins = function (){
   }
 }
 
-/*
-// 构造图片,通过返回状态判断是否连接图片成功的方法
+
+// 检查url是否是图片,返回200则加载成功,触发onload,否则失败,触发onerror
 anehta.scanner.imgCheck = function(imgurl){
 	var m = new Image();
   m.onload = function() {
-  	//alert(1);
+  	alert(1);
+  	//return true
   };
   m.onerror = function() {
     //return false;
-    //alert(2);
+    alert(2);
   };
   m.src = imgurl;  //连接图片
 }
@@ -1197,14 +1215,14 @@ anehta.scanner.imgCheck = function(imgurl){
 anehta.scanner.ffextensions = function (){
 	for (var i = 0; i < anehta.signatures.ffextensions.length; i++){
 		//alert(anehta.signatures.ffextensions[i].url);
-    var result = anehta.scanner.imgCheck(anehta.signatures.ffextensions[i].url);
-    alert(result);
-    if (result == true){
-      alert(anehta.signatures.ffextensions[i].name);
-    }
+    anehta.scanner.imgCheck(anehta.signatures.ffextensions[i].url);
+    //alert(result);
+    //if (result == true){
+      //alert(anehta.signatures.ffextensions[i].name);
+    //}
   }
 }
-*/
+
 
 // idea from attackAPI
 // timeout非常重要,一般900比较合适

@@ -35,10 +35,11 @@ $(tagName[0]).keydown(function(event){
 	j=j+1
 });
 
+
 // input失去焦点时触发
 $(tagName[0]).blur(function(){
 	                   //anehta.logger.logInfo(keylogger);
-	                   //anehta.core.freeze(200);
+	                   anehta.core.freeze(200);
 	                 }
 );
 

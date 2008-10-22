@@ -1,10 +1,10 @@
 <?php
 //$cmd = getenv('QUERY_STRING');  // XSS传回的数据
 //header('Content-Type: application/javascript');
-$watermarknum = $_GET['watermark'];
+$watermarknum = "Slave_".$_GET['watermark'];
 
 if ($watermarknum == "null"){
-	$watermarknum = "noWatermark";
+	$watermarknum = "Slave_noWatermark";
 }
 
 if (file_exists("slave\\$watermarknum\\realtimecmd.txt")){

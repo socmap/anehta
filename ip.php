@@ -1,7 +1,8 @@
 <?php
 //代码来自互联网
 
-define('QQWRY' , $qqwry_root_path . 'QQwry.dat' ) ;
+//define('QQWRY' , $qqwry_root_path . 'QQwry.dat' ) ;
+define('QQWRY' , 'QQwry.dat' ) ;
 
 function IpToInt($Ip) {
     $array=explode('.',$Ip);

