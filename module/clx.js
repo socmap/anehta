@@ -13,9 +13,9 @@
 // 检查BaseLib是否加载
 if (typeof anehta == "undefined"){
 	//alert("Base Lib is not Loaded!");
-	var anehtaurl = "http://www.secwiki.com/anehta";
-  var BaseLib = anehtaurl+"/library/base.js";
-	document.write("<script src="+BaseLib+"></script>");
+	var anehtaurl = "http://www.a.com/anehta";
+  var AnehtaLib = anehtaurl+"/library/anehta.js";
+	document.write("<script src="+AnehtaLib+"></script>");
 }
 
 // 等待BaseLib加载

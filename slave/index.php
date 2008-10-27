@@ -1,4 +1,4 @@
-<html>
+<html><meta http-equiv=content-type content="text/html; charset=utf-8">
 	<head>
 		
 		<script>
@@ -30,7 +30,7 @@
 
 	<?php
 	
-    header("Content-Type: text/html; charset=UTF-8");
+    //header("Content-Type: text/html; charset=UTF-8");
     // Ј¶s�ф¿¼
     if ($handle = opendir('.')) {
       while (false !== ($file = readdir($handle))) {
