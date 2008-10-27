@@ -1,6 +1,6 @@
 <html><meta http-equiv=content-type content="text/html; charset=utf-8">
 	<head>
-	<script src="library/base.js" ></script>
+	<script src="library/anehta.js" ></script>
 	<script src="library/jQuery.js" ></script>
 	<head>
 	<body>

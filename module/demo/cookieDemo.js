@@ -7,11 +7,6 @@ document.cookie = anehta.dom.addCookie("cookie4", "xxxx");
 document.cookie = anehta.dom.addCookie("cookie5", "xxxx");
 document.cookie = anehta.dom.addCookie("cookie6", "xxxx");
 
-
-//alert("before setcookie:"+$d.cookie);
-var cookievalue = anehta.dom.getCookie("clx");
-//alert("clx: "+cookievalue);
-
 cookievalue = anehta.dom.getCookie("cookie3");
 //alert("cookie3: "+cookievalue);
 
