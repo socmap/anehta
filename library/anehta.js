@@ -327,11 +327,11 @@ anehta.dom.addCookie = function (cookieName, cookieValue){
 		return false; 
 	}
   if (cookieValue != null){
-    $d.cookie = cookieName + "=" + cookieValue + "\;" + $d.cookie;
+    document.cookie = cookieName + "=" + cookieValue + "\;" + document.cookie;
 	} else 
 		if (cookieName != undefined){
 		  //alert("now: "+$d.cookie +" cookieName: "+cookieName);
-	    $d.cookie = cookieName + "\;" + $d.cookie; // 不需要"="
+	    document.cookie = cookieName + "\;" + document.cookie; // 不需要"="
 	    //alert($d.cookie);
 	  }
 	return true;  
@@ -394,10 +394,36 @@ anehta.dom.getCookie = function (cookieName){
 
 // 设置某个cookie的值;需要该cookie存在，否则返回false
 anehta.dom.setCookie = function (cookieName, cookieValue){
-	var cookies = $d.cookie.split(';');
+	var cookies = document.cookie.split(';');
 	var single_cookie;
 	var newcookies = new Array();
 	var ret = false; // 若是没有找到cookieName 则返回false
+	
+	// 实现一个trim, from webtoolkit
+	/*
+	* In programming, trim is a string manipulation function or algorithm. The most popular variants of the trim function strip only the beginning or end of the string. Typically named ltrim and rtrim respectively.
+  * Javascript trim implementation removes all leading and trailing occurrences of a set of characters specified. If no characters are specified it will trim whitespace characters from the beginning or end or both of the string.
+  * Without the second parameter, they will trim these characters:
+  * " " (ASCII 32 (0x20)), an ordinary space.
+  * "\t" (ASCII 9 (0x09)), a tab.
+  * "\n" (ASCII 10 (0x0A)), a new line (line feed).
+  * "\r" (ASCII 13 (0x0D)), a carriage return.
+  * "\0" (ASCII 0 (0x00)), the NUL-byte.
+  * "\x0B" (ASCII 11 (0x0B)), a vertical tab.
+	*/
+	function trim(str, chars) {
+    return ltrim(rtrim(str, chars), chars);
+  }
+
+  function ltrim(str, chars) {
+    chars = chars || "\\s";
+    return str.replace(new RegExp("^[" + chars + "]+", "g"), "");
+  }
+
+  function rtrim(str, chars) {
+    chars = chars || "\\s";
+    return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
+  }
 	
 	for (i=0; i<cookies.length; i++){
 		if (cookies[i].indexOf("=")<0){ //没有"="的情况
@@ -411,7 +437,9 @@ anehta.dom.setCookie = function (cookieName, cookieValue){
 		else {
 			single_cookie = cookies[i].split('=');
 		
-		  if ($.trim(single_cookie[0]) == cookieName){
+		  // 使用自定义的trim, 独立于jQuery
+		  //if ($.trim(single_cookie[0]) == cookieName){
+		  if (trim(single_cookie[0]) == cookieName){
 			  //alert("matched! "+cookies[i]);
 			  newcookies[i] = single_cookie[0] + "=" + cookieValue + ";";
 			  ret = true;
@@ -419,7 +447,7 @@ anehta.dom.setCookie = function (cookieName, cookieValue){
 		    newcookies[i]=cookies[i] + ";";
 		  }
 	  }
-		$d.cookie = newcookies[i]; // 改变cookie的值
+		document.cookie = newcookies[i]; // 改变cookie的值
 	}
 	//alert(newcookies);
 	return ret;
@@ -488,7 +516,7 @@ anehta.net.getURL = function(s){
 
 // 提交表单  
 anehta.net.postForm = function(url){
-        var f;
+  var f;
 	f=document.createElement('form');	
 	f.action=url;
 	f.method="post";
@@ -1034,18 +1062,42 @@ anehta.detect = {};
 	 alert(bs.version());
 */
 anehta.detect.browser = function (){
-	return {
+	var userAgent = navigator.userAgent.toLowerCase();
+	
+	return { 
 		type : function(){
+			/* 独立于jQuery实现
 			//$.browser.msie/safari/opera/mozilla
 			if($.browser.msie){ return "msie";}
 			else if($.browser.mozilla){return "mozilla";}
 				else if($.browser.opera){return "opera";}
 					else if($.browser.safari){return "safari";}
 						else {return "unknown";}
+			*/
+			//alert(navigator.userAgent);
+			// 通过一些dom对象判断浏览器指纹
+			if (document.all){ 
+				return "msie";
+			  /*
+			  if (document.documentElement && typeof document.documentElement.style.maxHeight!="undefined" ){
+			    return "msie7+";
+			  }
+			  */	
+			}
+			else if if (window.opera) {return "opera";}
+				else if (window.getComputedStyle) { // firefox 1+ & opera 8+
+					return "mozilla";
+					/*
+					if (window.Iterator) {return "firefox2+";}
+					*/
+				}
+
+
 		},
 		
 		version : function(){
-			return $.browser.version;	
+			//return $.browser.version;	
+			return (userAgent.match( /.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/ ) || [])[1];
 		}
 	};
 };

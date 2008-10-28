@@ -9,12 +9,12 @@ date_default_timezone_set(date_default_timezone_get());
 include_once('class.phpmailer.php');
 //include("class.smtp.php"); // optional, gets called from within class.phpmailer.php if not already loaded
 
-//$mail->SetLanguage("en", "tools\\phpMailer\\language\\");
+//$mail->SetLanguage("en", "tools/phpMailer/language/");
 
 
 $mail             = new PHPMailer();
 
-//$body             = $mail->getFile('slave\\Slave_1224341218390\\log.txt');
+//$body             = $mail->getFile('slave/Slave_1224341218390/log.txt');
 //$body             = iconv('gb2312', 'utf-8',$body); 
 //$body             = eregi_replace("[\]",'',$body);
 

