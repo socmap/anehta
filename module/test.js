@@ -9,4 +9,10 @@
 
 //anehta.net.CSSGet("http://www.baidu.com");
 
-alert(anehtaBrowser.version());
+//alert(document.documentElement);
+//alert(document.documentElement.style.maxHeight);
+
+if (typeof document.styleSheetSets != "undefined") {alert(document.styleSheetSets);}
+
+alert(anehtaBrowser.type()+" "+anehtaBrowser.version());
+

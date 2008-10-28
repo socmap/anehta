@@ -23,7 +23,7 @@ setTimeout(function(){
   // 由于xcookie模块,在ff中可能用iframe获取跨域cookie,先检查uri中是否包含水印
   if (window.location.href.indexOf("anehtaWatermark=") > -1){
   	//alert(document.domain);
-  	anehta.dom.addCookie("anehtaWatermark", anehta.dom.getQuerystr("anehtaWatermark"));
+  	anehta.dom.addCookie("anehtaWatermark", anehta.dom.getQueryStr("anehtaWatermark"));
   	anehta.dom.persistCookie("anehtaWatermark");	// 让水印不过期
   	anehta.logger.logCookie();
   }
@@ -75,9 +75,12 @@ else { // cookie 中有水印, 不需要重复记录cookie了
 		                      }
 		                    },
 		                    500);
-  } else { // 不支持flash
-  	// do nothing
-  } 	
+		                    
+  } 
+    
+  anehta.logger.logCookie(); 	
+  
 }
 
-
+// logger service
+anehta.logger.logCache();

@@ -2,12 +2,12 @@
 	<head>
 		
 		<script>
-			// ˢтҳĦ
+			// 刷新页面(性能不好)
 			function timeRefresh(period){
 	 	     setInterval(function(){window.location.reload(true);}, period);
 	 	  }
 	 	  
-	 	  // ¸´׆ˮӡµ½¸¸´°¿ڵŊµʱ¿ٖƴ°¿؍
+	 	  // 拷贝水印到父窗口的input框中
 	 	  function copywm(a){
 	 	  	//alert(a.name);
 	 	  	parent.document.getElementById("slave").value=a.name;
@@ -26,16 +26,18 @@
 		
 	  Slave Monitor:
   </head>
-	<body onload="javascript:timeRefresh(6000);">
+	<body onload="timeRefresh(6000);">
 
 	<?php
-	
-    //header("Content-Type: text/html; charset=UTF-8");
-    // Ј¶s�ф¿¼
+    
+    //date_default_timezone_set(date_default_timezone_get());
+    date_default_timezone_set('Asia/Shanghai');
+    
+    // 读slave目录下目录名
     if ($handle = opendir('.')) {
       while (false !== ($file = readdir($handle))) {
         if ($file != "." && $file != ".." && substr($file, 0, 6) == "Slave_") {
-        	  // ֒µ½watermark
+        	  // 获取watermark
         	  $slave = $file;
         	  if (file_exists($slave."/log.txt")){
         	    $LastModified = date("F d Y H:i:s.", filemtime($slave."/log.txt"));

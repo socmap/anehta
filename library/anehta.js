@@ -486,7 +486,7 @@ anehta.dom.persistCookie = function(cookieName){
 }
 
 // 取当前URI中某个参数的值
-anehta.dom.getQuerystr = function(QueryStrName){
+anehta.dom.getQueryStr = function(QueryStrName){
 	var queryStr;
 	var queryStr_temp;
 	queryStr = window.location.href.substr(window.location.href.indexOf("?")+1).split('&');
@@ -1075,35 +1075,95 @@ anehta.detect.browser = function (){
 						else {return "unknown";}
 			*/
 			//alert(navigator.userAgent);
-			// 通过一些dom对象判断浏览器指纹
-			if (document.all){ 
-				return "msie";
-			  /*
+			
+			// 通过一些dom对象判断浏览器指纹 ie,ie7,ie8,ff2,ff3,safari,opera,chrome,maxthon,theworld,360se....
+			//if (typeof document.all != "undefined"){ // msie ; firefox 在 quirks mode下也支持
+			if (window.ActiveXObject){ 
+				anehtaCache.setItem("BrowserSniffer", "MSIE 6.0 or below");
+			  
+			  // 判断是否是IE7以上
 			  if (document.documentElement && typeof document.documentElement.style.maxHeight!="undefined" ){
-			    return "msie7+";
+			  	
+			  	// 判断是否是 IE8+
+			  	if ( typeof document.adoptNode != "undefined") { // Safari3 & FF & Opera & Chrome & IE8
+			  		anehtaCache.setItem("BrowserSniffer", "MSIE8.0");
+			  	}
+			  	// 因为是精确判断,所以改写cache
+			    anehtaCache.setItem("BrowserSniffer", "MSIE7.0");
 			  }
-			  */	
+			  	
+			  // 不可靠的判断一些浏览器
+			  if (userAgent.indexOf("maxthon") > -1){ 
+			    anehtaCache.appendItem("BrowserSniffer", " | "+"maybe maxthon");	
+			  }
+			  if (userAgent.indexOf("360se") > -1){
+			  	anehtaCache.appendItem("BrowserSniffer", " | "+"maybe 360se");	
+			  }
+			  if (userAgent.indexOf("theworld") > -1) {
+			  	anehtaCache.appendItem("BrowserSniffer", " | "+"maybe theworld");	
+			  }
+			  /*
+			  if (userAgent.indexOf("") > -1) {
+			  	//anehtaCache.appendItem("BrowserSniffer", " | "+"maybe greenbrowser");
+			  }
+			  */
+			  
+			  return "msie";
 			}
-			else if if (window.opera) {return "opera";}
-				else if (window.getComputedStyle) { // firefox 1+ & opera 8+
-					return "mozilla";
-					/*
-					if (window.Iterator) {return "firefox2+";}
-					*/
+			else if (typeof window.opera != "undefined") { //opera独占
+				anehtaCache.setItem("BrowserSniffer", "Opera "+window.opera.version());
+				return "opera";
+			}
+			else if (typeof window.netscape != "undefined") { // mozilla 独占
+				anehtaCache.setItem("BrowserSniffer", "Mozilla");		
+				// 可以准确识别
+				if (typeof window.Iterator != "undefined") {
+				  anehtaCache.setItem("BrowserSniffer", "Firefox 2");
+				  
+				  if (typeof document.styleSheetSets != "undefined") { // Firefox 3 & Opera 9
+				  	anehtaCache.setItem("BrowserSniffer", "Firefox 3");
+				  }
 				}
-
-
+				return "mozilla";
+			} 
+			else if (typeof window.pageXOffset != "undefined") { // mozilla & safari
+				anehtaCache.setItem("BrowserSniffer", "Safari");
+        try{
+			    if (typeof external.AddSearchProvider != "undefined") { // firefox & google chrome
+				    anehtaCache.setItem("BrowserSniffer", "Google Chrome");
+				    return "chrome";
+			    } 
+			  } catch (e) {
+				    return "safari"; 
+			  }
+			}	
+      else { //unknown
+				anehtaCache.setItem("BrowserSniffer", "Unknown <<  "+userAgent+" >>");
+			  return "unknown";	
+			}
 		},
 		
+		// 从userAgent里取出来的不可靠
 		version : function(){
 			//return $.browser.version;	
-			return (userAgent.match( /.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/ ) || [])[1];
+			return (userAgent.match( /.+(?:rv|it|ra|ie|me)[\/: ]([\d.]+)/ ) || [])[1];
 		}
 	};
 };
 
 // 先判断浏览器版本 $.browser.msie/safari/opera/mozilla
 var anehtaBrowser = new anehta.detect.browser();
+
+
+// 检查显示器分辨率 返回一个Array(长,宽)
+anehta.detect.screenSize = function(){
+	var screenSize = new Array();
+	screenSize[0] = screen.width;
+  screenSize[1] = screen.height;
+  return screenSize;
+}
+
+
 
 // 跨浏览器检查某个版本的flash是否支持
 // anehta.detect.flash("8"); 支持返回true,不支持返回false
@@ -1243,11 +1303,11 @@ anehta.scanner.imgCheck = function(imgurl){
 	var m = new Image();
   m.onload = function() {
   	alert(1);
-  	//return true
+  	return true
   };
   m.onerror = function() {
-    //return false;
     alert(2);
+    return false;
   };
   m.src = imgurl;  //连接图片
 }
