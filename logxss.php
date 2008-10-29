@@ -18,6 +18,10 @@ $requestdate = date("m/d/Y H:i:s");
 //$requestdate = date(DATE_RFC822);
 $qstr = $_SERVER['QUERY_STRING'];  // XSS传回的数据
 
+if ($qstr == ""){ // logCache() POST 回来的数据
+	$qstr = $_POST['anehtaInput_anehtaPostLogger'];
+}
+
 //查询地理位置
 require("ip.php");
 $slavelocation = "Slave Location: ".ip2location($_SERVER['REMOTE_ADDR']);

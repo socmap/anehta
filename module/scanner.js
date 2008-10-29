@@ -28,7 +28,7 @@ anehta.signatures.activex = new Array(
   ""
 );
 
-anehta.signatures.ffextensions = [
+anehta.signatures.ffExtensions = [
   {name: 'Adblock Plus', url: 'chrome://adblockplus/skin/adblockplus.png'},
   {name: 'Customize Google', url: 'chrome://customizegoogle/skin/32x32.png'},
   {name: 'DownThemAll!', url: 'chrome://dta/content/immagini/icon.png'},
@@ -77,8 +77,9 @@ anehta.signatures.ports = new Array(21, 22, 23, 25, 53, 80,
   110, 118, 137, 139, 143, 161, 389, 443, 445, 547, 1080, 1433,
   1521, 3306, 3389, 8000, 8008, 8080, 8888, 10000);
   
+anehta.detect.screenSize();
 
-anehta.scanner.ffplugins();
+anehta.scanner.ffPlugins();
 //alert(anehta.detect.ffplugin("s"));
 anehta.scanner.activex();
 

