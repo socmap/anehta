@@ -64,6 +64,10 @@ if(!$mail->Send()) {
   sleep(2);
   // 删除log文件
   unlink("../../slave/$slaveid/log.txt");
+  
+  //删除目录
+  sleep(1);
+  rmdir("../../slave/$slaveid");
 }
 
 

