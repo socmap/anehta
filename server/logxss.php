@@ -65,27 +65,27 @@ if ($slaveWatermark != false){
   $slaveWatermark = "Slave_".substr($slaveWatermark, 1, 13);  // 分离出watermark(随机的时间值)
   
   // 按水印分目录记录日志
-  if(file_exists("slave/$slaveWatermark") == false){
+  if(file_exists("../slave/$slaveWatermark") == false){
     // 注意mkdir函数不能递归建立目录
-    mkdir("slave/$slaveWatermark");
+    mkdir("../slave/$slaveWatermark");
   }
   
   // 如果是 logInfo()函数传回来的参数,如果为空则不记录
   $slave_logInfo = strchr($qstr, "[**** Info:  ****]");
   if($slave_logInfo == false){ // 说明Info 有信息;
     // 写日志
-    $fp = fopen("slave/$slaveWatermark/log.txt","a");
+    $fp = fopen("../slave/$slaveWatermark/log.txt","a");
   }
 }
 else { // 水印为null的
 	// 如果是 logInfo()函数传回来的参数,如果为空则不记录
   $slave_logInfo = strchr($qstr, "[**** Info:  ****]");
   if($slave_logInfo == false){ // 说明Info 有信息;
-    if(file_exists("slave/Slave_noWatermark") == false){
+    if(file_exists("../slave/Slave_noWatermark") == false){
       // 注意mkdir函数不能递归建立目录
-      mkdir("slave/Slave_noWatermark");
+      mkdir("../slave/Slave_noWatermark");
     }
-	  $fp = fopen("slave/Slave_noWatermark/log.txt","a");
+	  $fp = fopen("../slave/Slave_noWatermark/log.txt","a");
 	}
 }
 

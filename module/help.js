@@ -55,7 +55,7 @@ anehta.help = function(args){
 		  alert("Anehta ajax API Help: \r\n\r\n" +
 		        "  anehtaXmlHttp.init(); //initial the ajax;you must call this function before your ajax request\r\n\r\n" +
 		        "  anehta.ajax.post(url, postdata); //ajax post; save response in cache as 'ajaxPostResponseHeaders' and 'ajaxPostResponse'\r\n\r\n" +
-		        "  anehta.ajax.post(url); //ajax get; save response in cache as 'ajaxGetResponseHeaders' and 'ajaxGetResponse'\r\n\r\n"
+		        "  anehta.ajax.get(url); //ajax get; save response in cache as 'ajaxGetResponseHeaders' and 'ajaxGetResponse'\r\n\r\n"
 		        );
 		  break;
 		  
@@ -97,7 +97,13 @@ anehta.help = function(args){
 		        "  anehta.scanner.history(); //scan if the client has ever visited the links listed in anehta.signatures.sites; save the result as 'sitesHistory' in cache; return the result\r\n\r\n"
 		        );
 		  break;
-		  
+
+		case "trick":
+		  alert("Anehta trick API Help: \r\n" +
+		        "  anehta.trick.hijackLink(link, url); //change the href of the link when user click on the link.\r\n\r\n"
+		        );
+		  break;
+		  		  
 		case "misc":
 		  alert("Anehta misc API Help: \r\n" +
 		        "  anehta.misc.getClipboard(); //get the clipboard's content(text); IE only.\r\n\r\n" +
@@ -107,7 +113,7 @@ anehta.help = function(args){
 		  break;
 		  
 		case "crypto":
-		  alert("Anehta misc API Help: \r\n" +
+		  alert("Anehta crypto API Help: \r\n" +
 		        "  anehta.crypto.base64Encode(str); //return the base64 encode of the str.\r\n\r\n" +
 		        "  anehta.crypto.base64Decode(str); //decode the base64 str, and return the decoded one.\r\n\r\n"
 		        );
@@ -115,7 +121,7 @@ anehta.help = function(args){
 		               
 		default:
 		  alert("Usage: anehta.help(args);\r\n" +
-		        "args could be: core,dom,net,logger,ajax,inject,detect,scanner,misc,crypto \r\n\r\n" +
+		        "args could be: core,dom,net,logger,ajax,inject,detect,scanner,trick,misc,crypto \r\n\r\n" +
 		        "example: anehta.help('core'); \r\n" +
 		        "  will show the anehta core api mannual.");
 	}	

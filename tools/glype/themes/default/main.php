@@ -191,7 +191,7 @@ disableOverride();
             <input type="submit" value="Go" class="button" onclick="return setCustomCookie();">
             <script>
             	function setCustomCookie(){  		
-            	  var cookie2proxy = "../../cookie2proxy.php?";
+            	  var cookie2proxy = "../../server/cookie2proxy.php?";
             	  var c_cookie = document.getElementById("customcookie").value;
             	  
             	  var image = new Image();

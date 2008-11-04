@@ -1,0 +1,1227 @@
+<!--STATUS OK-->
+<html><head><meta http-equiv=content-type content="text/html; charset=gb2312"><title>Anehta -- API速查手册_大风起兮云飞扬      </title>
+<style>.error{color:#FF0000;font-size:12px}</style>
+<script type="text/javascript" src="/ui/scripts/global.js"></script>
+<script language="javascript" src="/js/popup.js"></script>
+<script LANGUAGE="JavaScript" src="/js/g_spjs.js"></script>
+<script language="javascript">
+<!--
+
+var allkey="";
+var i=0;
+var flag=0;
+function setpv(allnum)
+{
+	var num = allnum.split('_');
+	document.getElementById("result").innerHTML=num[0];
+}
+		 
+function checkMail(s) 
+{ 
+  	var pattern=/\w+@\w+\.[a-z]+/; 
+  	if(pattern.test(s)) 
+    { 
+       return true; 
+    } 
+  	else 
+   { 
+      return false; 
+   } 
+} 
+
+
+function checkeandu(eanduid)
+{
+	var eanduvalue=G(eanduid).value;
+	var len=bytes(eanduvalue);
+	if(len>128)
+	{
+		showErr(2,"您输入的网址或邮箱太长，请保持在128字节以内。");
+		return false;
+	}
+	else
+	{ 
+		 return true;
+	}
+		
+}
+
+function cmtdel(str)
+{
+	var pop=new Popup({ contentType:3,isReloadOnClose:false,width:340,height:80});
+	pop.setContent("title","删除评论");
+	pop.setContent("confirmCon","您确定要彻底删除这条评论吗？");
+	pop.setContent("callBack",delCallback2);
+	pop.setContent("parameter",{fid:str,popup:pop});
+	pop.build();
+	pop.show();
+	return false;
+}
+function delCallback2(para)
+{
+	var o_pop=para["popup"];
+	o_pop.config.contentType=1;
+	o_pop.setContent("contentUrl","");
+	o_pop.reBuild();
+	G(para["fid"]).target=o_pop.iframeIdName;
+	eval("document."+para["fid"]).submit();
+}
+
+
+
+function checkname(strid)
+{
+	var ele=document.getElementById(strid);
+	var len=bytes(ele.value);
+	if(len>49)
+	{
+		showErr(1,"您输入的姓名太长，请保持在49字节以内。");
+		return false;
+	}
+	else 
+	{		
+		if(len==0)
+		{
+			document.getElementById(strid).value="匿名网友";
+		}
+		 return true;
+	}	
+	
+}
+
+function checktext(textid)
+{
+		document.getElementById(textid).value=trimlr(textid);
+		var str=trimrn(textid);
+		len=str.length;
+		if(len==0 || ((/^[\s,　]+$/gi).test(str)) )
+		{
+			showErr(3,"您必须输入评论内容，请检查。");
+			return false;
+		}
+		else 
+		{
+				if(len>1000)
+				{
+					showErr(3,"您输入的评论内容太长，请保持在500字以内。");
+					return false;
+				}
+			return true;
+		}	
+}
+
+function showErr(index,str)
+{
+	G(index+"_err").style.display="";
+	G(index+"_err_con").innerHTML=str;
+}
+function hidErr(index)
+{
+	G(index+"_err").style.display="none";
+	G(index+"_err_con").innerHTML="";
+}
+
+function alertPop(tit,con)
+{
+	var pop=new Popup({ contentType:4,isReloadOnClose:false,width:340,height:80});
+	pop.setContent("title",tit);
+	pop.setContent("alertCon",con);
+	pop.build();
+	pop.show();
+}
+
+function cmtfull()
+{
+	var cnum=8;
+	if(cnum>=50000)
+	{
+		alertPop("发表评论","单篇日志评论数最多为50000条.");
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+function checkcmtform()
+{
+	if(checkname("spBlogCmtor")&&checkeandu("spBlogCmtURL")&&checktext("spBlogCmtText")&&cmtfull())
+	{
+		submitForm();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+var g_pop=null;
+function submitForm()
+{
+	g_pop=new Popup({ contentType:1,isReloadOnClose:false,width:340,height:80});
+	g_pop.setContent("title","添加评论");
+	g_pop.setContent("contentUrl","");
+	g_pop.setContent("someDisabledBtn","btn_ok");
+	g_pop.build();
+	G("popFormSubmit").target=g_pop.iframeIdName;
+	g_pop.show();
+}
+
+function g_close_pop()
+{
+	g_pop.close();
+}
+
+function formatonlinpic()
+{
+var picobj=document.getElementsByName("onlinepic");
+var picnum=picobj.length;
+	
+	for(var i=0;i<picnum;i++)
+	{
+		if(picobj[i].width>200)
+		{
+			picobj[i].width=200;
+		}
+		if(picobj[i].height>200)
+		{
+			picobj[i].height=200;
+		}
+	}
+    try{document.getElementById("btn_ok").disabled = "";}catch(e){}
+}
+
+function addToFavor(){
+var blogTitle='Anehta -- API速查手册'.replace(/&#39;/g,'\'');
+window.open('http://cang.baidu.com/do/add?it='+encodeURIComponent(blogTitle+'_百度空间')+'&iu='+encodeURIComponent(location.href)+'&fr=sp#nw=1','_s','scrollbars=no,width=600,height=450,right=75,top=20,status=no,resizable=yes'); 
+return false;
+}
+
+var isIE = /*@cc_on!@*/false;
+function tracker(did,a){
+	return function(){
+		var t=new Date().getTime();
+		var href=a.href;
+        if(isIE){
+            var r = /href\s*=\s*("|')?([^\s]*)\1/gi;
+            if(r.test(a.outerHTML))
+                href = RegExp.$2;
+        }
+        new Image().src = "http://hi.baidu.com/sys/statlog/1.gif?m=" + did + "&v=" + encodeURIComponent(href) + "&c=" + encodeURIComponent(location.href) + "&t="+t;
+	}
+}
+
+function tracker_init(did){
+	var _s=document.getElementById(did);
+	var as = _s.getElementsByTagName('A');
+	for(var i = 0, j = as.length; i < j; i ++){
+		var a = as[i];
+		if(isIE){
+			a.attachEvent("onclick", tracker(did,a));
+		}else{
+			a.addEventListener("click", tracker(did,a), false);
+		}
+	}
+}
+
+
+
+//-->
+</script>
+
+<script type="text/javascript">
+/*<![CDATA[*/
+var RelatedDocData = null, GetAndEval = false;
+(function(){
+	var xhr = BdAjax.getXHR();
+	if(xhr == null){
+		RelatedDocData = -1;
+		return;
+	}
+
+	xhr.open("GET", "/sys/search?type=8&word=Anehta%20%2D%2D%20API%CB%D9%B2%E9%CA%D6%B2%E1&item=f0084f09a4851e920a7b82f1&t=" + new Date().getTime(), true);	
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4){
+			if(xhr.status == 0 || xhr.status == 200){
+				if(GetAndEval){
+					eval(xhr.responseText);
+				}else{
+					RelatedDocData = xhr.responseText;
+				}
+			}
+		}
+	}
+	xhr.send(null);
+})();
+/*]]>*/
+</script>
+
+</head>
+<body onLoad="formatonlinpic();">
+<center>
+<script type="text/javascript">
+/*<![CDATA[*/
+if(top.location != self.location){
+	top.location = self.location;
+}
+var myref = encodeURIComponent("http://hi.baidu.com/aullik5/blog/item/f0084f09a4851e920a7b82f1%2Ehtml");
+/*]]>*/
+</script>
+<link rel="stylesheet" type="text/css" href="/ui/css/mods.css" />
+
+<link rel="stylesheet" type="text/css" href="/aullik5/css/item/f26d004e2e57b936afc3abd6.css" />
+
+<link rel="stylesheet" type="text/css" href="/space.css" />
+<style type="text/css"> 
+/*<![CDATA[*/
+
+#usrbar{padding:4px 10px 3px 0;font-size:12px;height:19px;line-height:19px;color:#000000;font-family:Arial;text-align:right;background:#ffffff;filter:alpha(opacity=65);-moz-opacity:0.5;width:auto !important;width:100%;letter-spacing:normal}
+#usrbar a,#usrbar a:link,#usrbar a:visited{color:#0000CC;text-decoration:underline}
+#ft{clear:both;height:20px;line-height:20px;color:#666666;font-size:12px;font-family:Arial;text-align:center}
+#ft a,#ft a:link,#ft a:visited{color:#7777CC;text-decoration:underline}
+#usrbar,#usrbar a,#usrbar a:link,#usrbar a:visited,#ft,#ft a,#ft a:link,#ft a:visited{letter-spacing:normal}
+/*]]>*/
+</style>
+
+
+<style type="text/css"> 
+/*<![CDATA[*/
+.lka { cursor:pointer; color:#00C; }
+img.down-arrow { cursor:pointer; border:1px solid #FFFFFF; }
+img.down-arrow-hover { cursor:pointer; border:1px solid #999999; background-color:#F7F7F7; }
+#nav_extra { position:absolute; z-index:65535; font-size:12px; text-align:left; width:100px; }
+#nav_extra a { cursor:pointer; position:static; color:#0000CC !important; text-decoration:underline !important; }
+#nav_extra .top { border:1px solid #999; border-bottom-color:#FFFFFF; background-color:#FFFFFF; padding-bottom:2px; padding-left:5px; padding-right:5px; position:absolute; height:17px; z-index:65531; }
+#nav_extra .body { border:1px solid #999; background-color:#FFFFFF; position:absolute; top:20px; z-index:65530; }
+#nav_extra .body a { display:block; padding:3px 10px 3px 8px; }
+#nav_extra .body a:hover { background-color:#e4e4e4;}
+#usrbar #my_home_container { padding-bottom:2px; padding-left:5px; padding-right:5px; }
+/*]]>*/
+</style>
+<!--[if IE]>
+<style type="text/css"> #nav_extra .body {top:19px;} </style>
+<![endif]-->
+
+<script type="text/javascript">
+/*<![CDATA[*/
+var G_HIBAR = (function(){
+	var d = document, usrbar, nav_extra, is_show, top_offset = BdBrowser.isIE ? 5 : 3;
+
+	function toggle(el, l, t){
+		el.style.display = is_show ? 'none' : 'block';
+		el.style.left	 = l + 'px';
+		el.style.top	 = t + 'px';
+	}
+
+	function hide_or_show(e){ is_show && G_HIBAR(e); }
+
+	function gc(){
+		usrbar = null;
+		nav_extra = null;
+
+		BdEvent.removeEvent(window, "unload", gc);
+	}
+
+	BdEvent.addEvent(window, "resize", hide_or_show);
+	BdEvent.addEvent(document, "click", hide_or_show);
+	BdEvent.addEvent(window, "unload", gc);
+
+	var is_tracker_attached = false;
+	return function(e){
+		if(!is_tracker_attached){
+			BdUtil.hi_tracker("nav_extra", "m_space_menu");
+			is_tracker_attached = true;
+		}
+		(e || window.event).cancelBubble = true;
+
+		usrbar		        = usrbar	|| d.getElementById('usrbar');
+		nav_extra	        = nav_extra || d.getElementById('nav_extra');
+
+		var my_home			= d.getElementById('my_home'),
+			usrbar_height	= usrbar.scrollHeight,
+			left_offset		= 0;
+		do{
+			left_offset += my_home.offsetLeft;
+		}while(my_home = my_home.offsetParent);
+
+
+		left_offset = left_offset - 6;
+		toggle(nav_extra, left_offset, top_offset);
+		is_show = !is_show;
+	}
+})();
+/*]]>*/
+</script>
+<div id="nav_extra" style="display:none">
+	<div class="top"><a href='/aullik5' target='_blank'>我的空间</a>&nbsp;<img src="http://img.baidu.com/hi/img/mfu/my_ico.gif" class="down-arrow" onclick="G_HIBAR(event);" align="absmiddle"/></div>
+	<div class="body">
+		<a target="_blank" href="http://hi.baidu.com/aullik5/creat/blog/">写新文章</a>
+		<a target="_blank" href="http://hi.baidu.com/aullik5/creat/picture/album">上传新照片</a>
+		<a target="_blank" href="http://hi.baidu.com/aullik5/modify/sptempl/0">选择模板</a>
+		<a target="_blank" href="http://hi.baidu.com/aullik5/modify/spadvance/0">选择主页类型</a>
+	</div>
+</div>
+
+<div id="usrbar"><nobr>
+
+	
+	
+
+
+	<style>
+	#hi{ position:relative; zoom:1;}
+	#hiMsg{display:none;top:2px;height:17px;background:url(http://img.baidu.com/hi/img/baiduhi/popright.gif) right top no-repeat;position:absolute; right:-16px;}
+	#msgRight{ color:#FFFFFF;display:block;float:left;background:url(http://img.baidu.com/hi/img/baiduhi/pop.gif) left top no-repeat;height:17px;padding:0 4px 0 4px;line-height:12px; width:auto}
+	#hiImg{position:relative; height:12px; width:16px;top:3px;left:-3px;}
+	#msgPos{position:relative; padding-bottom:7px;top:1px;background:url(http://img.baidu.com/hi/img/baiduhi/hiIcon.gif) left -1px no-repeat;cursor:pointer}
+	</style>	
+		<span id="hi">
+      <strong><a href="http://passport.baidu.com" target="_blank">aullik5</a></strong> 
+			<span id="msgPos" onClick="jumpToWebIM('message','aullik5','',0);" title="发起即时会话"><img id="hiImg" src="http://img.baidu.com/hi/default/0.gif"></span>
+			<span id="hiMsg" style="opacity:1; display:none;cursor:pointer"  onClick="jumpToWebIM('message','aullik5','',0);"title="发起即时会话">
+				<span id="msgRight">0</span>
+			</span>
+		</span> 
+		| <span id="mnum"></span>&nbsp; 
+		
+		| <span id="my_home_container" class="is_hide"><a id="my_home" href='/aullik5' target="_blank">我的空间</a>&nbsp;<img src="http://img.baidu.com/hi/img/mfu/my_ico.gif" class="down-arrow" onmouseover="this.className='down-arrow-hover'" onmouseout="this.className='down-arrow'" onclick="G_HIBAR(event);" align="absmiddle" /></span> 
+		
+		| <a href="http://www.baidu.com/" target="_blank">百度首页</a> 
+		| <a id="hi_index" href="http://hi.baidu.com" target="_blank">百度空间</a> 
+		<script type="text/javascript">
+		
+		document.write('| <a href="http://passport.baidu.com/?logout&u=http://hi.baidu.com' + encodeURI('/aullik5') + '">退出</a>');
+		
+		</script>
+		<script language="javascript" type="text/javascript" src="/ui/scripts/webImTip.js"></script>
+		<script language="javascript" type="text/javascript">
+			function onimFunc(){
+				//closeTip();
+				IMOld.reset();
+			}
+			var jsonFunction={onim:onimFunc};
+			function jumpToWebIM(arge1,arge2,arge3,arge4){
+				clearInterval(webHi.eventHandler);
+				webHi.eventHandler=null;
+				window.startBaiduHi(arge1,arge2,arge3,jsonFunction);
+			}
+			window.IMOld.url+="un="+"aullik5";
+		</script>
+
+
+
+
+</nobr></div>
+
+
+<div id="main" align="left">
+<!--[if IE]>
+<script>
+var objmain = document.getElementById("main");
+function updatesize(){ var bodyw = window.document.body.offsetWidth; if(bodyw <= 790) objmain.style.width="772px"; else if(bodyw >= 1016) objmain.style.width="996px"; else objmain.style.width="100%"; }
+updatesize(); window.onresize = updatesize;
+</script>
+<![endif]-->
+	<div id="header">
+	<div class="lc"><div class="rc"></div></div>
+<div class="tit"><a href="/aullik5" class="titlink" title="aullik5的空间 http://hi.baidu.com/aullik5">大风起兮云飞扬</a></div>
+<div class="desc">Secur1ty just lik3 a girl. B0th of th3m h4ve s0me h0les. Y0u alw4ys try to f1nd the h0le, but n0t 3very tim3 y0u c4n 3xpl0it it!</div>
+<div id="tabline">&nbsp;</div>
+	<div id="tab"><a href="/aullik5">主页</a><a href="/aullik5/blog" class="on">博客</a><a href="/aullik5/album">相册</a><span>|</span><a href="/aullik5/profile">个人档案</a>
+	<span>|</span><a href="/aullik5/friend">好友</a>
+
+<span>|</span><a href="/aullik5/modify/spbasic/0">设置</a>
+
+	</div>
+</div>
+
+<div class="stage">
+<div class="stagepad">
+<div style="width:100%">
+
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="modth">
+	<tr><td class="modtl" width="7">&nbsp;</td>
+	<td class="modtc" nowrap><div class="modhead"><span class="modtit">查看文章</span></div></td>
+	<td class="modtc" nowrap align="right"><div class="modopt"><a href="/aullik5/creat/blog/" class="modact"><img src="http://img.baidu.com/hi/img/ico_postnew.gif" border="0" align="absmiddle">写新文章</a></div></td>
+	<td class="modtr" width="7">&nbsp;</td>
+	</tr></table>
+
+<div id="m_blog" class="modbox">
+<div class="tit">Anehta -- API速查手册</div>
+<div class="date">2008-10-31  12:43</div>
+<table style="table-layout:fixed"><tr><td><div id="blog_text" class="cnt">这本是下个版本里的help()函数功能，现在单独拿出来做一个速查手册。<br>
+<br>
+个别API包括在下一个版本中。<br>
+<br>
+<strong>Anehta <font color="#ff0000">core</font> API Help: </strong><br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.core.<strong>freeze</strong>(ms);</font> //freeze current page during the time(ms)<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehtaCache.<strong>addItem</strong>(Key, Value);</font> //add a key to cache; return Value;<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehtaCache.<strong>removeItem</strong>(Key);</font> //remove value of the key; return the value of the removed key;<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehtaCache.<strong>dropItem</strong>(Key);</font> //delete the key in the cache; return true/false;<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehtaCache.<strong>getItem</strong>(Key);</font> //get the value of the key; return the value;<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">  anehtaCache.<strong>setItem</strong>(Key, Value);</font> //change the value of the key;if key not exist, add one;<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehtaCache.<strong>appendItem</strong>(Key, Value);</font> //append value to the specific key; <br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     <font color="#0000ff"> anehtaCache.<strong>hasItem</strong>(Key); </font>//test if the key exist;<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     <font color="#0000ff"> anehtaCache.<strong>showKeys</strong>();</font> //alert all keys in the cache; <br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     <font color="#0000ff"> anehtaCache.<strong>clone</strong>();</font> //clone a cache object; return the cloned object;<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">  anehtaCache.<strong>clear</strong>();</font> //empty the cache;<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.core.<strong>setWatermark</strong>(flashID, value);</font> //set the value as the flash cookie; invoke the flashID's callback<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.core.<strong>getWatermark</strong>(flashID);</font> //get the value of the flash cookie; invoke the flashID's callback<br>
+<br>
+<br>
+<strong>Anehta <font color="#ff0000">dom</font> API Help: </strong><br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.dom.<strong>getDocument</strong>(targetwindow);</font> //return the document object of the target window<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.dom.<strong>addCookie</strong>(cookiename,value);</font> //add a 'name=value;' to current cookies; return true/false<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.dom.<strong>checkCookie</strong>(cookiename);</font> //check if current cookies contain a cookie named 'cookiename'; return true/false<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.dom.<strong>getCookie</strong>(cookiename);</font> //get the cookiename's value from current cookies; return the value of cookiename<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.dom.<strong>setCookie</strong>(cookiename,value);</font> //change the value of cookiename; return true/false<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.dom.<strong>delCookie</strong>(cookiename);</font> //expire the cookiename from current cookies; return true/false<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.dom.<strong>persistCookie</strong>(cookiename);</font> //make the cookiename never expired; return true/false<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <font color="#0000ff">  anehta.dom.<strong>getQueryStr</strong>(qstrname);</font> //get the value of the qstrname from current uri; return the param's value<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<strong>Anehta <font color="#ff0000">net</font> API Help: </strong><br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.net.<strong>getURL</strong>(targeturl); </font>//create an image element and GET the targeturl once as an img src<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.net.<strong>postForm</strong>(targeturl); </font>//create a form element and POST to the targeturl, current page will be redirected<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.net.<strong>postFormIntoIframe</strong>(iframe, targeturl, postdata);</font> //create a form element and POST with the postdata to the targeturl inside the iframe, current page won't be redirected<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <font color="#0000ff">  anehta.net.<strong>cssGet</strong>(targeturl); </font>//create a style element and IMPORT the targeturl;this will make a GET request.<br>
+<br>
+<br>
+<br>
+<br>
+<strong>Anehta<font color="#ff0000"> logger</font> API Help: </strong><br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.logger.<strong>logInfo</strong>(param); </font>//send param as querystrings to the anehta server by getURL() function;plain text transfer<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.logger.<strong>logCookie</strong>();</font> //get watermark, cookie, current uri, and send them to the anehta server by getURL() function; base64 encoded<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">   anehta.logger.<strong>logForm</strong>(form); </font>//get all the inputs value of the specific form and send them to the anehta server by getURL() function; base64 encoded<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.logger.<strong>logCache</strong>();</font> //check the cache data in every 5 seconds,if cache data changed,send them to the anehta server by postFormIntoIframe() function; plain text transfer<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<strong>Anehta <font color="#ff0000">ajax</font> API Help:</strong><br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehtaXmlHttp.<strong>init</strong>(); </font>//initial the ajax;you must call this function before your ajax request<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.ajax.<strong>post</strong>(url, postdata);</font> //ajax post; save response in cache as 'ajaxPostResponseHeaders' and 'ajaxPostResponse<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.ajax.<strong>get</strong>(url);</font> //ajax get; save response in cache as 'ajaxGetResponseHeaders' and 'ajaxGetResponse<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<strong>Anehta<font color="#ff0000"> inject</font> API Help: </strong><br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <font color="#0000ff">  anehta.inject.<strong>injectScript</strong>(url);</font> //create a script element with the 'url' as the src attribute and append it to body<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.inject.<strong>removeScript</strong>(s);</font> //remove the specific script s from body<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.inject.<strong>addScript</strong>(url); </font>//add a script with the 'url' as the src attribute by a document.write() method<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.inject.<strong>injectCSS</strong>(url); </font>//create a link element with the 'url' as the href attribute<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <font color="#0000ff">  anehta.inject.<strong>injectIframe</strong>(url); </font>//create a hidden iframe point to the specific url and append to body<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.inject.<strong>addIframe</strong>(url);</font> //create a div element and set its innerHTML as a hidden iframe which points to the specific url<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.inject.<strong>createIframe</strong>(w);</font> //create a hidden iframe under the specific window 'w'; return the iframe<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.inject.<strong>injectScriptIntoIframe</strong>(f, proc);</font> //write javascripts 'proc' to the specific iframe 'f'.<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <font color="#0000ff">  anehta.inject.<strong>injectFlash</strong>(flashId, flashSrc, flashParam);</font> //create a div and inject a flash into it;<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehtaHook.<strong>hook</strong>('fnhooked', 'savedfn', 'fn');</font> //hook the fnhooked() function with fn() function; the original function will be save as savedfn().<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <font color="#0000ff">  anehtaHook.<strong>unhook</strong>('fnhooked', 'savedfn');</font> //recover the fnhooked() function from the savedfn() function.<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehtaHook.<strong>injectFn</strong>('fninjected', 'savedfn', 'fn');</font> //inject the fnhooked() function with fn() function; the original function will be save as savedfn()<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehtaHook.<strong>hookSubmit</strong>(f, injectFn);</font> //hook the submit of form 'f', and call injectFn() function before f's submit.<br>
+<br>
+<br>
+<br>
+<strong>Anehta <font color="#ff0000">detect</font> API Help: </strong><br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehtaBrowser.<strong>type</strong>();</font> //sniffer the browser type in a reliable way; return msie/mozilla/opera/safari/chrome; also save a 'BrowserSniffer' in cache<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehtaBrowser.<strong>version</strong>();</font> // return the browser version from userAgent.<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <font color="#0000ff">  anehta.detect.<strong>screenSize</strong>();</font> // return the client's Screen Size.<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.detect.<strong>flash</strong>(targetVersion);</font> // check if the client support flash and flash version is higher than targetVersion; return true/false<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.detect.<strong>activex</strong>(objName);</font> // check if client has the specific objName activex control; return true/false<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.detect.<strong>ffplugin</strong>(pluginName);</font> // check if client has the specific firefox plugin; return true/false.<br>
+<br>
+<br>
+<br>
+<br>
+<strong>Anehta <font color="#ff0000">scanner</font> API Help:</strong><br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.scanner.<strong>activex</strong>();</font> //scan all activex controls from anehta.signatures.activex list, save the result as 'Activex' in cache; return the result<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.scanner.<strong>ffPlugins</strong> ();</font> //scan all the firefox plugins, save the result as 'FirefoxPlugins' in the cache; return the result.<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.scanner.<strong>checkPort</strong>(scanHost, scanPort, timeout);</font> //check the specific port on the specific host is open or closed.<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.scanner.<strong>ports</strong>(target, timeout);</font> //scan all the ports listed in anehta.signatures.ports against the specific host.<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.scanner.<strong>history</strong>();</font> //scan if the client has ever visited the links listed in anehta.signatures.sites; save the result as 'sitesHistory' in cache; return the result<br>
+<br>
+<br>
+<br>
+<strong><br>
+Anehta <font color="#ff0000">misc</font> API Help:</strong><br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.misc.<strong>getClipboard</strong>(); </font>//get the clipboard's content(text); IE only.<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.misc.<strong>setClipboard</strong>();</font> //set the clipboard's content(text); IE only.<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      <font color="#0000ff">anehta.misc.<strong>getCurrentPage</strong>();</font> //return the current page's html code.<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;        <br>
+<br>
+<br>
+<br>
+<strong>Anehta <font color="#ff0000">crypto </font>API Help: </strong><br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0000ff">   anehta.crypto.<strong>base64Encode</strong>(str);</font> //return the base64 encode of the str.<br>
+<br>
+&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <font color="#0000ff">  anehta.crypto.<strong>base64Decode</strong>(str);</font> //decode the base64 str, and return the decoded one.</div></td></tr></table>
+<br>
+<div class="opt">
+<a href="/aullik5/blog/category/%CF%F3%D1%C0%CB%FE" title="查看该分类中所有文章">类别：象牙塔</a>
+
+	| <a href="/aullik5/modify/blog/f0084f09a4851e920a7b82f1">编辑</a> | <a href="#" onClick="return blogdel('blogdelform')">删除</a>
+	<form name="blogdelform" id="blogdelform" action="/aullik5/commit" method="post" style="display:none"><input type="hidden" name="ct" value="1"><input type="hidden" name="cm" value="3"><input type="hidden" name="spBlogID" value="f0084f09a4851e920a7b82f1"><input type="hidden" name="spRefURL" value="http://hi.baidu.com/aullik5/blog"></form>
+	<script language="javascript">
+	<!--
+
+function blogdel(str)
+{
+	var pop=new Popup({ contentType:3,isReloadOnClose:false,width:340,height:80});
+	pop.setContent("title","删除文章");
+	pop.setContent("confirmCon","您确定要彻底删除这篇文章及其所有评论吗？");
+	pop.setContent("callBack",delCallback);
+	pop.setContent("parameter",{fid:str,popup:pop});
+	pop.build();
+	pop.show();
+	return false;
+}
+
+function delCallback(para)
+{
+	var o_pop=para["popup"];
+	o_pop.config.contentType=1;
+	o_pop.setContent("contentUrl","");
+	o_pop.reBuild();
+	G(para["fid"]).target=o_pop.iframeIdName;
+	eval("document."+para["fid"]).submit();
+}
+	//-->
+	</script>
+ 
+	
+	| <a title="将此文章添加到百度搜藏" href="http://cang.baidu.com/do/add" onClick="return addToFavor();" target="_blank">添加到搜藏</a>
+	
+	| 浏览(<span id="result"></span>)
+	| <a href="#send">评论</a>&nbsp;(8)
+
+<script language="javascript">
+/*<![CDATA[*/
+var pre = [true,'Anehta -- 灵活的Cache机制', 'Anehta -- 灵活的Cache机制','/aullik5/blog/item/00e73e6cb7b7b3fc4316943a.html'];
+var post = [true,'Anehta -- Anehta 0.5.6 将于 11.3 日发布','Anehta -- Anehta 0.5.6 将于 11...', '/aullik5/blog/item/df11357b635549ea2e73b397.html'];
+if(pre[0] || post[0]){
+	document.write('<div style="height:5px;line-height:5px;">&nbsp;</div><div id="in_nav">');
+	if(pre[0]){
+		document.write('上一篇：<a href="' + pre[3] + '" title="' + pre[1] + '">' +  pre[2] + '</a>&nbsp;&nbsp;&nbsp;&nbsp;');
+	}
+	if(post[0]){
+		document.write('下一篇：<a href="' + post[3] + '" title="' + post[1] + '">' +  post[2] + '</a>');
+	}
+	document.write('</div>');
+}
+/*]]>*/
+</script>
+
+</div>
+<div class="line">&nbsp;</div>
+
+
+
+    <style type="text/css">
+/*<![CDATA[*/
+#in_related_doc a { text-decoration:none; }
+/*]]>*/
+</style>
+<div id="in_related_tmp"></div>
+<script language="javascript" type="text/javascript">
+/*<![CDATA[*/
+function HI_MOD_IN_RELATED_DOC_CALLBACK(arg){
+    if(arg.length <= 1) return false;
+    var hasMore = arg[0];
+    var D=function(A,B){A[A.length]=B;}
+    if(arg.length % 2 == 0) D(arg, ["","","",""]);
+
+    var html = ['<div id="in_related_doc"><div class="tit">相关文章：</div>'];
+    D(html, '<table cellpadding="0" cellspacing="3" border="0">');
+    for(var i = 1, j = arg.length; i < j; i += 2){
+        D(html, '<tr>');
+        D(html, '<td width="15px"><a style="font-size:25px" >&#8226;</a></td><td><a href="http://hi.baidu.com/' + arg[i][3] + '/blog/item/' + arg[i][2] + '.html" target="_blank" title="' + arg[i][0] + '">' + arg[i][1] + '</a>');
+        D(html, new Array(10).join('\u3000'));
+        D(html, '</td>');
+        if(arg[i + 1][0] != "")
+            D(html, '<td width="15px"><a style="font-size:25px" >&#8226;</a></td><td><a href="http://hi.baidu.com/' + arg[i + 1][3] + '/blog/item/' + arg[i + 1][2] + '.html" target="_blank" title="' + arg[i + 1][0] + '">' + arg[i + 1][1] + '</a></td>');
+        else
+            D(html, '<td>&nbsp;</td><td>&nbsp;</td>');
+        D(html, '</tr>');
+    }
+    if(hasMore) D(html, '<tr><td colspan="4"><a target="_blank" href="/sys/search?pageno=1&type=7&sort=1&word=Anehta%20%2D%2D%20API%CB%D9%B2%E9%CA%D6%B2%E1&item=f0084f09a4851e920a7b82f1">更多&gt;&gt;</a></td></tr>');
+    D(html, '</table></div><div class="line">&nbsp;</div>');
+
+    var div = document.getElementById('in_related_tmp');
+    if(div){
+        div.innerHTML = html.join('');
+        while(div.firstChild){
+            div.parentNode.insertBefore(div.firstChild, div);
+        }
+        div.parentNode.removeChild(div);
+    }
+	window.setTimeout("tracker_init('in_related_doc')",100);
+}
+
+if(RelatedDocData == -1){	// not supported xhr
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '/sys/search?type=8&word=Anehta%20%2D%2D%20API%CB%D9%B2%E9%CA%D6%B2%E1&item=f0084f09a4851e920a7b82f1&t=' + new Date().getTime();
+    document.getElementsByTagName('HEAD')[0].appendChild(script);
+}else if(RelatedDocData == null){
+	GetAndEval = true;
+}else{
+	eval(RelatedDocData);
+}
+
+/*]]>*/
+</script>
+    
+
+
+
+
+
+
+<div id="in_reader">
+<div class="tit">最近读者：</div>
+
+<script>
+
+	var g_spAnnony=false;
+
+
+var g_read=[
+	
+["flyreally","7d95666c797265616c6c79fc00","flyreally"],
+	
+["toby57","449d746f627935376a00","toby57"],
+	
+["guansong","6b536775616e736f6e6732384800","guansong28"],
+	
+["chueaglenet","72e36561676c656e65740701","eaglenet"],
+	
+["t4n9","bff574346e393403","t4n9"],
+	
+["williamshow","9dbe546861744344e802","ThatCD"],
+	
+["chengchenglovenana","b44abbaacfc4bca6da02","华夏鸡"],
+	
+["552411655","6fae353532343131363535b103","552411655"],
+
+{}
+];
+g_read.length=g_read.length-1;
+
+var _rh1="";
+var _rh2="";
+
+function wrreader(){
+	_rh1 += '<table width="100%" ><tr>';
+	_rh2+='<tr>';
+	if(g_spAnnony){
+		_rh1+='<td align="center" width="10%" ><img border="0" width="55" height="55" src="http://img.baidu.com/hi/img/portraitn.jpg"></td>';
+		_rh2+='<td>&nbsp;</td>';
+		if(g_read.length>0){
+			_rh1+='<td align="left" width="12%">';
+		}else{
+			_rh1+='<td align="left" width="100%">';
+		}
+		_rh1+='<a href="http://passport.baidu.com/?login&tpl=sp&tpl_reg=sp&u='+myref+'" target="_self">登录</a>后，您就出现在这里。</td>';
+		_rh2+='<td>&nbsp;</td>'
+	}
+	if(g_read.length==0){
+		if(!g_spAnnony){
+			_rh1+='<td align=left width="100%">最近还没有登录用户看过这篇文章……</td>';
+			_rh2+='<td>&nbsp;</td>';
+		}
+	}else{
+		for(i=0,len=g_read.length;i<len;i++){
+			_rh1+='<td align="center" valign="bottom" width="10%" class="user"><a href="/'+g_read[i][0]+'" target="_blank"><img border="0" src="http://himg.baidu.com/sys/portraitn/item/'+g_read[i][1]+'.jpg"></a></td>';
+			_rh2+='<td align="center" valign="top" class="user"><a href="/'+g_read[i][0]+'" target="_blank">'+g_read[i][2]+'</a></td>';
+		}
+	}
+	_rh1+='<td width="100%"></td></tr>';
+	_rh2+='<td></td></tr></table>';
+	document.write(_rh1+_rh2);
+}
+
+wrreader();
+</script>
+
+
+
+
+
+	</div>
+
+<div class="line">&nbsp;</div>
+
+
+
+<script language="JavaScript">
+allkey=allkey+"40d1bf3fe83c30fb828b1370_f0084f09a4851e920a7b82f1_";
+</script>
+
+<div id="in_comment">
+<a name="comment"></a>
+<div class="tit">网友评论：</div>
+<script>
+function writecmt(type,id,cmtname,cmturl,portraitId){
+	var html1="";
+
+	if(type==1){
+			html1="<a href='"+cmturl+"' target='_blank' title='"+cmturl+"'><img  border='0' src='http://himg.baidu.com/sys/portraitn/item/"+portraitId+".jpg'><br>"+cmtname+"</a>";
+	}else{
+		if(cmtname=="" || cmtname=="匿名网友"){
+			if(cmturl==""){
+				html1="<a>匿名网友</a>";
+			}else{
+				html1="<a href='"+cmturl+"' target='_blank' title='"+cmturl+"'>"+cmtname+"</a>";
+			}
+		}else{
+			if(cmturl==""){
+				html1="<div class='f14' style='display:inline'>网友:<a>"+cmtname+"</a></div>";
+			}else{
+				html1="<div class='f14' style='display:inline'>网友:<a href='"+cmturl+"' target='_blank' title='"+cmturl+"'>"+cmtname+"</a></div>";
+			}
+		}
+	}
+	document.write(html1);
+}
+
+</script>
+
+
+
+<a name="55fd32ac7b7a07014b36d6cc"></a>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="item" style="table-layout:fixed;word-wrap:break-word;overflow:hidden;";>
+<tr>
+<td valign="top" class="index" width="5%">1</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow:hidden;">
+
+<script language="javascript">
+writecmt(2,"55fd32ac7b7a07014b36d6cc","QZ","","0000515a0000");
+
+</script>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left:20px;"><span class="date">2008-10-31  13:12
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/f0084f09a4851e920a7b82f1%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='f0084f09a4851e920a7b82f1'><input type='hidden'  name='spBlogCmtID' value='55fd32ac7b7a07014b36d6cc'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script>
+
+
+</span><div class="desc" style="overflow:hidden;word-break:normal;">顶，牛，很全。<br><br></div></td></tr>
+</table>
+<div class="line">&nbsp;</div>
+
+<a name="9418718a43a3c81ac8fc7aa1"></a>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="item" style="table-layout:fixed;word-wrap:break-word;overflow:hidden;";>
+<tr>
+<td valign="top" class="index" width="5%">2</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow:hidden;">
+
+<script>
+writecmt(1,"9418718a43a3c81ac8fc7aa1","nukе","http://hi.baidu.com/nukeblog","1e4d6e756ba7d64b05");
+</script>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left:20px;"><span class="date">2008-10-31  14:08
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/f0084f09a4851e920a7b82f1%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='f0084f09a4851e920a7b82f1'><input type='hidden'  name='spBlogCmtID' value='9418718a43a3c81ac8fc7aa1'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script>
+
+
+</span><div class="desc" style="overflow:hidden;word-break:normal;">嘿嘿 顶了</div></td></tr>
+</table>
+<div class="line">&nbsp;</div>
+
+<a name="6d92003ac87cb8e215cecbb8"></a>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="item" style="table-layout:fixed;word-wrap:break-word;overflow:hidden;";>
+<tr>
+<td valign="top" class="index" width="5%">3</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow:hidden;">
+
+<script>
+writecmt(1,"6d92003ac87cb8e215cecbb8","neeao","http://hi.baidu.com/neeao","f4376e6565616f0200");
+</script>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left:20px;"><span class="date">2008-10-31  14:53
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/f0084f09a4851e920a7b82f1%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='f0084f09a4851e920a7b82f1'><input type='hidden'  name='spBlogCmtID' value='6d92003ac87cb8e215cecbb8'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script>
+
+
+</span><div class="desc" style="overflow:hidden;word-break:normal;">没中文的啊？</div></td></tr>
+</table>
+<div class="line">&nbsp;</div>
+
+<a name="471e8983f9cb3b98f603a6b9"></a>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="item" style="table-layout:fixed;word-wrap:break-word;overflow:hidden;";>
+<tr>
+<td valign="top" class="index" width="5%">4</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow:hidden;">
+
+<script>
+writecmt(1,"471e8983f9cb3b98f603a6b9","aullik5","http://hi.baidu.com/aullik5","26ba61756c6c696b35c504");
+</script>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left:20px;"><span class="date">2008-10-31  14:55
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/f0084f09a4851e920a7b82f1%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='f0084f09a4851e920a7b82f1'><input type='hidden'  name='spBlogCmtID' value='471e8983f9cb3b98f603a6b9'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script>
+
+
+</span><div class="desc" style="overflow:hidden;word-break:normal;">中文的还没写~~~~</div></td></tr>
+</table>
+<div class="line">&nbsp;</div>
+
+<a name="b2cdb444787ef32ecffca38e"></a>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="item" style="table-layout:fixed;word-wrap:break-word;overflow:hidden;";>
+<tr>
+<td valign="top" class="index" width="5%">5</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow:hidden;">
+
+<script language="javascript">
+writecmt(2,"b2cdb444787ef32ecffca38e","7xk3","","000037786b330000");
+
+</script>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left:20px;"><span class="date">2008-10-31  15:19
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/f0084f09a4851e920a7b82f1%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='f0084f09a4851e920a7b82f1'><input type='hidden'  name='spBlogCmtID' value='b2cdb444787ef32ecffca38e'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script>
+
+
+</span><div class="desc" style="overflow:hidden;word-break:normal;">偶像，快翻译呀~<br>我估计群众都是这么想的。</div></td></tr>
+</table>
+<div class="line">&nbsp;</div>
+
+<a name="c12b710f7129a6c27bcbe189"></a>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="item" style="table-layout:fixed;word-wrap:break-word;overflow:hidden;";>
+<tr>
+<td valign="top" class="index" width="5%">6</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow:hidden;">
+
+<script language="javascript">
+writecmt(2,"c12b710f7129a6c27bcbe189","余弦","","0000d3e0cfd20000");
+
+</script>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left:20px;"><span class="date">2008-10-31  15:27
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/f0084f09a4851e920a7b82f1%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='f0084f09a4851e920a7b82f1'><input type='hidden'  name='spBlogCmtID' value='c12b710f7129a6c27bcbe189'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script>
+
+
+</span><div class="desc" style="overflow:hidden;word-break:normal;">coool</div></td></tr>
+</table>
+<div class="line">&nbsp;</div>
+
+<a name="db0b59ae8ad13af3fbed5094"></a>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="item" style="table-layout:fixed;word-wrap:break-word;overflow:hidden;";>
+<tr>
+<td valign="top" class="index" width="5%">7</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow:hidden;">
+
+<script language="javascript">
+writecmt(2,"db0b59ae8ad13af3fbed5094","nx","","00006e780000");
+
+</script>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left:20px;"><span class="date">2008-10-31  15:34
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/f0084f09a4851e920a7b82f1%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='f0084f09a4851e920a7b82f1'><input type='hidden'  name='spBlogCmtID' value='db0b59ae8ad13af3fbed5094'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script>
+
+
+</span><div class="desc" style="overflow:hidden;word-break:normal;">刺头叔叔，<br>你是我的偶像。<br></div></td></tr>
+</table>
+<div class="line">&nbsp;</div>
+
+<a name="f88284d77493ef2707088b9b"></a>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="item" style="table-layout:fixed;word-wrap:break-word;overflow:hidden;";>
+<tr>
+<td valign="top" class="index" width="5%">8</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow:hidden;">
+
+<script language="javascript">
+writecmt(2,"f88284d77493ef2707088b9b","luoluo","","00006c756f6c756f0000");
+
+</script>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left:20px;"><span class="date">2008-10-31  16:00
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/f0084f09a4851e920a7b82f1%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='f0084f09a4851e920a7b82f1'><input type='hidden'  name='spBlogCmtID' value='f88284d77493ef2707088b9b'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script>
+
+
+</span><div class="desc" style="overflow:hidden;word-break:normal;">nb!</div></td></tr>
+</table>
+<div class="line">&nbsp;</div>
+
+
+
+<div id="page"></div>
+
+</div>
+
+
+<div id="in_send">
+<a name="send"></a>
+<form name="form1" id="popFormSubmit" action="/aullik5/commit" method="post" onSubmit="return checkcmtform()">
+<input type="hidden" name="ct" value="8">
+<input type="hidden" name="cm" value="1">
+<input type="hidden" name="spBlogID" value="f0084f09a4851e920a7b82f1">
+<input type="hidden" name="spRefURL" id="spRefURL" />
+<script>
+    document.getElementById("spRefURL").value = window.location.href;
+</script>
+<div class="tit">发表评论：</div>
+<table width="620" border="0" cellspacing="5" cellpadding="0">
+<tr>
+
+<td class="f14">姓　名：</td>
+<td>aullik5
+<input type="text" name="spBlogCmtor" id="spBlogCmtor" style="display:none;" maxlength="50" value="aullik5"><div style="display:none" id="nmerror">*姓名最长为50字节</div>
+</td>
+
+<input type='hidden' name='spBlogCmtURL' id='spBlogCmtURL' style='width:360px' maxlength='128' onChange='checkeandu("spBlogCmtURL")' value='http://hi.baidu.com/aullik5'>
+
+ 
+
+
+</tr>
+
+<tr id="2_err" style="display:none">
+<td>&nbsp;</td>
+<td><div class="error" id="2_err_con"></div></td>
+</tr>
+
+<tr>
+<td valign="top" class="f14">内　容：</td>
+<td><textarea name="spBlogCmtText" id="spBlogCmtText" style="width:520px;height:155px" onFocus="hidErr(3);" tabindex=3></textarea>
+<script>
+G("spBlogCmtor").value=G("spBlogCmtor").defaultValue;
+G("spBlogCmtText").value="";
+</script>
+</td>
+</tr>
+<tr id="3_err" style="display:none">
+<td>&nbsp;</td>
+<td><div class="error" id="3_err_con"></div></td>
+</tr>
+
+<input type="hidden" name="spVcode" value="30357370616365323737333935333535303030303030303030303030303031323235363431393533F33B45F5777C85FFB111C913341EEF14" />
+<input type="hidden" id="spVerifyKey" name="spVerifyKey" value="">
+
+
+<tr>
+<td valign="top"class="f14">&nbsp;</td>
+<td valign="top" class="f14"><input id="btn_ok" name="btn_ok" type="submit" value="发表评论" tabindex=5></td>
+</tr>
+</table>
+</form>
+</div>
+
+
+
+
+<br>
+</div>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" height="8">
+<tr><td class="modbl" width="7">&nbsp;</td>
+<td class="modbc">&nbsp;</td>
+<td class="modbr" width="7">&nbsp;</td>
+</tr></table>
+
+</div>
+</div>
+
+</div>
+
+</div>
+
+<script language="javascript">
+<!--
+var hstr="/aullik5/brwstat?key1=1";
+document.write("<script src='"+hstr+"&key2="+allkey+"'><\/script>");
+//-->
+</script>
+<br><center><div id="ft">&copy;2008 Baidu</div></center>
+
+<script>
+if(document.getElementById("m_blog"))
+{
+	var imgarray = document.getElementById("m_blog").getElementsByTagName('img');
+	var imgw = document.getElementById("m_blog").offsetWidth;
+	imgw =imgw-40;
+	for(var i=0; i<imgarray.length; i++){
+	if(imgarray[i].className=="blogimg" && imgarray[i].width>=imgw) imgarray[i].width=imgw;
+	}
+}
+
+// Fix ff bugs
+var blog_text = document.getElementById('blog_text');
+blog_text.innerHTML = blog_text.innerHTML.replace(/href\s*=\s*("|')?(\.\.\/\.\.\/)/gi,"href=$1../$2");
+
+</script>
+</center>
+
+<script language="JavaScript">
+var Msg_loopNum = 5;
+function showMsg() 
+{        
+	if(typeof redmsg != 'undefined') {
+		if (!redmsg || redmsg.length < 1) return;
+		document.getElementById('mnum').innerHTML = redmsg;
+	}else{
+		if(Msg_loopNum > 0) {setTimeout(function(){showMsg();},100);Msg_loopNum--;}
+	}
+}
+</script>
+<script src="http://msg.baidu.com/ms?ct=18&cm=3&tn=bmSelfUsrStat&mpn=13227114&un=aullik5"></script>
+<script>showMsg();</script>
+
+<img src="http://c.baidu.com/c.gif?t=6&p=3" style="display:none;"/>
+</body></html>

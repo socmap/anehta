@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<anehtaConfig>
+
+<record>
+<key>1</key>
+<homepage>http://anehta.googlecode.com</homepage>
+<author>axis</author>
+<blog>http://hi.baidu.com/aullik5</blog>
+<team>http://www.ph4nt0m.org</team>
+</record>
+
+<record>
+<key>2</key>
+<anehtaurl>aHR0cDovL3d3dy5hLmNvbS9hbmVodGE=</anehtaurl>
+<boomerangtarget>aHR0cDovL3d3dy5hbGltYWZpYS5jb20veHNzRGVtby5odG1sIyc+PHNjcmlwdCBzcmM9aHR0cDovL3d3dy5hLmNvbS9hbmVodGEvZmVlZC5qcz48L3NjcmlwdD48Jw==</boomerangtarget>
+<boomerangsrc>aHR0cDovL3d3dy5hLmNvbS9hbmVodGEvZGVtby5odG1s</boomerangsrc>
+</record>
+
+</anehtaConfig>

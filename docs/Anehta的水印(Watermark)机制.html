@@ -1,0 +1,1170 @@
+<html><head><!--STATUS OK-->
+<meta http-equiv="content-type" content="text/html; charset=GB2312"><title>Anehta的水印(Watermark)机制_大风起兮云飞扬      </title>
+<style>.error{color:#FF0000;font-size:12px}</style>
+<script type="text/javascript" src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/global.js"></script>
+<script language="javascript" src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/popup.js"></script>
+<script language="JavaScript" src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/g_spjs.js"></script>
+<script language="javascript">
+<!--
+
+var allkey="";
+var i=0;
+var flag=0;
+function setpv(allnum)
+{
+	var num = allnum.split('_');
+	document.getElementById("result").innerHTML=num[0];
+}
+		 
+function checkMail(s) 
+{ 
+  	var pattern=/\w+@\w+\.[a-z]+/; 
+  	if(pattern.test(s)) 
+    { 
+       return true; 
+    } 
+  	else 
+   { 
+      return false; 
+   } 
+} 
+
+
+function checkeandu(eanduid)
+{
+	var eanduvalue=G(eanduid).value;
+	var len=bytes(eanduvalue);
+	if(len>128)
+	{
+		showErr(2,"您输入的网址或邮箱太长，请保持在128字节以内。");
+		return false;
+	}
+	else
+	{ 
+		 return true;
+	}
+		
+}
+
+function cmtdel(str)
+{
+	var pop=new Popup({ contentType:3,isReloadOnClose:false,width:340,height:80});
+	pop.setContent("title","删除评论");
+	pop.setContent("confirmCon","您确定要彻底删除这条评论吗？");
+	pop.setContent("callBack",delCallback2);
+	pop.setContent("parameter",{fid:str,popup:pop});
+	pop.build();
+	pop.show();
+	return false;
+}
+function delCallback2(para)
+{
+	var o_pop=para["popup"];
+	o_pop.config.contentType=1;
+	o_pop.setContent("contentUrl","");
+	o_pop.reBuild();
+	G(para["fid"]).target=o_pop.iframeIdName;
+	eval("document."+para["fid"]).submit();
+}
+
+
+
+function checkname(strid)
+{
+	var ele=document.getElementById(strid);
+	var len=bytes(ele.value);
+	if(len>49)
+	{
+		showErr(1,"您输入的姓名太长，请保持在49字节以内。");
+		return false;
+	}
+	else 
+	{		
+		if(len==0)
+		{
+			document.getElementById(strid).value="匿名网友";
+		}
+		 return true;
+	}	
+	
+}
+
+function checktext(textid)
+{
+		document.getElementById(textid).value=trimlr(textid);
+		var str=trimrn(textid);
+		len=str.length;
+		if(len==0 || ((/^[\s,　]+$/gi).test(str)) )
+		{
+			showErr(3,"您必须输入评论内容，请检查。");
+			return false;
+		}
+		else 
+		{
+				if(len>1000)
+				{
+					showErr(3,"您输入的评论内容太长，请保持在500字以内。");
+					return false;
+				}
+			return true;
+		}	
+}
+
+function showErr(index,str)
+{
+	G(index+"_err").style.display="";
+	G(index+"_err_con").innerHTML=str;
+}
+function hidErr(index)
+{
+	G(index+"_err").style.display="none";
+	G(index+"_err_con").innerHTML="";
+}
+
+function alertPop(tit,con)
+{
+	var pop=new Popup({ contentType:4,isReloadOnClose:false,width:340,height:80});
+	pop.setContent("title",tit);
+	pop.setContent("alertCon",con);
+	pop.build();
+	pop.show();
+}
+
+function cmtfull()
+{
+	var cnum=5;
+	if(cnum>=50000)
+	{
+		alertPop("发表评论","单篇日志评论数最多为50000条.");
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+function checkcmtform()
+{
+	if(checkname("spBlogCmtor")&&checkeandu("spBlogCmtURL")&&checktext("spBlogCmtText")&&cmtfull())
+	{
+		submitForm();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+var g_pop=null;
+function submitForm()
+{
+	g_pop=new Popup({ contentType:1,isReloadOnClose:false,width:340,height:80});
+	g_pop.setContent("title","添加评论");
+	g_pop.setContent("contentUrl","");
+	g_pop.setContent("someDisabledBtn","btn_ok");
+	g_pop.build();
+	G("popFormSubmit").target=g_pop.iframeIdName;
+	g_pop.show();
+}
+
+function g_close_pop()
+{
+	g_pop.close();
+}
+
+function formatonlinpic()
+{
+var picobj=document.getElementsByName("onlinepic");
+var picnum=picobj.length;
+	
+	for(var i=0;i<picnum;i++)
+	{
+		if(picobj[i].width>200)
+		{
+			picobj[i].width=200;
+		}
+		if(picobj[i].height>200)
+		{
+			picobj[i].height=200;
+		}
+	}
+    try{document.getElementById("btn_ok").disabled = "";}catch(e){}
+}
+
+function addToFavor(){
+var blogTitle='Anehta的水印(Watermark)机制'.replace(/&#39;/g,'\'');
+window.open('http://cang.baidu.com/do/add?it='+encodeURIComponent(blogTitle+'_百度空间')+'&iu='+encodeURIComponent(location.href)+'&fr=sp#nw=1','_s','scrollbars=no,width=600,height=450,right=75,top=20,status=no,resizable=yes'); 
+return false;
+}
+
+var isIE = /*@cc_on!@*/false;
+function tracker(did,a){
+	return function(){
+		var t=new Date().getTime();
+		var href=a.href;
+        if(isIE){
+            var r = /href\s*=\s*("|')?([^\s]*)\1/gi;
+            if(r.test(a.outerHTML))
+                href = RegExp.$2;
+        }
+        new Image().src = "http://hi.baidu.com/sys/statlog/1.gif?m=" + did + "&v=" + encodeURIComponent(href) + "&c=" + encodeURIComponent(location.href) + "&t="+t;
+	}
+}
+
+function tracker_init(did){
+	var _s=document.getElementById(did);
+	var as = _s.getElementsByTagName('A');
+	for(var i = 0, j = as.length; i < j; i ++){
+		var a = as[i];
+		if(isIE){
+			a.attachEvent("onclick", tracker(did,a));
+		}else{
+			a.addEventListener("click", tracker(did,a), false);
+		}
+	}
+}
+
+
+
+//-->
+</script>
+
+<script type="text/javascript">
+/*<![CDATA[*/
+var RelatedDocData = null, GetAndEval = false;
+(function(){
+	var xhr = BdAjax.getXHR();
+	if(xhr == null){
+		RelatedDocData = -1;
+		return;
+	}
+
+	xhr.open("GET", "/sys/search?type=8&word=Anehta%B5%C4%CB%AE%D3%A1%28Watermark%29%BB%FA%D6%C6&item=0e2512de4d787915632798c2&t=" + new Date().getTime(), true);	
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4){
+			if(xhr.status == 0 || xhr.status == 200){
+				if(GetAndEval){
+					eval(xhr.responseText);
+				}else{
+					RelatedDocData = xhr.responseText;
+				}
+			}
+		}
+	}
+	xhr.send(null);
+})();
+/*]]>*/
+</script>
+
+</head><body onload="formatonlinpic();">
+<center>
+<script type="text/javascript">
+/*<![CDATA[*/
+if(top.location != self.location){
+	top.location = self.location;
+}
+var myref = encodeURIComponent("http://hi.baidu.com/aullik5/blog/item/0e2512de4d787915632798c2%2Ehtml");
+/*]]>*/
+</script>
+<link rel="stylesheet" type="text/css" href="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/mods.css">
+
+<link rel="stylesheet" type="text/css" href="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/f26d004e2e57b936afc3abd6.css">
+
+<link rel="stylesheet" type="text/css" href="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/space.css">
+<style type="text/css"> 
+/*<![CDATA[*/
+
+#usrbar{padding:4px 10px 3px 0;font-size:12px;height:19px;line-height:19px;color:#000000;font-family:Arial;text-align:right;background:#ffffff;filter:alpha(opacity=65);-moz-opacity:0.5;width:auto !important;width:100%;letter-spacing:normal}
+#usrbar a,#usrbar a:link,#usrbar a:visited{color:#0000CC;text-decoration:underline}
+#ft{clear:both;height:20px;line-height:20px;color:#666666;font-size:12px;font-family:Arial;text-align:center}
+#ft a,#ft a:link,#ft a:visited{color:#7777CC;text-decoration:underline}
+#usrbar,#usrbar a,#usrbar a:link,#usrbar a:visited,#ft,#ft a,#ft a:link,#ft a:visited{letter-spacing:normal}
+/*]]>*/
+</style>
+
+
+<style type="text/css"> 
+/*<![CDATA[*/
+.lka { cursor:pointer; color:#00C; }
+img.down-arrow { cursor:pointer; border:1px solid #FFFFFF; }
+img.down-arrow-hover { cursor:pointer; border:1px solid #999999; background-color:#F7F7F7; }
+#nav_extra { position:absolute; z-index:65535; font-size:12px; text-align:left; width:100px; }
+#nav_extra a { cursor:pointer; position:static; color:#0000CC !important; text-decoration:underline !important; }
+#nav_extra .top { border:1px solid #999; border-bottom-color:#FFFFFF; background-color:#FFFFFF; padding-bottom:2px; padding-left:5px; padding-right:5px; position:absolute; height:17px; z-index:65531; }
+#nav_extra .body { border:1px solid #999; background-color:#FFFFFF; position:absolute; top:20px; z-index:65530; }
+#nav_extra .body a { display:block; padding:3px 10px 3px 8px; }
+#nav_extra .body a:hover { background-color:#e4e4e4;}
+#usrbar #my_home_container { padding-bottom:2px; padding-left:5px; padding-right:5px; }
+/*]]>*/
+</style>
+<!--[if IE]>
+<style type="text/css"> #nav_extra .body {top:19px;} </style>
+<![endif]-->
+
+<script type="text/javascript">
+/*<![CDATA[*/
+var G_HIBAR = (function(){
+	var d = document, usrbar, nav_extra, is_show, top_offset = BdBrowser.isIE ? 5 : 3;
+
+	function toggle(el, l, t){
+		el.style.display = is_show ? 'none' : 'block';
+		el.style.left	 = l + 'px';
+		el.style.top	 = t + 'px';
+	}
+
+	function hide_or_show(e){ is_show && G_HIBAR(e); }
+
+	function gc(){
+		usrbar = null;
+		nav_extra = null;
+
+		BdEvent.removeEvent(window, "unload", gc);
+	}
+
+	BdEvent.addEvent(window, "resize", hide_or_show);
+	BdEvent.addEvent(document, "click", hide_or_show);
+	BdEvent.addEvent(window, "unload", gc);
+
+	var is_tracker_attached = false;
+	return function(e){
+		if(!is_tracker_attached){
+			BdUtil.hi_tracker("nav_extra", "m_space_menu");
+			is_tracker_attached = true;
+		}
+		(e || window.event).cancelBubble = true;
+
+		usrbar		        = usrbar	|| d.getElementById('usrbar');
+		nav_extra	        = nav_extra || d.getElementById('nav_extra');
+
+		var my_home			= d.getElementById('my_home'),
+			usrbar_height	= usrbar.scrollHeight,
+			left_offset		= 0;
+		do{
+			left_offset += my_home.offsetLeft;
+		}while(my_home = my_home.offsetParent);
+
+
+		left_offset = left_offset - 6;
+		toggle(nav_extra, left_offset, top_offset);
+		is_show = !is_show;
+	}
+})();
+/*]]>*/
+</script>
+<div id="nav_extra" style="display: none;">
+	<div class="top"><a href="http://hi.baidu.com/aullik5" target="_blank">我的空间</a>&nbsp;<img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/my_ico.gif" class="down-arrow" onclick="G_HIBAR(event);" align="absmiddle"></div>
+	<div class="body">
+		<a target="_blank" href="http://hi.baidu.com/aullik5/creat/blog/">写新文章</a>
+		<a target="_blank" href="http://hi.baidu.com/aullik5/creat/picture/album">上传新照片</a>
+		<a target="_blank" href="http://hi.baidu.com/aullik5/modify/sptempl/0">选择模板</a>
+		<a target="_blank" href="http://hi.baidu.com/aullik5/modify/spadvance/0">选择主页类型</a>
+	</div>
+</div>
+
+<div id="usrbar"><nobr>
+
+	
+	
+
+
+	<style>
+	#hi{ position:relative; zoom:1;}
+	#hiMsg{display:none;top:2px;height:17px;background:url(http://img.baidu.com/hi/img/baiduhi/popright.gif) right top no-repeat;position:absolute; right:-16px;}
+	#msgRight{ color:#FFFFFF;display:block;float:left;background:url(http://img.baidu.com/hi/img/baiduhi/pop.gif) left top no-repeat;height:17px;padding:0 4px 0 4px;line-height:12px; width:auto}
+	#hiImg{position:relative; height:12px; width:16px;top:3px;left:-3px;}
+	#msgPos{position:relative; padding-bottom:7px;top:1px;background:url(http://img.baidu.com/hi/img/baiduhi/hiIcon.gif) left -1px no-repeat;cursor:pointer}
+	</style>	
+		<span id="hi">
+      <strong><a href="http://passport.baidu.com/" target="_blank">aullik5</a></strong> 
+			<span id="msgPos" onclick="jumpToWebIM('message','aullik5','',0);" title="发起即时会话"><img id="hiImg" src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/0.gif"></span>
+			<span id="hiMsg" style="opacity: 1; display: none; cursor: pointer;" onclick="jumpToWebIM('message','aullik5','',0);" title="发起即时会话">
+				<span id="msgRight">0</span>
+			</span>
+		</span> 
+		| <span id="mnum"><a href="http://msg.baidu.com/" class="bluelink" target="_blank">我的消息(0/136)</a></span>&nbsp; 
+		
+		| <span id="my_home_container" class="is_hide"><a id="my_home" href="http://hi.baidu.com/aullik5" target="_blank">我的空间</a>&nbsp;<img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/my_ico.gif" class="down-arrow" onmouseover="this.className='down-arrow-hover'" onmouseout="this.className='down-arrow'" onclick="G_HIBAR(event);" align="absmiddle"></span> 
+		
+		| <a href="http://www.baidu.com/" target="_blank">百度首页</a> 
+		| <a id="hi_index" href="http://hi.baidu.com/" target="_blank">百度空间</a> 
+		<script type="text/javascript">
+		
+		document.write('| <a href="http://passport.baidu.com/?logout&u=http://hi.baidu.com' + encodeURI('/aullik5') + '">退出</a>');
+		
+		</script>| <a href="http://passport.baidu.com/?logout&amp;u=http://hi.baidu.com/aullik5">退出</a>
+		<script language="javascript" type="text/javascript" src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/webImTip.js"></script>
+		<script language="javascript" type="text/javascript">
+			function onimFunc(){
+				//closeTip();
+				IMOld.reset();
+			}
+			var jsonFunction={onim:onimFunc};
+			function jumpToWebIM(arge1,arge2,arge3,arge4){
+				clearInterval(webHi.eventHandler);
+				webHi.eventHandler=null;
+				window.startBaiduHi(arge1,arge2,arge3,jsonFunction);
+			}
+			window.IMOld.url+="un="+"aullik5";
+		</script>
+
+
+
+
+</nobr></div>
+
+
+<div id="main" align="left">
+<!--[if IE]>
+<script>
+var objmain = document.getElementById("main");
+function updatesize(){ var bodyw = window.document.body.offsetWidth; if(bodyw <= 790) objmain.style.width="772px"; else if(bodyw >= 1016) objmain.style.width="996px"; else objmain.style.width="100%"; }
+updatesize(); window.onresize = updatesize;
+</script>
+<![endif]-->
+	<div id="header">
+	<div class="lc"><div class="rc"></div></div>
+<div class="tit"><a href="http://hi.baidu.com/aullik5" class="titlink" title="aullik5的空间 http://hi.baidu.com/aullik5">大风起兮云飞扬</a></div>
+<div class="desc">Secur1ty just lik3 a girl. B0th of th3m h4ve s0me h0les. Y0u alw4ys try to f1nd the h0le, but n0t 3very tim3 y0u c4n 3xpl0it it!</div>
+<div id="tabline">&nbsp;</div>
+	<div id="tab"><a href="http://hi.baidu.com/aullik5">主页</a><a href="http://hi.baidu.com/aullik5/blog" class="on">博客</a><a href="http://hi.baidu.com/aullik5/album">相册</a><span>|</span><a href="http://hi.baidu.com/aullik5/profile">个人档案</a>
+	<span>|</span><a href="http://hi.baidu.com/aullik5/friend">好友</a>
+
+<span>|</span><a href="http://hi.baidu.com/aullik5/modify/spbasic/0">设置</a>
+
+	</div>
+</div>
+
+<div class="stage">
+<div class="stagepad">
+<div style="width: 100%;">
+
+	<table class="modth" border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tbody><tr><td class="modtl" width="7">&nbsp;</td>
+	<td class="modtc" nowrap="nowrap"><div class="modhead"><span class="modtit">查看文章</span></div></td>
+	<td class="modtc" align="right" nowrap="nowrap"><div class="modopt"><a href="http://hi.baidu.com/aullik5/creat/blog/" class="modact"><img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/ico_postnew.gif" align="absmiddle" border="0">写新文章</a></div></td>
+	<td class="modtr" width="7">&nbsp;</td>
+	</tr></tbody></table>
+
+<div id="m_blog" class="modbox">
+<div class="tit">Anehta的水印(Watermark)机制</div>
+<div class="date">2008-10-23  23:46</div>
+<table style="table-layout: fixed;"><tbody><tr><td><div id="blog_text" class="cnt"><font color="#ff0000"><strong>Anehta</strong></font>中采用了一种<font color="#0000ff"><strong>同机识别</strong></font>的技术，我在项目中将其称为“<strong>水印</strong>”（<strong>Watermark</strong>）.<br>
+<br>
+看过我的录像演示的人应该有印象，效果如下：<br>
+<br>
+<font color="#800080"><strong>如果一个客户端被打上了水印，那么，不管客户端删除了cookie、缓存，抑或是切换了各种不同的浏览器，其水印都不会变化</strong></font>。<br>
+<br>
+换句话来说，就是常规的清除上网痕迹的措施，都无法清除掉anehta给客户端打上的水印。<br>
+<br>
+这看起来好像跟变魔术一样，其实揭穿了很简单，我是通过<font color="#ff0000"><strong>Flash的</strong><strong>shared objects</strong></font>来做的，也可以称作<strong>flash cookie</strong>。<br>
+<br>
+其实这种技术在比较早的时候<u><strong>foundstone</strong></u>的paper中就提到过了，同时还有提到的是一个<strong>IE persistence Data</strong>，会保存在IE临时文件的一个index.dat中，也是光删cookie或缓存删不掉的。但是这个持久数据在IE7中已经不能再这么利用了，所以我这里仅仅使用了flash的cookie。<br>
+<br>
+而<u><strong>yahoo</strong></u>和<u><strong>alibaba</strong></u>都使用了这种技术用在登录入口来<em><strong>防范钓鱼</strong></em>的威胁。<br>
+<br>
+正常来说，flash cookie保存在系统的如下位置：<br>
+<font color="#0000ff">C:\Documents and Settings\yourusername\Application Data\Macromedia\Flash Player\#SharedObjects\</font><br>
+<br>
+在这个目录下可以看到非常多的网站目录，里面都有他们的flash留下的痕迹。<br>
+<br>
+<div forimg="1"><img class="blogimg" small="0" src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/90e316cf86a48222b600c8f9.jpg" border="0"></div>
+<br>
+<br>
+由于一般删除cookie、删除缓存等不会来清理这里，所以就给客户端打上了一个水印。 可以看到，这个位置是和windows的系统用户相关的，所以<font color="#800080">如果切换了一个windows的系统用户，也会导致水印发生改变</font>。<br>
+<br>
+由于flash是跨浏览器的，所以水印也就可以跨浏览器了，显得很神奇：换到了firefox上，还能被认出来！<br>
+<br>
+然而更神奇的是，<strong>只要flash的加载位置不变，那么就算从A站切换到了B站，也照样能识别出来</strong>。<br>
+<br>
+这是因为flash cookie是记录在flash加载域名下的，所以，如果有如下情景：<br>
+<br>
+www.a.com 上加载了 www.c.com/flash.swf  ，打上了一个水印<br>
+<br>
+用户之后访问 www.b.com，这个站上也加载了一个 www.c.com/flash.swf <br>
+<br>
+这时候，用户的水印还是没有变。<br>
+<br>
+<br>
+也就是说，<font color="#ff0000"><strong>如果同时针对两个不同域实施了XSS攻击，加载水印后，在不同域能够识别到同一个用户</strong></font>。<br>
+<br>
+<br>
+这种同机识别技术能够给我们提供很大的便利，<strong>Anehta</strong>使用它后，能够准确识别到用户，从而进行进一步的统计分析。 这种技术不光在攻击中能用，在实际网站应用中也是非常有用的。<br>
+<br>
+下面看看我是如何在<strong>Anehta</strong>中实现这一个过程的。<br>
+<br>
+首先需要提到 Flash 的<strong>ExternalInterface</strong> ， 它是在Flash 8中加入的支持，使用之后，就可以和外部的js通信了。具体使用方法请参考手册。<br>
+<br>
+以下是Flash 中的 AS部分<br>
+<br>
+首先，在flash中取shard objects<br>
+<br>
+<font color="#0000ff"><strong>so = SharedObject.getLocal("anehtaWatermark", "/");</strong></font><br>
+<br>
+可以把SharedObject理解为一个数组，它的存储是以二进制文件形式存储在本地的，我在这里定义了一个名为 anehtaWatermark
+的共享对象，范围是所有子目录。 对应的我的文件名就是 anehtaWatermark.sol ，和上面图片里的一致。<br>
+<br>
+然后需要设定什么域能访问Flash的资源，即设定<strong> allowDomain</strong><br>
+<br>
+<font color="#0000ff"><strong>System.security.allowDomain(_root.domainAllowed);</strong></font><br>
+<br>
+这里我是从客户端传回来一个参数，这样就是动态定制了。<br>
+<br>
+然后是比较核心的部分，怎样 读、写 flash cookie：<br>
+<br>
+// 这个是读， 获取so里的名为 watermark的字段的值<br>
+function <font color="#ff0000">getWatermark()</font>{<br>
+&nbsp;&nbsp;&nbsp;   ret = "";<br>
+&nbsp;&nbsp;&nbsp;   ret = <font color="#0000ff">so.data.watermark;</font><br>
+&nbsp;&nbsp;&nbsp;   return ret;<br>
+}<br>
+<br>
+// 这是写，往名为watermark的字段里写内容<br>
+function <font color="#ff0000">setWatermark(obj)</font> {<br>
+&nbsp;&nbsp;&nbsp;   if (!( obj == null)){<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <font color="#0000ff">so.data.watermark = obj;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   }<br>
+&nbsp;&nbsp;&nbsp;   return so.flush()&nbsp;&nbsp;&nbsp;   <br>
+}<br>
+<br>
+<br>
+最后再通过 <strong>ExternalInterface</strong>添加两个 call back ， 和外部的js之间通信<br>
+<br>
+<strong><font color="#0000ff">ExternalInterface.addCallback("setWatermark", this, setWatermark);<br>
+ExternalInterface.addCallback("getWatermark", this, getWatermark);</font></strong><br>
+<br>
+这样，当外部的js 调用这个flash的 setWatermark 和 getWatermark 的函数时，对应的就调用flash内部 AS脚本里的 这两个函数。<br>
+<br>
+flash 完成后，我编译好放在了 <strong>/module/flash/anehtaWatermark.swf</strong> 里<br>
+<br>
+然后再是js部分，前面说了， Flash 8才有 ExternalInterface, 所以首先要判断浏览器是否支持flash，是否高于版本8. 如果一起都满足了， 就插入flash， 然后写flash cookie，或是读flash cookie。<br>
+<br>
+flash cookie设置好后，最后还是需要传递给cookie，从而让服务器识别。<br>
+<br>
+整个过程逻辑有点复杂，描述如下：<br>
+<div forimg="1"><img class="blogimg" small="0" src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/ce03334f2bdcc2d1d1c86a8c.jpg" border="0"></div>
+其中与 flash通信的代码如下：<br>
+// Using Flash Shared Object to Store Watermark<br>
+anehta.core.setWatermark = function(flashID, o){<br>
+&nbsp;&nbsp;&nbsp;   return <font color="#0000ff">document.getElementById(flashID).setWatermark(o);&nbsp;&nbsp;</font>  <br>
+}<br>
+<br>
+// Get the info from flash<br>
+anehta.core.getWatermark = function(flashID){&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;   return <font color="#0000ff">document.getElementById(flashID).getWatermark();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>&nbsp;&nbsp;&nbsp;   <br>
+}<br>
+<br>
+<br>
+注意在插入flash的时候，需要设置 flash 的 <strong>allowScriptAccess</strong> 为always，不然跨域插入flash将访问不到当前域的一些DOM对象<br>
+<br>
+<br>
+anehta.inject.injectFlash = function(flashId, flashSrc, flashParam) {<br>
+&nbsp;&nbsp;&nbsp;   //flashParam = '?' + flashParam;<br>
+&nbsp;&nbsp;&nbsp;   document.write('&lt;object type="application/x-shockwave-flash" data="' + flashSrc +<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   '" width="0" height="0" id="' + flashId +<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   '"&gt;&lt;param name="<font color="#ff0000">allowScriptAccess</font>" value="always" /&gt; ' +<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'&lt;param name="movie" value="' + flashSrc + '" /&gt;' +<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   '<font color="#0000ff">&lt;PARAM NAME=FlashVars VALUE="domainAllowed=' + flashParam + '" /&gt;</font>' +<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'&lt;param name="bgColor" value="#fff" /&gt;
+&lt;/object&gt;');&nbsp;&nbsp;&nbsp; <br>
+}<br>
+<br>
+<br>
+最后，实现上面那个图里的复杂逻辑过程是在 clx.js 里，代码如下：<br>
+// 以下是正常加载clx过程<br>
+var ts = new Date();<br>
+ts = ts.getTime(); // 随机数,作为水印,只加载一次<br>
+<strong>var watermarkvalue = "FirstCatch:"+document.domain+"|"+ts;</strong><br>
+//alert(watermarkvalue);<br>
+<br>
+if (anehta.dom.checkCookie("anehtaWatermark") == false){ // cookie中没有水印<br>
+&nbsp;&nbsp;&nbsp;   if (anehta.detect.flash('8') == true){ // 检测是否有flash<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   // 插入水印flash; 加载flash需要时间<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   <strong>anehta.inject.injectFlash</strong>("anehtaWatermark", watermarkflash, document.domain);<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   //alert(1);<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   setTimeout(function(){<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;     if (<strong> anehta.core.getWatermark("anehtaWatermark") == undefined</strong>
+){ &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   // flash cache 中没有记录,需要设置一个<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <font color="#ff0000"><strong>anehta.core.setWatermark("anehtaWatermark", watermarkvalue);</strong></font><br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   }<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   // 读取水印并写进cookie<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   <font color="#0000ff">anehta.dom.addCookie("anehtaWatermark", anehta.core.getWatermark("anehtaWatermark"));</font><br>&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   <strong>anehta.dom.persistCookie("anehtaWatermark");&nbsp;&nbsp;&nbsp;   // 让水印不过期&nbsp;&nbsp;&nbsp;   </strong>&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   // 记录当前cookie<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   anehta.logger.logCookie();<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   },<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   500);<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;&nbsp;   } else { // 不支持flash&nbsp;&nbsp;&nbsp;   <br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   // 在cookie里添加水印<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   anehta.dom.addCookie("anehtaWatermark", watermarkvalue); <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+anehta.dom.persistCookie("anehtaWatermark");&nbsp;&nbsp;&nbsp; //
+让水印不过期&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   anehta.logger.logCookie();&nbsp;&nbsp;&nbsp;&nbsp;   <br>
+}  <br>
+} <br>
+else { // cookie 中有水印, 不需要重复记录cookie了<br>
+//检查flashcache中是否有水印,如果没有,则把cookie里的水印写入flashcache <br>
+&nbsp;&nbsp;&nbsp;&nbsp;   if (anehta.detect.flash('8') == true){ // 检测是否有flash<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   // 插入水印flash; 加载flash需要时间<br>
+&nbsp;&nbsp;&nbsp;   &nbsp;&nbsp;&nbsp;   anehta.inject.injectFlash("anehtaWatermark", watermarkflash, document.domain);<br>
+<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; setTimeout(function(){if (
+anehta.core.getWatermark("anehtaWatermark") == undefined ){
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; // flash cache 中没有记录,需要设置一个<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp; anehta.core.setWatermark("anehtaWatermark",
+anehta.dom.getCookie("anehtaWatermark"));<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+}<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+},<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+500);<br>
+} else { // 不支持flash<br>
+&nbsp;&nbsp;&nbsp;   // do nothing<br>
+} &nbsp;&nbsp;&nbsp;   <br>
+}<br>
+<br>
+<br></div></td></tr></tbody></table>
+<br>
+<div class="opt">
+<a href="http://hi.baidu.com/aullik5/blog/category/%CF%F3%D1%C0%CB%FE" title="查看该分类中所有文章">类别：象牙塔</a>
+
+	| <a href="http://hi.baidu.com/aullik5/modify/blog/0e2512de4d787915632798c2">编辑</a> | <a href="#" onclick="return blogdel('blogdelform')">删除</a>
+	<form name="blogdelform" id="blogdelform" action="/aullik5/commit" method="post" style="display: none;"><input name="ct" value="1" type="hidden"><input name="cm" value="3" type="hidden"><input name="spBlogID" value="0e2512de4d787915632798c2" type="hidden"><input name="spRefURL" value="http://hi.baidu.com/aullik5/blog" type="hidden"></form>
+	<script language="javascript">
+	<!--
+
+function blogdel(str)
+{
+	var pop=new Popup({ contentType:3,isReloadOnClose:false,width:340,height:80});
+	pop.setContent("title","删除文章");
+	pop.setContent("confirmCon","您确定要彻底删除这篇文章及其所有评论吗？");
+	pop.setContent("callBack",delCallback);
+	pop.setContent("parameter",{fid:str,popup:pop});
+	pop.build();
+	pop.show();
+	return false;
+}
+
+function delCallback(para)
+{
+	var o_pop=para["popup"];
+	o_pop.config.contentType=1;
+	o_pop.setContent("contentUrl","");
+	o_pop.reBuild();
+	G(para["fid"]).target=o_pop.iframeIdName;
+	eval("document."+para["fid"]).submit();
+}
+	//-->
+	</script>
+ 
+	
+	| <a title="将此文章添加到百度搜藏" href="http://cang.baidu.com/do/add" onclick="return addToFavor();" target="_blank">添加到搜藏</a>
+	
+	| 浏览(<span id="result">423</span>)
+	| <a href="#send">评论</a>&nbsp;(5)
+
+<script language="javascript">
+/*<![CDATA[*/
+var pre = [true,'Anehta -- Boomerang(回旋镖)，如何将反射型XSS变成持久型XSS：论跨域获取cookie', 'Anehta -- Boomerang(回旋镖)，...','/aullik5/blog/item/02bccaeb018dc4d5d539c930.html'];
+var post = [true,'关于MS08-067的一点细节','关于MS08-067的一点细节', '/aullik5/blog/item/2f00483782bbd8dba3cc2b41.html'];
+if(pre[0] || post[0]){
+	document.write('<div style="height:5px;line-height:5px;">&nbsp;</div><div id="in_nav">');
+	if(pre[0]){
+		document.write('上一篇：<a href="' + pre[3] + '" title="' + pre[1] + '">' +  pre[2] + '</a>&nbsp;&nbsp;&nbsp;&nbsp;');
+	}
+	if(post[0]){
+		document.write('下一篇：<a href="' + post[3] + '" title="' + post[1] + '">' +  post[2] + '</a>');
+	}
+	document.write('</div>');
+}
+/*]]>*/
+</script><div style="height: 5px; line-height: 5px;">&nbsp;</div><div id="in_nav">上一篇：<a href="http://hi.baidu.com/aullik5/blog/item/02bccaeb018dc4d5d539c930.html" title="Anehta -- Boomerang(回旋镖)，如何将反射型XSS变成持久型XSS：论跨域获取cookie">Anehta -- Boomerang(回旋镖)，...</a>&nbsp;&nbsp;&nbsp;&nbsp;下一篇：<a href="http://hi.baidu.com/aullik5/blog/item/2f00483782bbd8dba3cc2b41.html" title="关于MS08-067的一点细节">关于MS08-067的一点细节</a></div>
+
+</div>
+<div class="line">&nbsp;</div>
+
+
+
+    <style type="text/css">
+/*<![CDATA[*/
+#in_related_doc a { text-decoration:none; }
+/*]]>*/
+</style>
+<div id="in_related_tmp"></div>
+<script language="javascript" type="text/javascript">
+/*<![CDATA[*/
+function HI_MOD_IN_RELATED_DOC_CALLBACK(arg){
+    if(arg.length <= 1) return false;
+    var hasMore = arg[0];
+    var D=function(A,B){A[A.length]=B;}
+    if(arg.length % 2 == 0) D(arg, ["","","",""]);
+
+    var html = ['<div id="in_related_doc"><div class="tit">相关文章：</div>'];
+    D(html, '<table cellpadding="0" cellspacing="3" border="0">');
+    for(var i = 1, j = arg.length; i < j; i += 2){
+        D(html, '<tr>');
+        D(html, '<td width="15px"><a style="font-size:25px" >&#8226;</a></td><td><a href="http://hi.baidu.com/' + arg[i][3] + '/blog/item/' + arg[i][2] + '.html" target="_blank" title="' + arg[i][0] + '">' + arg[i][1] + '</a>');
+        D(html, new Array(10).join('\u3000'));
+        D(html, '</td>');
+        if(arg[i + 1][0] != "")
+            D(html, '<td width="15px"><a style="font-size:25px" >&#8226;</a></td><td><a href="http://hi.baidu.com/' + arg[i + 1][3] + '/blog/item/' + arg[i + 1][2] + '.html" target="_blank" title="' + arg[i + 1][0] + '">' + arg[i + 1][1] + '</a></td>');
+        else
+            D(html, '<td>&nbsp;</td><td>&nbsp;</td>');
+        D(html, '</tr>');
+    }
+    if(hasMore) D(html, '<tr><td colspan="4"><a target="_blank" href="/sys/search?pageno=1&type=7&sort=1&word=Anehta%B5%C4%CB%AE%D3%A1%28Watermark%29%BB%FA%D6%C6&item=0e2512de4d787915632798c2">更多&gt;&gt;</a></td></tr>');
+    D(html, '</table></div><div class="line">&nbsp;</div>');
+
+    var div = document.getElementById('in_related_tmp');
+    if(div){
+        div.innerHTML = html.join('');
+        while(div.firstChild){
+            div.parentNode.insertBefore(div.firstChild, div);
+        }
+        div.parentNode.removeChild(div);
+    }
+	window.setTimeout("tracker_init('in_related_doc')",100);
+}
+
+if(RelatedDocData == -1){	// not supported xhr
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = '/sys/search?type=8&word=Anehta%B5%C4%CB%AE%D3%A1%28Watermark%29%BB%FA%D6%C6&item=0e2512de4d787915632798c2&t=' + new Date().getTime();
+    document.getElementsByTagName('HEAD')[0].appendChild(script);
+}else if(RelatedDocData == null){
+	GetAndEval = true;
+}else{
+	eval(RelatedDocData);
+}
+
+/*]]>*/
+</script>
+    
+
+
+
+
+
+
+<div id="in_reader">
+<div class="tit">最近读者：</div>
+
+<script>
+
+	var g_spAnnony=false;
+
+
+var g_read=[
+	
+["insighter","8b3f686e7064736c79662a00","hnpdslyf"],
+	
+["dxl198853","1a1764786c3139383835336700","dxl198853"],
+	
+["yanfei6","67f579616e66656936e502","yanfei6"],
+	
+["xi4o7e","3c947869346f3765bc04","xi4o7e"],
+	
+["fatalist","052b6c77707772e701","lwpwr"],
+	
+["ppesk","3683707065736b4100","ppesk"],
+	
+["sinomazing","d62a73696e6f6d617a696e67bc02","sinomazing"],
+	
+["hysia","d7cd6879736961e901","hysia"],
+
+{}
+];
+g_read.length=g_read.length-1;
+
+var _rh1="";
+var _rh2="";
+
+function wrreader(){
+	_rh1 += '<table width="100%" ><tr>';
+	_rh2+='<tr>';
+	if(g_spAnnony){
+		_rh1+='<td align="center" width="10%" ><img border="0" width="55" height="55" src="http://img.baidu.com/hi/img/portraitn.jpg"></td>';
+		_rh2+='<td>&nbsp;</td>';
+		if(g_read.length>0){
+			_rh1+='<td align="left" width="12%">';
+		}else{
+			_rh1+='<td align="left" width="100%">';
+		}
+		_rh1+='<a href="http://passport.baidu.com/?login&tpl=sp&tpl_reg=sp&u='+myref+'" target="_self">登录</a>后，您就出现在这里。</td>';
+		_rh2+='<td>&nbsp;</td>'
+	}
+	if(g_read.length==0){
+		if(!g_spAnnony){
+			_rh1+='<td align=left width="100%">最近还没有登录用户看过这篇文章……</td>';
+			_rh2+='<td>&nbsp;</td>';
+		}
+	}else{
+		for(i=0,len=g_read.length;i<len;i++){
+			_rh1+='<td align="center" valign="bottom" width="10%" class="user"><a href="/'+g_read[i][0]+'" target="_blank"><img border="0" src="http://himg.baidu.com/sys/portraitn/item/'+g_read[i][1]+'.jpg"></a></td>';
+			_rh2+='<td align="center" valign="top" class="user"><a href="/'+g_read[i][0]+'" target="_blank">'+g_read[i][2]+'</a></td>';
+		}
+	}
+	_rh1+='<td width="100%"></td></tr>';
+	_rh2+='<td></td></tr></table>';
+	document.write(_rh1+_rh2);
+}
+
+wrreader();
+</script><table width="100%"><tbody><tr><td class="user" align="center" valign="bottom" width="10%"><a href="http://hi.baidu.com/insighter" target="_blank"><img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/8b3f686e7064736c79662a00.jpg" border="0"></a></td><td class="user" align="center" valign="bottom" width="10%"><a href="http://hi.baidu.com/dxl198853" target="_blank"><img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/1a1764786c3139383835336700.jpg" border="0"></a></td><td class="user" align="center" valign="bottom" width="10%"><a href="http://hi.baidu.com/yanfei6" target="_blank"><img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/67f579616e66656936e502.jpg" border="0"></a></td><td class="user" align="center" valign="bottom" width="10%"><a href="http://hi.baidu.com/xi4o7e" target="_blank"><img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/3c947869346f3765bc04.jpg" border="0"></a></td><td class="user" align="center" valign="bottom" width="10%"><a href="http://hi.baidu.com/fatalist" target="_blank"><img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/052b6c77707772e701.jpg" border="0"></a></td><td class="user" align="center" valign="bottom" width="10%"><a href="http://hi.baidu.com/ppesk" target="_blank"><img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/3683707065736b4100.jpg" border="0"></a></td><td class="user" align="center" valign="bottom" width="10%"><a href="http://hi.baidu.com/sinomazing" target="_blank"><img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/d62a73696e6f6d617a696e67bc02.jpg" border="0"></a></td><td class="user" align="center" valign="bottom" width="10%"><a href="http://hi.baidu.com/hysia" target="_blank"><img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/d7cd6879736961e901.jpg" border="0"></a></td><td width="100%"></td></tr><tr><td class="user" align="center" valign="top"><a href="http://hi.baidu.com/insighter" target="_blank">hnpdslyf</a></td><td class="user" align="center" valign="top"><a href="http://hi.baidu.com/dxl198853" target="_blank">dxl198853</a></td><td class="user" align="center" valign="top"><a href="http://hi.baidu.com/yanfei6" target="_blank">yanfei6</a></td><td class="user" align="center" valign="top"><a href="http://hi.baidu.com/xi4o7e" target="_blank">xi4o7e</a></td><td class="user" align="center" valign="top"><a href="http://hi.baidu.com/fatalist" target="_blank">lwpwr</a></td><td class="user" align="center" valign="top"><a href="http://hi.baidu.com/ppesk" target="_blank">ppesk</a></td><td class="user" align="center" valign="top"><a href="http://hi.baidu.com/sinomazing" target="_blank">sinomazing</a></td><td class="user" align="center" valign="top"><a href="http://hi.baidu.com/hysia" target="_blank">hysia</a></td><td></td></tr></tbody></table>
+
+
+
+
+
+	</div>
+
+<div class="line">&nbsp;</div>
+
+
+
+<script language="JavaScript">
+allkey=allkey+"40d1bf3fe83c30fb828b1370_0e2512de4d787915632798c2_";
+</script>
+
+<div id="in_comment">
+<a name="comment"></a>
+<div class="tit">网友评论：</div>
+<script>
+function writecmt(type,id,cmtname,cmturl,portraitId){
+	var html1="";
+
+	if(type==1){
+			html1="<a href='"+cmturl+"' target='_blank' title='"+cmturl+"'><img  border='0' src='http://himg.baidu.com/sys/portraitn/item/"+portraitId+".jpg'><br>"+cmtname+"</a>";
+	}else{
+		if(cmtname=="" || cmtname=="匿名网友"){
+			if(cmturl==""){
+				html1="<a>匿名网友</a>";
+			}else{
+				html1="<a href='"+cmturl+"' target='_blank' title='"+cmturl+"'>"+cmtname+"</a>";
+			}
+		}else{
+			if(cmturl==""){
+				html1="<div class='f14' style='display:inline'>网友:<a>"+cmtname+"</a></div>";
+			}else{
+				html1="<div class='f14' style='display:inline'>网友:<a href='"+cmturl+"' target='_blank' title='"+cmturl+"'>"+cmtname+"</a></div>";
+			}
+		}
+	}
+	document.write(html1);
+}
+
+</script>
+
+
+
+<a name="02bccaebb2a369dbd539c9e4"></a>
+<table class="item" style="overflow: hidden; table-layout: fixed;" ;="" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="index" valign="top" width="5%">1</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow: hidden;">
+
+<script>
+writecmt(1,"02bccaebb2a369dbd539c9e4","darkst","http://hi.baidu.com/darkst","247b6461726b73742502");
+</script><a href="http://hi.baidu.com/darkst" target="_blank" title="http://hi.baidu.com/darkst"><img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/247b6461726b73742502.jpg" border="0"><br>darkst</a>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left: 20px;"><span class="date">2008-10-24  13:54
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/0e2512de4d787915632798c2%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='0e2512de4d787915632798c2'><input type='hidden'  name='spBlogCmtID' value='02bccaebb2a369dbd539c9e4'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script><a href="#" onclick='return cmtdel("dform8")'>删除</a><form action="/aullik5/commit" id="dform8" name="dform8" method="post"><input name="ct" value="8" type="hidden"><input name="cm" value="2" type="hidden"><input name="spBlogID" value="0e2512de4d787915632798c2" type="hidden"><input name="spBlogCmtID" value="02bccaebb2a369dbd539c9e4" type="hidden"><input name="spRefURL" value="http://hi.baidu.com/aullik5/blog/item/0e2512de4d787915632798c2.html/index/0#comment" type="hidden"></form>
+
+
+</span><div class="desc" style="overflow: hidden;">受教。</div></td></tr>
+</tbody></table>
+<div class="line">&nbsp;</div>
+
+<a name="6fd82c2f6b43c4584fc226ea"></a>
+<table class="item" style="overflow: hidden; table-layout: fixed;" ;="" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="index" valign="top" width="5%">2</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow: hidden;">
+
+<script language="javascript">
+writecmt(2,"6fd82c2f6b43c4584fc226ea","余弦","","0000d3e0cfd20000");
+
+</script><div class="f14" style="display: inline;">网友:<a>余弦</a></div>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left: 20px;"><span class="date">2008-10-24  14:21
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/0e2512de4d787915632798c2%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='0e2512de4d787915632798c2'><input type='hidden'  name='spBlogCmtID' value='6fd82c2f6b43c4584fc226ea'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script><a href="#" onclick='return cmtdel("dform9")'>删除</a><form action="/aullik5/commit" id="dform9" name="dform9" method="post"><input name="ct" value="8" type="hidden"><input name="cm" value="2" type="hidden"><input name="spBlogID" value="0e2512de4d787915632798c2" type="hidden"><input name="spBlogCmtID" value="6fd82c2f6b43c4584fc226ea" type="hidden"><input name="spRefURL" value="http://hi.baidu.com/aullik5/blog/item/0e2512de4d787915632798c2.html/index/0#comment" type="hidden"></form>
+
+
+</span><div class="desc" style="overflow: hidden;">flash cookie存储数据量大多了。使用这个方法很好啊。<br>用IP作为判断呢？对内网用户就无法区分了吧。</div></td></tr>
+</tbody></table>
+<div class="line">&nbsp;</div>
+
+<a name="c726040940bf4038e92488fe"></a>
+<table class="item" style="overflow: hidden; table-layout: fixed;" ;="" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="index" valign="top" width="5%">3</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow: hidden;">
+
+<script language="javascript">
+writecmt(2,"c726040940bf4038e92488fe","est","http://initiative.yo2.cn/","00006573740000");
+
+</script><div class="f14" style="display: inline;">网友:<a href="http://initiative.yo2.cn/" target="_blank" title="http://initiative.yo2.cn/">est</a></div>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left: 20px;"><span class="date">2008-10-24  14:43
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/0e2512de4d787915632798c2%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='0e2512de4d787915632798c2'><input type='hidden'  name='spBlogCmtID' value='c726040940bf4038e92488fe'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script><a href="#" onclick='return cmtdel("dform10")'>删除</a><form action="/aullik5/commit" id="dform10" name="dform10" method="post"><input name="ct" value="8" type="hidden"><input name="cm" value="2" type="hidden"><input name="spBlogID" value="0e2512de4d787915632798c2" type="hidden"><input name="spBlogCmtID" value="c726040940bf4038e92488fe" type="hidden"><input name="spRefURL" value="http://hi.baidu.com/aullik5/blog/item/0e2512de4d787915632798c2.html/index/0#comment" type="hidden"></form>
+
+
+</span><div class="desc" style="overflow: hidden;">我X。太牛X了<br><br>还好。。我的chrome的单独的flash插件。。。</div></td></tr>
+</tbody></table>
+<div class="line">&nbsp;</div>
+
+<a name="8c30b50193235b8fe950cd87"></a>
+<table class="item" style="overflow: hidden; table-layout: fixed;" ;="" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="index" valign="top" width="5%">4</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow: hidden;">
+
+<script>
+writecmt(1,"8c30b50193235b8fe950cd87","hackloft","http://hi.baidu.com/hackloft","57f36861636b6c6f66742404");
+</script><a href="http://hi.baidu.com/hackloft" target="_blank" title="http://hi.baidu.com/hackloft"><img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/57f36861636b6c6f66742404.jpg" border="0"><br>hackloft</a>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left: 20px;"><span class="date">2008-10-25  09:55
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/0e2512de4d787915632798c2%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='0e2512de4d787915632798c2'><input type='hidden'  name='spBlogCmtID' value='8c30b50193235b8fe950cd87'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script><a href="#" onclick='return cmtdel("dform11")'>删除</a><form action="/aullik5/commit" id="dform11" name="dform11" method="post"><input name="ct" value="8" type="hidden"><input name="cm" value="2" type="hidden"><input name="spBlogID" value="0e2512de4d787915632798c2" type="hidden"><input name="spBlogCmtID" value="8c30b50193235b8fe950cd87" type="hidden"><input name="spRefURL" value="http://hi.baidu.com/aullik5/blog/item/0e2512de4d787915632798c2.html/index/0#comment" type="hidden"></form>
+
+
+</span><div class="desc" style="overflow: hidden;">配置貌似有些麻烦 要替换好多地址 昨天很不容易alert一个框框<br>不知道是不是自己哪里搞错了<br>是时候建立详细的文档了 这样才能有滚滚而来的意见呵呵!<br>回旋镖！i like</div></td></tr>
+</tbody></table>
+<div class="line">&nbsp;</div>
+
+<a name="1aa0812785dc7a1f8a82a157"></a>
+<table class="item" style="overflow: hidden; table-layout: fixed;" ;="" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="index" valign="top" width="5%">5</td>
+<td align="center" valign="top" width="10%">
+<div class="user" style="overflow: hidden;">
+
+<script>
+writecmt(1,"1aa0812785dc7a1f8a82a157","aullik5","http://hi.baidu.com/aullik5","26ba61756c6c696b35c504");
+</script><a href="http://hi.baidu.com/aullik5" target="_blank" title="http://hi.baidu.com/aullik5"><img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/26ba61756c6c696b35c504.jpg" border="0"><br>aullik5</a>
+ 
+</div>
+</td>
+<td class="cnt" style="padding-left: 20px;"><span class="date">2008-10-25  21:53
+|
+	<script language="javascript">
+	<!--
+	var delrefurl=window.location.href;
+	if((pos=delrefurl.indexOf("%2Ehtml"))!=-1) delrefurl=delrefurl.substring(0,pos+7);
+                else if((pos=delrefurl.indexOf(".html"))!=-1) delrefurl=delrefurl.substring(0,pos+5);
+                //var delrefurl="http://hi.baidu.com/aullik5/blog/item/0e2512de4d787915632798c2%2Ehtml";
+	document.write("<a href='#' onClick='return cmtdel(\"dform"+i+"\")'>删除</a><form action='/aullik5/commit' id='dform"+i+"'  name='dform"+i+"' method='post'><input type='hidden'  name='ct' value='8'><input type='hidden'  name='cm' value='2'><input type='hidden'  name='spBlogID' value='0e2512de4d787915632798c2'><input type='hidden'  name='spBlogCmtID' value='1aa0812785dc7a1f8a82a157'><input type='hidden' name='spRefURL' value='"+delrefurl+"/index/0#comment'></form>");
+	i++;
+	//-->
+	</script><a href="#" onclick='return cmtdel("dform12")'>删除</a><form action="/aullik5/commit" id="dform12" name="dform12" method="post"><input name="ct" value="8" type="hidden"><input name="cm" value="2" type="hidden"><input name="spBlogID" value="0e2512de4d787915632798c2" type="hidden"><input name="spBlogCmtID" value="1aa0812785dc7a1f8a82a157" type="hidden"><input name="spRefURL" value="http://hi.baidu.com/aullik5/blog/item/0e2512de4d787915632798c2.html/index/0#comment" type="hidden"></form>
+
+
+</span><div class="desc" style="overflow: hidden;">文档我会逐渐补充完整的。<br><br>主要替换的地址就是 feed.js 和 base.js 里的 anehtaurl 这个变量<br><br>其他模块里面一般都是最后引用这个地址。 回旋镖模块需要单独设置下地址。<br><br>不过有时候遇到问题，最好直接看看代码.变量和常量一般都是定义在每个文件的最前面</div></td></tr>
+</tbody></table>
+<div class="line">&nbsp;</div>
+
+
+
+<div id="page"></div>
+
+</div>
+
+
+<div id="in_send">
+<a name="send"></a>
+<form name="form1" id="popFormSubmit" action="/aullik5/commit" method="post" onsubmit="return checkcmtform()">
+<input name="ct" value="8" type="hidden">
+<input name="cm" value="1" type="hidden">
+<input name="spBlogID" value="0e2512de4d787915632798c2" type="hidden">
+<input value="http://hi.baidu.com/aullik5/blog/item/0e2512de4d787915632798c2.html" name="spRefURL" id="spRefURL" type="hidden">
+<script>
+    document.getElementById("spRefURL").value = window.location.href;
+</script>
+<div class="tit">发表评论：</div>
+<table border="0" cellpadding="0" cellspacing="5" width="620">
+<tbody><tr>
+
+<td class="f14">姓　名：</td>
+<td>aullik5
+<input name="spBlogCmtor" id="spBlogCmtor" style="display: none;" maxlength="50" value="aullik5" type="text"><div style="display: none;" id="nmerror">*姓名最长为50字节</div>
+</td>
+
+<input name="spBlogCmtURL" id="spBlogCmtURL" style="width: 360px;" maxlength="128" onchange='checkeandu("spBlogCmtURL")' value="http://hi.baidu.com/aullik5" type="hidden">
+
+ 
+
+
+</tr>
+
+<tr id="2_err" style="display: none;">
+<td>&nbsp;</td>
+<td><div class="error" id="2_err_con"></div></td>
+</tr>
+
+<tr>
+<td class="f14" valign="top">内　容：</td>
+<td><textarea name="spBlogCmtText" id="spBlogCmtText" style="width: 520px; height: 155px;" onfocus="hidErr(3);" tabindex="3"></textarea>
+<script>
+G("spBlogCmtor").value=G("spBlogCmtor").defaultValue;
+G("spBlogCmtText").value="";
+</script>
+</td>
+</tr>
+<tr id="3_err" style="display: none;">
+<td>&nbsp;</td>
+<td><div class="error" id="3_err_con"></div></td>
+</tr>
+
+<input name="spVcode" value="3035737061636531343639353430313532303030303030303030303030303031323235363431383433A7C45D28EB6B98FEEE814C563866E518" type="hidden">
+<input id="spVerifyKey" name="spVerifyKey" value="" type="hidden">
+
+
+<tr>
+<td class="f14" valign="top">&nbsp;</td>
+<td class="f14" valign="top"><input id="btn_ok" name="btn_ok" value="发表评论" tabindex="5" type="submit"></td>
+</tr>
+</tbody></table>
+</form>
+</div>
+
+
+
+
+<br>
+</div>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%" height="8">
+<tbody><tr><td class="modbl" width="7">&nbsp;</td>
+<td class="modbc">&nbsp;</td>
+<td class="modbr" width="7">&nbsp;</td>
+</tr></tbody></table>
+
+</div>
+</div>
+
+</div>
+
+</div>
+
+<script language="javascript">
+<!--
+var hstr="/aullik5/brwstat?key1=1";
+document.write("<script src='"+hstr+"&key2="+allkey+"'><\/script>");
+//-->
+</script><script src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/brwstat.htm"></script>
+<br><center><div id="ft">&#169;2008 Baidu</div></center>
+
+<script>
+if(document.getElementById("m_blog"))
+{
+	var imgarray = document.getElementById("m_blog").getElementsByTagName('img');
+	var imgw = document.getElementById("m_blog").offsetWidth;
+	imgw =imgw-40;
+	for(var i=0; i<imgarray.length; i++){
+	if(imgarray[i].className=="blogimg" && imgarray[i].width>=imgw) imgarray[i].width=imgw;
+	}
+}
+
+// Fix ff bugs
+var blog_text = document.getElementById('blog_text');
+blog_text.innerHTML = blog_text.innerHTML.replace(/href\s*=\s*("|')?(\.\.\/\.\.\/)/gi,"href=$1../$2");
+
+</script>
+</center>
+
+<script language="JavaScript">
+var Msg_loopNum = 5;
+function showMsg() 
+{        
+	if(typeof redmsg != 'undefined') {
+		if (!redmsg || redmsg.length < 1) return;
+		document.getElementById('mnum').innerHTML = redmsg;
+	}else{
+		if(Msg_loopNum > 0) {setTimeout(function(){showMsg();},100);Msg_loopNum--;}
+	}
+}
+</script>
+<script src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/ms.htm"></script>
+<script>showMsg();</script>
+
+<img src="Anehta%E7%9A%84%E6%B0%B4%E5%8D%B0%28Watermark%29%E6%9C%BA%E5%88%B6_files/c.htm" style="display: none;">
+</body></html>

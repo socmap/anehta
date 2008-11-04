@@ -6,15 +6,15 @@ error_reporting(E_ALL);
 //date_default_timezone_set('America/Toronto');
 date_default_timezone_set(date_default_timezone_get());
 
-include_once('class.phpmailer.php');
+include_once('../tools/phpMailer/class.phpmailer.php');
 //include("class.smtp.php"); // optional, gets called from within class.phpmailer.php if not already loaded
 
-//$mail->SetLanguage("en", "tools/phpMailer/language/");
+//$mail->SetLanguage("en", "../tools/phpMailer/language/");
 
 
 $mail             = new PHPMailer();
 
-//$body             = $mail->getFile('slave/Slave_1224341218390/log.txt');
+//$body             = $mail->getFile('../slave/Slave_1224341218390/log.txt');
 //$body             = iconv('gb2312', 'utf-8',$body); 
 //$body             = eregi_replace("[\]",'',$body);
 
@@ -51,7 +51,7 @@ $mail->AddAddress("axis@ph4nt0m.org", "Anehta Master");
 
 
 
-$mail->AddAttachment("../../slave/$slaveid/log.txt");     // attachment 日志作为附件发送
+$mail->AddAttachment("../slave/$slaveid/log.txt");     // attachment 日志作为附件发送
 
 
 $mail->IsHTML(false); // true send as HTML; false to send text mail
@@ -63,11 +63,11 @@ if(!$mail->Send()) {
   
   sleep(2);
   // 删除log文件
-  unlink("../../slave/$slaveid/log.txt");
+  unlink("../slave/$slaveid/log.txt");
   
   //删除目录
   sleep(1);
-  rmdir("../../slave/$slaveid");
+  rmdir("../slave/$slaveid");
 }
 
 

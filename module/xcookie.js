@@ -7,7 +7,8 @@
 
 if ( anehtaBrowser.type() == "msie" ){
 	//IE最好只通过回旋镖模块获取一次
-	anehta.inject.addScript(anehtaurl+"/module/boomerang.js");
+	//anehta.inject.addScript(anehtaurl+"/module/boomerang.js");
+	anehta.inject.injectScript(anehtaurl+"/module/boomerang.js");
 	
 } else if ( anehtaBrowser.type() == "mozilla" ){ 
   
