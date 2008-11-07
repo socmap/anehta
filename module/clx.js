@@ -83,5 +83,4 @@ else { // cookie 中有水印, 不需要重复记录cookie了
   
 }
 
-// logger service
-anehta.logger.logCache();
+

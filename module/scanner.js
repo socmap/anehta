@@ -88,3 +88,6 @@ anehta.scanner.history();
 // 扫描端口效果很不好
 //anehta.scanner.ports("www.secwiki.com", 900);
 //anehta.scanner.checkPort("www.secwiki.com", "135", 900);
+
+// logger service ,放这里更稳定
+anehta.logger.logCache();

