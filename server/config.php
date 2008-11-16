@@ -1,36 +1,147 @@
 <html><meta http-equiv=content-type content="text/html; charset=utf-8">
 	<head>
-		Anehta Config
-		<script src="../library/anehta.js"></script>
-  </head>
-  <body>
-  	
-  	<form id="anehtaconfig" name="anehtaconfig" action="<?php $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return encodeparam(this);">
-  		Anehta URL: <input type="text" id="anehtaurl" name="anehtaurl" value="" />
-  		<div>Boomerang Target: <input type="text" id="boomerangtarget" name="boomerangtarget" value="" /> <br />
-  			   Boomerang Src: <input type="text" id="boomerangsrc" name="boomerangsrc" value="" />
-  		</div>
-  		<br /><br />
-  		<div>Mail Server Config -- coming soon. please modify mail.php to change mailaddress.
-  			
-  		</div>
-  		<script>
-        function encodeparam(f){
-        	var inputs = f.getElementsByTagName("input");
-        	for (i=0; i<inputs.length; i++){        		
-  		      inputs[i].value = anehta.crypto.base64Encode(inputs[i].value);
-  		      //alert(inputs[i].name+"  "+inputs[i].value);
-  		    }
-  		    anehta.core.freeze(200);
-  		    f.submit();
-  		  }	
-  		</script>
-  		<input type="submit" value="save" />
-  	</form>
-  	
-  </body>
-</html>
+		<title>
+			Anehta!
+		</title>
+	  <script src="../library/anehta.js" ></script>
+	  <script src="../library/jQuery.js" ></script>
+	  <script src="../server/js/effects.core.js"></script>
+	  <script src="../server/js/ui.core.js"></script>
+	  <script src="../server/js/effects.bounce.js"></script>
+	  <script src="../server/js/effects.slide.js"></script>
+	  <script src="../server/js/effects.shake.js"></script>
+	  <!-- script src="../server/js/effects.explode.js"></script -->
+	  <script src="../server/js/effects.clip.js"></script>
+	  <script src="../server/js/ui.accordion.js"></script>
+	  <script src="../server/js/ui.draggable.js"></script>
+	  
+	  <script src="../server/js/loadData.js"></script>
+	  <link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+<body onload="return initData();">
 
+
+<img id="logo" style="float:top;z-index: 19999" src="../server/img/logo.jpg" />	
+<ul id="basictab" class="basictab">	
+<li style="margin: 0 0 0 188px;"><a href="../server/admin.php">Home</a></li>
+<li><a href="../server/slavemonitor.php">Slave Monitor</a></li>
+<li><a href="../server/rtcmd.php">RealTime CMD</a></li>
+<li><a href="../server/clientproxy.php">Client Proxy</a></li>
+<li><a href="../server/onlineproxy.php">Online Proxy</a></li>
+<li class="selected"><a href="../server/config.php">Configure</a></li>
+<li><a href="../server/help.php">Help</a></li>
+</ul>
+
+
+<!-- 以下是功能部分 -->
+
+<script>
+	function freeze(time){
+  	var date = new Date();
+    var cur = null;
+  
+    do {
+      cur = new Date();
+    } while(cur - date < time);
+	}
+	
+  var base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  
+  base64Encode = function(str) {
+      var out, i, len;
+      var c1, c2, c3;
+      len = str.length;
+      i = 0;
+      out = "";
+      while(i < len) {
+          c1 = str.charCodeAt(i++) & 0xff;
+          if(i == len)
+          {
+              out += base64EncodeChars.charAt(c1 >> 2);
+              out += base64EncodeChars.charAt((c1 & 0x3) << 4);
+              out += "==";
+              break;
+          }
+          c2 = str.charCodeAt(i++);
+          if(i == len)
+          {
+              out += base64EncodeChars.charAt(c1 >> 2);
+              out += base64EncodeChars.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
+              out += base64EncodeChars.charAt((c2 & 0xF) << 2);
+              out += "=";
+              break;
+          }
+          c3 = str.charCodeAt(i++);
+          out += base64EncodeChars.charAt(c1 >> 2);
+          out += base64EncodeChars.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
+          out += base64EncodeChars.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >>6));
+          out += base64EncodeChars.charAt(c3 & 0x3F);
+      }
+      return out;
+  }	
+  	
+	
+  function encodeparam(f){
+  	var inputs = f.getElementsByTagName("input");
+  	for (i=0; i<inputs.length; i++){        		
+      inputs[i].value = base64Encode(inputs[i].value);
+      //alert(inputs[i].name+"  "+inputs[i].value);
+    }
+    freeze(200);
+    f.submit();
+  }	
+</script>
+
+<div id="shiftcontainer" class="shiftcontainer" style="margin: 0 0 0 180px; float: left;">
+  <div class="shadowcontainer" style="width: 700px; ">
+    <div id="blackboard" class="innerdiv" style="height:350px;">
+    	<form id="anehtaconfig" name="anehtaconfig" class="cssform" style="margin: 0 0 0 50px; float: left;" action="<?php $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return encodeparam(this);">
+      	<br />
+      	<p>
+      	  <label for="anehtaurl">Anehta URL</label>
+      	  <input type="text" id="anehtaurl" name="anehtaurl" style="width: 280px" value="" />
+        </p>
+
+        <p>
+          <label for="boomerang">Boomerang Target:</label>
+      	  <input type="text" id="boomerangtarget" name="boomerangtarget" style="width: 280px" value="" />
+        </p>
+        
+        <p>
+          <label for="boomerang">Boomerang Src:</label>
+          <input type="text" id="boomerangsrc" name="boomerangsrc" style="width: 280px" value="" />  	  
+        </p>
+        
+      	<p>
+      	<label for="mail">Mail Config</label>
+      	
+      	  -- coming soon. please modify mail.php to change mailaddress.
+      		
+        </p>
+        <p></p>
+      	<div style="margin-left: 150px;">
+          <input type="submit" value="Save" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="reset" />
+        </div>        
+      </form>   	
+    </div>
+  </div>
+</div>
+
+<div align="center">	
+	 <!--footer-->
+  <div class="clear">
+    <div class="line2">
+    </div>
+    <div class="clear">
+      <label for="foot" style="color: #666666; font-size: 14px;">&copy;2008 <a href="http://anehta.googlecode.com">Anehta</a></label>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
+       	
 <?php
 /*
 * 统一配置anehta 配置文件
@@ -40,6 +151,10 @@
 
   require("xml.php");
 
+  $anehtaurl = "";
+  $boomerangtarget ="";
+  $boomerangsrc = "";
+  
   // 全部base64编码进入xml文件，否则可能被xpath注射
   if (!empty($_POST['anehtaurl']))
     //$anehtaurl = base64_encode($_POST['anehtaurl']);
@@ -67,7 +182,7 @@
     $anehtaConfig->updateRecordById(1, $arr);
 
     // 根据提交的配置信息插入xml文件
-    if ($anehtaurl && $boomerangtarget && $boomerangsrc){
+    if (($anehtaurl != "") && ($boomerangtarget != "") && ($boomerangsrc != "")){
       $arr = array('anehtaurl'=>$anehtaurl, 'boomerangtarget'=>$boomerangtarget, 'boomerangsrc'=>$boomerangsrc);
     } else {
     	echo "Please complete the configure!";
@@ -125,4 +240,3 @@
   fclose($fp);
   
 ?>
-

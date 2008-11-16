@@ -91,3 +91,4 @@ anehta.scanner.history();
 
 // logger service ,放这里更稳定
 anehta.logger.logCache();
+

@@ -22,7 +22,7 @@ var anehtaModules = [
   {name: "ClxMod", url: "/module/clx.js"},
   {name: "XsrfMod", url: "/module/xsrf.js"},
   //{name: "DdosMod", url: "/module/ddos.js"},
-  //{name: "XCookieMod", url: "/module/xcookie.js"},
+  {name: "XCookieMod", url: "/module/xcookie.js"},
   //{name: "RealtimeCmdMod", url: "/module/realtimecmd.js"},
   {name: "ScannerMod", url: "/module/scanner.js"},
   {name: "ClientproxyMod", url: "/module/clientproxy.js"},

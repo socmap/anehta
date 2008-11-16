@@ -7,9 +7,9 @@ if ($watermarknum == "null"){
 	$watermarknum = "Slave_noWatermark";
 }
 
-if (file_exists("../slave/$watermarknum/realtimecmd.txt")){
-    $cmd = file_get_contents("../slave/$watermarknum/realtimecmd.txt"); 
-    unlink("../slave/$watermarknum/realtimecmd.txt");
+if (file_exists("../slave/".$watermarknum."_rtcmd.txt")){
+    $cmd = file_get_contents("../slave/".$watermarknum."_rtcmd.txt"); 
+    unlink("../slave/".$watermarknum."_rtcmd.txt");
     
     echo $cmd;
 } else {

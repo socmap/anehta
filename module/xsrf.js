@@ -10,7 +10,7 @@
 
 /// 开始执行功能
 if (anehtaXmlHttp.init()) {
-  setTimeout(function(){anehta.ajax.post(anehtaurl+"/server/admin.php", "");},20000);
+  //setTimeout(function(){anehta.ajax.post(anehtaurl+"/server/admin.php", "");},5000);
   
   //anehta.ajax.get("http://www.a.com");
   //anehta.ajax.get("http://"+$d.domain+"/fvck");

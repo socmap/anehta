@@ -121,8 +121,9 @@ private function checkFile()
     if(!$bool_record) break;
    }
    rsort($keys);
-   $bool_repeat=preg_match('/(\d),\1/',join(',',$keys),$wb)==0 ? true : false;
-   if(!($bool_statement && $bool_root && $bool_record && $bool_repeat))
+   //$bool_repeat=preg_match('/(\d),\1/',join(',',$keys),$wb)==0 ? true : false;
+   //if(!($bool_statement && $bool_root && $bool_record && $bool_repeat))
+   if(!($bool_statement && $bool_root && $bool_record))
    {
     echo '文件规则已被破坏';
     exit;

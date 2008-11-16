@@ -2,6 +2,9 @@
 /*Credits: Dynamic Drive CSS Library */
 /*URL: http://www.dynamicdrive.com/style/ */
 
+/***********************
+  basic tab css
+***********************/
 .basictab{
 padding: 3px 0;
 margin-left: 0;
@@ -48,9 +51,9 @@ color: black;
 }
 
 
-
-
-
+/***********************
+  left bar css
+***********************/
 .wireframemenu{
 border: 1px solid #C0C0C0;
 background-color: white;
@@ -90,3 +93,279 @@ width: auto;
 background-color: #F8FBBD;
 color: black;
 }
+
+
+
+/***********************
+  slide menu 
+***********************/
+#dropmenudiv{
+position:absolute;
+background-color: #E3FFB0;
+border:1px solid black;
+border-bottom-width: 0;
+font:normal 12px Verdana;
+line-height:18px;
+z-index:100;
+}
+
+#dropmenudiv a{
+width: 100%;
+display: block;
+text-indent: 3px;
+border-bottom: 1px solid black;
+padding: 1px 0;
+text-decoration: none;
+font-weight: bold;
+}
+
+#dropmenudiv a:hover{ /*hover background color*/
+background-color: #C7FF5E;
+}
+
+/* Sample CSS definition for the example list. Remove if desired */
+.navlist li {
+list-style-type: square;
+width: 135px;
+background-color: #FFFFB9;
+}
+
+
+
+/***********************
+  scroll bar, ie only
+***********************/
+
+html, body{
+scrollbar-face-color:#EBF5FF;
+scrollbar-base-color:#EBF5FF;
+scrollbar-arrow-color:black;
+scrollbar-track-color:#F3F3F3;
+scrollbar-shadow-color:#EBF5FF;
+scrollbar-highlight-color:#EBF5FF;
+scrollbar-3dlight-color:#78AAFF;
+scrollbar-darkshadow-Color:#78AAFF;
+}
+
+
+/***********************
+  button css
+***********************/
+.formbutton{
+cursor:pointer;
+border:outset 1px #ccc;
+background:#999;
+color:#666;
+font-weight:bold;
+padding: 1px 2px;
+background:url("../img/formbg.gif") repeat-x left top;
+}
+
+.formbutton2{
+cursor:pointer;
+border:outset 1px #ccc;
+background:#999;
+color:#666;
+font-weight:bold;
+padding: 1px 2px;
+background:url("../img/formbg2.gif") repeat-x left top;
+}
+
+
+/***********************
+  shadow div container
+***********************/
+.shiftcontainer{
+position: relative;
+left: 5px; /*Number should match -left shadow depth below*/
+top: 5px; /*Number should match -top shadow depth below*/
+}
+
+.shadowcontainer{
+width: 300px; /* container width*/
+background-color: #d1cfd0;
+}
+
+.shadowcontainer .innerdiv{
+/* Add container height here if desired */
+background-color: white;
+border: 1px solid gray;
+padding: 6px;
+position: relative;
+left: -5px; /*shadow depth*/
+top: -5px; /*shadow depth*/
+}
+
+
+/***********************
+  form css
+***********************/
+.cssform p{
+width: 300px;
+clear: left;
+margin: 0;
+padding: 5px 0 8px 0;
+padding-left: 155px; /*width of left column containing the label elements*/
+border-top: 1px dashed gray;
+height: 1%;
+}
+
+.cssform label{
+font-weight: bold;
+float: left;
+margin-left: -155px; /*width of left column*/
+width: 150px; /*width of labels. Should be smaller than left column (155px) to create some right margin*/
+}
+
+.cssform input[type="text"]{ /*width of text boxes. IE6 does not understand this attribute*/
+width: 180px;
+}
+
+.cssform textarea{
+width: 250px;
+height: 150px;
+}
+
+/*.threepxfix class below:
+Targets IE6- ONLY. Adds 3 pixel indent for multi-line form contents.
+to account for 3 pixel bug: http://www.positioniseverything.net/explorer/threepxtest.html
+*/
+
+* html .threepxfix{
+margin-left: 3px;
+}
+
+
+
+
+
+
+/* ------------------
+ styling for the tables 
+   ------------------   */
+
+
+body
+{
+	line-height: 1.6em;
+}
+
+
+/* #rounded-corner */
+#slavetable
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	/* margin: 45px; */
+	margin: 0px;
+	/* width: 480px; */
+	width: 600px;
+	/* height: 300px; */
+	text-align: left;
+	border-collapse: collapse;
+}
+
+/*
+#slavetable thead th.rounded-left
+{
+	background: #b9c9fe url('img/table-left.png') left -1px no-repeat;
+}
+#slavetable thead th.rounded-right
+{
+	background: #b9c9fe url('img/table-right.png') right -1px no-repeat;
+}
+*/
+
+#slavetable th
+{
+	padding: 8px;
+	font-weight: normal;
+	font-size: 13px;
+	color: #039;
+	background: #b9c9fe;
+
+}
+#slavetable td
+{
+	padding: 8px;
+	background: #e8edff;
+	border-top: 1px solid #fff;
+	color: #669;
+}
+
+/*
+#slavetable tfoot td.rounded-foot-left
+{
+	background: #e8edff url('img/table-botleft.png') left bottom no-repeat;
+}
+#slavetable tfoot td.rounded-foot-right
+{
+	background: #e8edff url('img/table-botright.png') right bottom no-repeat;
+}
+*/
+
+#slavetable tbody tr:hover td
+{
+	background: #d0dafd;
+}
+
+
+/***********************
+*  foot style
+***********************/
+.line2 {
+border-bottom:1px solid;
+font-size:0;
+height:1px;
+padding: 10px 0;
+/* width:96%; */
+}
+
+.clear {	
+clear:both;
+}
+
+
+/***********************
+*  rssReader style
+***********************/
+.rssReader  {
+	font-family: verdana;
+	border: 1px solid black;
+}
+.rssReader div {
+	background: #e8edff;
+	color: #669;
+}
+
+.rssReader p {
+	margin-bottom : 10px;
+	border: none;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 10px;
+	margin: 0px;
+	padding: 10px;
+}
+.rssReader a {
+	height: 16px;
+	cursor:pointer;
+	display:block;
+	padding:5px;
+	margin-top: 0;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 12px;
+	background: #b9c9fe;
+  color: #039;
+	border-top: 1px solid #FFFFFF;
+	border-bottom: 1px solid #999;
+}
+.rssReader a:hover {
+	background: #d0dafd;
+}
+.rssReader a.selected {
+	color: #039;
+	background: #b9c9fe;
+}
+
