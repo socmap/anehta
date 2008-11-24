@@ -207,11 +207,14 @@ margin: 0;
 padding: 5px 0 8px 0;
 padding-left: 155px; /*width of left column containing the label elements*/
 border-top: 1px dashed gray;
-height: 1%;
+//height: 1%;
 }
 
 .cssform label{
 font-weight: bold;
+font-size: 12px;
+font-family: verdana;
+color: grey;
 float: left;
 margin-left: -155px; /*width of left column*/
 width: 150px; /*width of labels. Should be smaller than left column (155px) to create some right margin*/
@@ -369,3 +372,32 @@ clear:both;
 	background: #b9c9fe;
 }
 
+
+/***********************
+*  popup dialog style
+***********************/
+.ui-dialog-container {
+	border: 1px solid black;
+}
+
+.ui-dialog-titlebar {
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+
+	background: #DBFF6C;
+}
+
+.ui-dialog-titlebar-close {
+	float: top;
+	margin: 0 0 0 180px;
+	color: black;
+}
+
+.ui-dialog-content {
+	background: #999;
+}
+
+.ui-dialog-buttonpane {
+
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" >
+	<channel>
+		<title>Anehta!</title>
+		<link>http://anehta.googlecode.com</link>
+		<description>Anehta Slave Events!</description>
+		<language>zh-cn</language>
+		<item>
+			<title>Slave_1225443335164 From 127.0.0.1</title>
+			<category>本机地址 CZ88.NET</category>
+			<author>Slave_1225443335164@hi.baidu.com</author>
+			<link>
+http://hi.baidu.com/aullik5/blog/item/2417d11a5b6f36d2ad6e75c8.html</link>
+			<guid>
+http://hi.baidu.com/aullik5/blog/item/2417d11a5b6f36d2ad6e75c8.html#1154991876</guid>
+			<description>
+				<![CDATA[
+
+&lt;requestURI&gt;http://hi.baidu.com/aullik5/blog/item/2417d11a5b6f36d2ad6e75c8.html&lt;/requestURI&gt;
+
+&lt;BrowserSniffer&gt;MSIE7.0&lt;/BrowserSniffer&gt;
+&lt;FlashVer&gt;ShockwaveFlash.ShockwaveFlash.8&lt;/FlashVer&gt;
+&lt;screenSize&gt;1280x800&lt;/screenSize&gt;
+&lt;Activex&gt;|Flash Player 8: ShockwaveFlash.ShockwaveFlash.8|Flash Player 9: ShockwaveFlash.ShockwaveFlash.9|360Safe: 360SafeLive.Update|Alibaba User(AliEdit): Aliedit.EditCtrl|CMB Bank: CMBHtmlControl.Edit|JRE 1.5(WebStart): JavaWebStart.isInstalled.1.5.0.0|JRE 1.6(WebStart): JavaWebStart.isInstalled.1.6.0.0|PPlayer: PPlayer.XPPlayer|QuickTime: QuickTime.QTElementBehavior|Xunlei: XunLeiBHO.ThunderIEHelper&lt;/Activex&gt;
+&lt;sitesHistory&gt; | http://www.google.com | http://www.google.cn | http://www.baidu.com | http://www.taobao.com | http://www.alipay.com | http://www.sohu.com | http://www.163.com | http://www.xiaonei.com | http://hi.baidu.com/aullik5&lt;/sitesHistory&gt;
+&lt;spVcode&gt;3035737061636532303338383130353339303030303030303030303030303031323237323434343134E7D90AE8D41153DFA6D44D21F08F6B1D&lt;/spVcode&gt;
+				]]>
+			</description>
+			<pubDate>Fri, 21 Nov 08 13:13:55 +0800</pubDate>
+		</item>
+
+	</channel>
+</rss>

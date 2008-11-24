@@ -1,0 +1,29 @@
+/***********************
+*  popup dialog style
+***********************/
+.ui-dialog-container {
+	border: 1px solid black;
+}
+
+.ui-dialog-titlebar {
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+
+	background: #9C9C9C;
+}
+
+.ui-dialog-titlebar-close {
+	visibility: hidden;
+	float: top;
+	margin: 0 0 0 180px;
+	color: black;
+}
+
+.ui-dialog-content {
+	background: #999;
+}
+
+.ui-dialog-buttonpane {
+
+}

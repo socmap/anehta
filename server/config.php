@@ -1,4 +1,12 @@
-<html><meta http-equiv=content-type content="text/html; charset=utf-8">
+<?php
+  //加载auth类
+  include_once("class/auth_Class.php");
+
+  header("Content-Type: text/html; charset=utf-8");
+  
+  checkLoginStatus();
+?>
+<html>
 	<head>
 		<title>
 			Anehta!
@@ -14,6 +22,15 @@
 	  <script src="../server/js/effects.clip.js"></script>
 	  <script src="../server/js/ui.accordion.js"></script>
 	  <script src="../server/js/ui.draggable.js"></script>
+	  <script src="../server/js/ui.dialog.js"></script>
+	  <script src="../server/js/ui.resizable.js"></script>	  
+	  
+	  <!-- 加载 JSONER -->
+	  <script src="../server/js/_compressed_jsoner.commons.js"></script>
+    <script src="../server/js/_compressed_jsoner.js"></script>
+    <script src="../server/js/_compressed_jsoner.serializer.js"></script>
+    <script src="../server/js/jsoner.undomanager.js"></script>
+    <script src="../server/js/jsoner.updater.js"></script>	  
 	  
 	  <script src="../server/js/loadData.js"></script>
 	  <link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -30,6 +47,7 @@
 <li><a href="../server/onlineproxy.php">Online Proxy</a></li>
 <li class="selected"><a href="../server/config.php">Configure</a></li>
 <li><a href="../server/help.php">Help</a></li>
+<a href="../server/logout.php">Logout</a>
 </ul>
 
 
@@ -95,8 +113,9 @@
 <div id="shiftcontainer" class="shiftcontainer" style="margin: 0 0 0 180px; float: left;">
   <div class="shadowcontainer" style="width: 700px; ">
     <div id="blackboard" class="innerdiv" style="height:350px;">
-    	<form id="anehtaconfig" name="anehtaconfig" class="cssform" style="margin: 0 0 0 50px; float: left;" action="<?php $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return encodeparam(this);">
+    	<form id="anehtaconfig" name="anehtaconfig" class="cssform" style="margin: 20 0 40 100px; float: top;" action="<?php $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return encodeparam(this);">
       	<br />
+      	<input type=text name="csrfToken" style="display:none;" value="<?php echo file_get_contents("../temp/session_token"); ?>" />
       	<p>
       	  <label for="anehtaurl">Anehta URL</label>
       	  <input type="text" id="anehtaurl" name="anehtaurl" style="width: 280px" value="" />
@@ -114,13 +133,14 @@
         
       	<p>
       	<label for="mail">Mail Config</label>
-      	
+      	<font style="font-size: 12px; font-family: verdana; color: grey;">
       	  -- coming soon. please modify mail.php to change mailaddress.
-      		
+      	</font>
         </p>
         <p></p>
       	<div style="margin-left: 150px;">
-          <input type="submit" value="Save" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" value="reset" />
+          <input type="submit" class="formbutton2" style='float:left; margin-left: 0px; margin-top: 20px; width: 55px; height: 25px;' value="Save" />
+          <input type="reset" class="formbutton2" style='float:left; margin-left: 50px; margin-top: 20px; width: 55px; height: 25px;' value="reset" />
         </div>        
       </form>   	
     </div>
@@ -154,6 +174,19 @@
   $anehtaurl = "";
   $boomerangtarget ="";
   $boomerangsrc = "";
+  
+  // check csrf TOKEN
+  if (!isset($_POST["csrfToken"])){
+  	echo "\nToken Error! May be CSRF attack!\n";
+  	return false;
+  } else {
+  	list($user, $pass, $token) = explode(",", authCode($_COOKIE["anehtaDoor"], $textKey, "DECODE"));
+  	if ($token != $_POST["csrfToken"]){
+  		echo "\nToken Error! May be CSRF attack!\n";
+  		return false;
+  	}
+  }
+  
   
   // 全部base64编码进入xml文件，否则可能被xpath注射
   if (!empty($_POST['anehtaurl']))

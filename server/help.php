@@ -1,4 +1,12 @@
-<html><meta http-equiv=content-type content="text/html; charset=utf-8">
+<?php
+  //加载auth类
+  include_once("class/auth_Class.php");
+
+  header("Content-Type: text/html; charset=utf-8");
+  
+  checkLoginStatus();
+?>
+<html>
 <head>
 		<title>
 			Anehta!
@@ -14,6 +22,15 @@
 	  <script src="../server/js/effects.clip.js"></script>
 	  <script src="../server/js/ui.accordion.js"></script>
 	  <script src="../server/js/ui.draggable.js"></script>
+	  <script src="../server/js/ui.dialog.js"></script>
+	  <script src="../server/js/ui.resizable.js"></script>	  
+	  
+	  <!-- 加载 JSONER -->
+	  <script src="../server/js/_compressed_jsoner.commons.js"></script>
+    <script src="../server/js/_compressed_jsoner.js"></script>
+    <script src="../server/js/_compressed_jsoner.serializer.js"></script>
+    <script src="../server/js/jsoner.undomanager.js"></script>
+    <script src="../server/js/jsoner.updater.js"></script>	  
 	  
 	  <script src="../server/js/loadData.js"></script>
 	  <link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -30,6 +47,7 @@
 <li><a href="../server/onlineproxy.php">Online Proxy</a></li>
 <li><a href="../server/config.php">Configure</a></li>
 <li class="selected" ><a href="../server/help.php">Help</a></li>
+<a href="../server/logout.php">Logout</a>
 </ul>
 
 
@@ -41,6 +59,7 @@
 </ul>
 </div>
 
+<center>Coming Soon......</center>
 
 <div align="center">	
 	 <!--footer-->

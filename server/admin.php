@@ -1,9 +1,20 @@
-<html><meta http-equiv=content-type content="text/html; charset=utf-8">
+<?php
+  //加载auth类
+  include_once("class/auth_Class.php");
+
+  header("Content-Type: text/html; charset=utf-8");
+  
+  checkLoginStatus();
+?>
+
+<html>
 	<head>
 		<title>
 			Anehta!
 		</title>
 	  <script src="../library/anehta.js" ></script>
+	  
+	  <!-- 加载 jQuery -->
 	  <script src="../library/jQuery.js" ></script>
 	  <script src="../server/js/effects.core.js"></script>
 	  <script src="../server/js/ui.core.js"></script>
@@ -14,6 +25,17 @@
 	  <script src="../server/js/effects.clip.js"></script>
 	  <script src="../server/js/ui.accordion.js"></script>
 	  <script src="../server/js/ui.draggable.js"></script>
+	  <script src="../server/js/ui.dialog.js"></script>
+	  <script src="../server/js/ui.resizable.js"></script>
+	  
+	  
+	  <!-- 加载 JSONER -->
+	  <script src="../server/js/_compressed_jsoner.commons.js"></script>
+    <script src="../server/js/_compressed_jsoner.js"></script>
+    <script src="../server/js/_compressed_jsoner.serializer.js"></script>
+    <script src="../server/js/jsoner.undomanager.js"></script>
+    <script src="../server/js/jsoner.updater.js"></script>
+
 	  
 	  <script src="../server/js/loadData.js"></script>
 	  <link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -30,6 +52,7 @@
 <li><a href="../server/onlineproxy.php">Online Proxy</a></li>
 <li><a href="../server/config.php">Configure</a></li>
 <li><a href="../server/help.php">Help</a></li>
+<a href="../server/logout.php">Logout</a>
 </ul>
 
 <div id="xssSites" class="wireframemenu" style="float:left;" >
@@ -40,8 +63,10 @@
 <li><a href="">Anehta</a></li>
 -->
 </ul>
-<a href="../server/rss.xml"><img style="float:top;" border="0" src="../server/img/rss.png" ></img>订阅Slave RSS</a>
+<a href="../server/rss.xml"><img style="float:top;" border="0" src="../server/img/rss.png" ></img>&nbsp;订阅Slave RSS</a>
+<a href="javascript:dumpToMail();" ><img style="float:top;" border="0" src="../server/img/mail.gif" ></img>&nbsp;Dump to Mail</a>
 </div>
+
 
 
 <script>
@@ -177,10 +202,16 @@ function dosomething(o){
 <div id="shiftcontainer" class="shiftcontainer" style="margin: 0 0 0 15px; float: left;">
   <div class="shadowcontainer" style="width: 700px;">
     <div id="blackboard" class="innerdiv" style="height:350px;">
-    	<div id="home_notes">
+    	<div id="home_notes" style="font-size: 14px; font-family: verdana; font-weight: bold; color: grey;">
       <ul>
-      	<li> 注意事项：</li>
-      	<li><a href="#">test</a></li>
+      	<font style="color: blue">注意事项：</font>
+      	<li>最好使用PHP5，如果使用PHP4，部分功能可能无法正常工作。</li>
+      	<li>请关闭服务器错误回显。后台展示数据需要解析json，PHP warning可能导致无法正常解析。</li>
+      	<li>大部分目录需要有写权限。</li>
+      	<li>不可见字符或特殊符号可能会导致无法正确解析xml数据，此时请删除slave.xml和rss.xml。</li>
+      	<li>请在server/class/auth_Class.php中手动修改用户名和密码</li>
+      	<li>请在server/mail.php中手动修改邮件发送相关配置</li>
+      	<li>任何问题可以发送邮件到：<a href="mailto:axis@ph4nt0m.org">axis@ph4nt0m.org</a></li>
       </ul>	
       <div>
     </div>

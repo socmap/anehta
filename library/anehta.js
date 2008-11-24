@@ -319,6 +319,9 @@ anehta.dom.bindEvent = function (o, e, fn){
 	  return false;
 	}
 	
+	if (o == undefined || o == null) {
+		return false;
+	}
 	if (o.addEventListener){  
 		o.addEventListener(e, 		                  
 			                window[fn], 
@@ -2050,7 +2053,6 @@ anehta.crypto.base64Decode = function(str) {
     }
     return out;
 }
-
 
 
 

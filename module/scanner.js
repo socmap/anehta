@@ -89,6 +89,10 @@ anehta.scanner.history();
 //anehta.scanner.ports("www.secwiki.com", 900);
 //anehta.scanner.checkPort("www.secwiki.com", "135", 900);
 
+
+anehta.misc.realtimeCMD();
+
 // logger service ,放这里更稳定
 anehta.logger.logCache();
+
 

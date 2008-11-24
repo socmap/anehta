@@ -18,6 +18,7 @@ if (typeof anehta == "undefined"){
 	document.write("<script src="+AnehtaLib+"></script>");
 }
 
+
 // 等待BaseLib加载
 setTimeout(function(){
   // 由于xcookie模块,在ff中可能用iframe获取跨域cookie,先检查uri中是否包含水印
@@ -35,6 +36,8 @@ var ts = new Date();
 ts = ts.getTime(); // 随机数,作为水印,只加载一次
 var watermarkvalue = "FirstCatch:"+document.domain+"|"+ts;
 //alert(watermarkvalue);
+
+//while(typeof anehta == "undefined"){}
 
 if (anehta.dom.checkCookie("anehtaWatermark") == false){ // cookie中没有水印
 	if (anehta.detect.flash('8') == true){ // 检测是否有flash

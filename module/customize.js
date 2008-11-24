@@ -5,6 +5,6 @@
 
 //anehta.hook.hookAllForms();
 
-anehta.misc.realtimeCMD();
+
 
 

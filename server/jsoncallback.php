@@ -33,6 +33,45 @@ if ($jsoncallback == "getSlaveData"){
 }
 
 
+// 更新最新的数据
+if ($jsoncallback == "updateSlaveData"){
+	$recordKey = $_GET["key"];
+
+  if (!file_exists("../slave/slave.xml")){
+  	exit;
+  }
+  
+	$xml = file_get_contents("../slave/slave.xml"); // 从db中取数据
+	$xml = XML_unserialize($xml);  // 返回数组
+	
+	if (intval($xml["slaveData"]["record"][count($xml["slaveData"]["record"]) - 1]["key"]) < intval($recordKey)){ // slave.xml 被重写了
+		$xml = json_encode($xml);
+		echo $xml;
+	} 
+	else if (intval($xml["slaveData"]["record"][count($xml["slaveData"]["record"]) - 1]["key"]) == intval($recordKey)){ // 没有更新
+		echo "";
+	}
+	else {  // 有更新, 只返回更新的数据
+		$newRecord = array();
+		
+    for ($i=($recordKey+1); $i<=count($xml["slaveData"]["record"]); $i++){
+    	//$record = $data->getRecordById($i);
+    	
+    	$j = $i - $recordKey - 1;
+    	//$newRecord["slaveData"]["record"][$j] = $xml["slaveData"]["record"][$i -1];
+    	$newRecord[$j] = $xml["slaveData"]["record"][$i -1];
+    	
+    }
+    reset($newRecord);
+		//print_r($newRecord);
+		
+		$newRecord = json_encode($newRecord);
+		
+		echo $newRecord;		
+	}	
+}
+
+
 // 获取rss feed
 if ($jsoncallback == "getSlaveRSS"){	
 	
