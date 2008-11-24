@@ -3,7 +3,7 @@
 * JSON CallBack
 *********************************/
 // 将slave信息存储到xml文件中
-require("xml.php");
+include_once("xml.php");
 
 //加载XML解析类
 include_once("class/xml_Class.php");

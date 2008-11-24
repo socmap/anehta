@@ -3,8 +3,8 @@
 
 <record>
 <key>1</key>
-<requestDate>Fri, 21 Nov 08 13:13:52 +0800</requestDate>
-<slaveWatermark>1225443335164</slaveWatermark>
+<requestDate>Tue, 25 Nov 08 04:05:58 +0800</requestDate>
+<slaveWatermark>1224341218390</slaveWatermark>
 <slaveIP>127.0.0.1</slaveIP>
 <slaveUA>Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727)</slaveUA>
 <slaveLang>zh-cn</slaveLang>
@@ -13,20 +13,20 @@
 <xssGot>
 <requestURI>
 <![CDATA[
-http://hi.baidu.com/aullik5/blog/item/2417d11a5b6f36d2ad6e75c8.html
+http://www.secwiki.com/anehta/demo.html
 ]]>
 </requestURI>
 <slaveCookie>
 <![CDATA[
-anehtaWatermark=FirstCatch:www.alipay.com|1225443335164; BAIDUID=EFAC70FC3D7C524D22B12ADB5505418D:FG=1; BDSP=084a6d7facaf2edddf8d741b8d1001e93901213fb80e7bec54e736d12f2eb9389b504fc2d5628535e5dde71190ef76c6a7efce1b9d16fdfaaf51f3deb48f8c5494eef01f3a292df5e0fe9925bc315c6034a85edf8db1cb1349540923dd54564e935832dc; BDSTAT=1e1a0364aa690e7d349b033b5bb5c9ea15ce36d3d539b6003af33a87e850710b
+anehtaWatermark=FirstCatch:www.underwoodlandcompany.com|1224341218390
 ]]>
 </slaveCookie></xssGot>
 </record>
 
 <record>
 <key>2</key>
-<requestDate>Fri, 21 Nov 08 13:13:55 +0800</requestDate>
-<slaveWatermark>1225443335164</slaveWatermark>
+<requestDate>Tue, 25 Nov 08 04:06:01 +0800</requestDate>
+<slaveWatermark>1224341218390</slaveWatermark>
 <slaveIP>127.0.0.1</slaveIP>
 <slaveUA>Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727)</slaveUA>
 <slaveLang>zh-cn</slaveLang>
@@ -35,7 +35,7 @@ anehtaWatermark=FirstCatch:www.alipay.com|1225443335164; BAIDUID=EFAC70FC3D7C524
 <xssGot>
 <requestURI>
 <![CDATA[
-http://hi.baidu.com/aullik5/blog/item/2417d11a5b6f36d2ad6e75c8.html
+http://www.secwiki.com/anehta/demo.html
 ]]>
 </requestURI>
 
@@ -61,14 +61,74 @@ ShockwaveFlash.ShockwaveFlash.8
 </Activex>
 <sitesHistory>
 <![CDATA[
- | http://www.google.com | http://www.google.cn | http://www.baidu.com | http://www.taobao.com | http://www.alipay.com | http://www.sohu.com | http://www.163.com | http://www.xiaonei.com | http://hi.baidu.com/aullik5
+ | http://www.google.com | http://www.google.cn | http://www.baidu.com | http://www.taobao.com | http://www.alipay.com | http://www.sohu.com | http://www.163.com | http://www.xiaonei.com | http://hi.baidu.com/aullik5 | http://www.secwiki.com/anehta/demo.html
 ]]>
-</sitesHistory>
-<spVcode>
+</sitesHistory></xssGot>
+</record>
+
+<record>
+<key>3</key>
+<requestDate>Tue, 25 Nov 08 04:06:57 +0800</requestDate>
+<slaveWatermark>1225443335164</slaveWatermark>
+<slaveIP>127.0.0.1</slaveIP>
+<slaveUA>Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727)</slaveUA>
+<slaveLang>zh-cn</slaveLang>
+<slaveProxy></slaveProxy>
+<slaveLocation>本机地址 CZ88.NET</slaveLocation>
+<xssGot>
+<requestURI>
 <![CDATA[
-3035737061636532303338383130353339303030303030303030303030303031323237323434343134E7D90AE8D41153DFA6D44D21F08F6B1D
+http://www.secwiki.com/anehta/demo.html
 ]]>
-</spVcode></xssGot>
+</requestURI>
+<slaveCookie>
+<![CDATA[
+anehtaWatermark=FirstCatch:www.alipay.com|1225443335164
+]]>
+</slaveCookie></xssGot>
+</record>
+
+<record>
+<key>4</key>
+<requestDate>Tue, 25 Nov 08 04:06:59 +0800</requestDate>
+<slaveWatermark>1225443335164</slaveWatermark>
+<slaveIP>127.0.0.1</slaveIP>
+<slaveUA>Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 2.0.50727)</slaveUA>
+<slaveLang>zh-cn</slaveLang>
+<slaveProxy></slaveProxy>
+<slaveLocation>本机地址 CZ88.NET</slaveLocation>
+<xssGot>
+<requestURI>
+<![CDATA[
+http://www.secwiki.com/anehta/demo.html
+]]>
+</requestURI>
+
+<BrowserSniffer>
+<![CDATA[
+MSIE7.0
+]]>
+</BrowserSniffer>
+<FlashVer>
+<![CDATA[
+ShockwaveFlash.ShockwaveFlash.8
+]]>
+</FlashVer>
+<screenSize>
+<![CDATA[
+1280x800
+]]>
+</screenSize>
+<Activex>
+<![CDATA[
+|Flash Player 8: ShockwaveFlash.ShockwaveFlash.8|Flash Player 9: ShockwaveFlash.ShockwaveFlash.9|360Safe: 360SafeLive.Update|Alibaba User(AliEdit): Aliedit.EditCtrl|CMB Bank: CMBHtmlControl.Edit|JRE 1.5(WebStart): JavaWebStart.isInstalled.1.5.0.0|JRE 1.6(WebStart): JavaWebStart.isInstalled.1.6.0.0|PPlayer: PPlayer.XPPlayer|QuickTime: QuickTime.QTElementBehavior|Xunlei: XunLeiBHO.ThunderIEHelper
+]]>
+</Activex>
+<sitesHistory>
+<![CDATA[
+ | http://www.google.com | http://www.google.cn | http://www.baidu.com | http://www.taobao.com | http://www.alipay.com | http://www.sohu.com | http://www.163.com | http://www.xiaonei.com | http://hi.baidu.com/aullik5 | http://www.secwiki.com/anehta/demo.html
+]]>
+</sitesHistory></xssGot>
 </record>
 
 </slaveData>

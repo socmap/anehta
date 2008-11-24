@@ -4,7 +4,7 @@
 
   header("Content-Type: text/html; charset=utf-8");
   
-  checkLoginStatus();
+  checkLoginStatus($U, $P, $textKey);
 ?>
 <html>
 	<head>
@@ -113,7 +113,7 @@
 <div id="shiftcontainer" class="shiftcontainer" style="margin: 0 0 0 180px; float: left;">
   <div class="shadowcontainer" style="width: 700px; ">
     <div id="blackboard" class="innerdiv" style="height:350px;">
-    	<form id="anehtaconfig" name="anehtaconfig" class="cssform" style="margin: 20 0 40 100px; float: top;" action="<?php $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return encodeparam(this);">
+    	<form id="anehtaconfig" name="anehtaconfig" class="cssform" style="margin: 20 0 40 100px; float: top;" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" onsubmit="return encodeparam(this);">
       	<br />
       	<input type=text name="csrfToken" style="display:none;" value="<?php echo file_get_contents("../temp/session_token"); ?>" />
       	<p>
@@ -169,19 +169,25 @@
 *
 */
 
-  require("xml.php");
+  include_once("xml.php");
 
   $anehtaurl = "";
   $boomerangtarget ="";
   $boomerangsrc = "";
   
+ 
   // check csrf TOKEN
-  if (!isset($_POST["csrfToken"])){
+if (isset($_POST["csrfToken"])){
+  if (empty($_POST["csrfToken"])){
   	echo "\nToken Error! May be CSRF attack!\n";
   	return false;
-  } else {
+  } else { 	
+  	
   	list($user, $pass, $token) = explode(",", authCode($_COOKIE["anehtaDoor"], $textKey, "DECODE"));
-  	if ($token != $_POST["csrfToken"]){
+  	//echo "token = $token\n";
+  	//echo "csrf = ".base64_decode($_POST["csrfToken"])."\n"; 
+
+  	if ($token != base64_decode($_POST["csrfToken"])){
   		echo "\nToken Error! May be CSRF attack!\n";
   		return false;
   	}
@@ -271,5 +277,5 @@
   $fp = fopen("../module/boomerang.js", "w+");
   fwrite($fp, "var target = \"$write_booemrangtarget\";\r\n"."var org_url = \"$write_boomerangsrc\";\r\n".$boomerang_raw);
   fclose($fp);
-  
+}
 ?>

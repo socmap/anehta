@@ -4,7 +4,7 @@
 
   header("Content-Type: text/html; charset=utf-8");
   
-  checkLoginStatus();
+  checkLoginStatus($U, $P, $textKey);
 ?>
 <html>
 <head>

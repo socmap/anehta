@@ -1,6 +1,6 @@
 <?php
 
-  require("xml.php");
+  include_once("xml.php");
 
   $U = "admin";  // 用户名
   $P = "123456";  // 密码
@@ -98,11 +98,13 @@
 
 
 
-  function checkLoginStatus(){
+  function checkLoginStatus($U, $P, $textKey){
   	if (!isset($_COOKIE["anehtaDoor"])){
   		echo "<html><script>window.location = \"login.php?redirect=".urlencode($_SERVER["PHP_SELF"])."\";</script></html>";
   		return false;
   	}
+  	
+  	//$textKey = "anehtaokok112@@sdsdwerrddfdsw";  // 加密密钥
   	
   	list($user, $pass, $token) = explode(",", authCode($_COOKIE["anehtaDoor"], $textKey, "DECODE"));
   	

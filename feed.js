@@ -15,12 +15,6 @@ var anehtaLibs = [
   {name: "AnehtaLib", url: "/library/anehta.js"},
   //{name: "DojoLib", url: "......"},
   {name: "JqueryLib", url: "/library/jquery.js"}
-  /*
-  {name: "UICore", url: "/server/js/ui.core.js"},
-	{name: "UICore", url: "/server/js/ui.draggable.js"},
-	{name: "UICore", url: "/server/js/ui.dialog.js"},
-	{name: "UICore", url: "/server/js/ui.resizable.js"}
-	*/
 ];
 
 var anehtaModules = [

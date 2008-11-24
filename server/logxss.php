@@ -3,13 +3,16 @@
 // Author: axis
 
 // 将slave信息存储到xml文件中
-require("xml.php");
+include_once("xml.php");
 
 //加载RSS类
 include_once("class/RSS_Class.php");
 
 //加载XML解析类
 include_once("class/xml_Class.php");
+
+// 加载QQWry IP库
+include_once("ip.php");
 
 // 加载XSS过滤库
 require_once ("../server/safe_php/Safe.php");
@@ -38,8 +41,8 @@ $slaveProxy = "";
 if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){ 
   $slaveProxy = $_SERVER['HTTP_X_FORWARDED_FOR'];
 }
+
 //查询地理位置
-require("ip.php");
 $slaveLocation = ip2location($slaveIP);
 $slaveLocation = iconv("gbk","utf-8",$slaveLocation); 
 
