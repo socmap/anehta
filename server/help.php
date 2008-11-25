@@ -4,7 +4,9 @@
 
   header("Content-Type: text/html; charset=utf-8");
   
-  checkLoginStatus($U, $P, $textKey);
+  if (checkLoginStatus($U, $P, $textKey) == false){
+  	return false;
+  }
 ?>
 <html>
 <head>

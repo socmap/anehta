@@ -38,9 +38,8 @@ function initData(){
 	    	
         // 释放内存
 	      setTimeout(function(){data = null;}, 500);	    	
-	    	
-	    });	 
-	setTimeout(function(){loadXSSsites();},1000);
+	    	setTimeout(function(){loadXSSsites();},1000);
+	    });	 	
 	
 	// 然后每隔10秒钟去取一次slave记录
 	setInterval(function(){
@@ -72,9 +71,8 @@ function initData(){
 
         // 释放内存
 	      setTimeout(function(){data = null;}, 500);	    	
-	    	
-	    });	    	
-	  setTimeout(function(){loadXSSsites();},1000);
+	    	setTimeout(function(){loadXSSsites();},1000);
+	    });	    		  
 	},
 	20000);	   	// 20秒    	 
 	 	

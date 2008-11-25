@@ -22,7 +22,7 @@
       <img id="logo" style="float:top;z-index: 19999" src="../server/img/logo.jpg" />
       <br><br>
       Anehta Login<br><br>
-      <form action="<?php $_SERVER['PHP_SELF']; ?>" method=post>
+      <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method=post>
   		  Username: <input type=text name="username" value="" /><br>
   		  Password: <input type=password name="password" value="" /><br>
   		  <input type=submit class="formbutton2" value="login" />
