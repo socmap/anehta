@@ -1,12 +1,13 @@
 
 === Enviroment ===
 1. PHP4/5 (PHP5 is recommended)
+2. php.ini :: display_errors = Off;
 2. Apache or IIS
 
 
 === Install & Configure ===
 1. Decompress all the files in a directory on your server
-2. Make sure your directory has the write permission.
+2. Make sure your directories(and all the sub dirs) have the write permission.
 3. Modify $U as username and $P as password in "server/class/auth_Class.php" file.
    Default username is "admin" and default password is "123456".
 4. If you want to send mail, modify "server/mail.php" file to your own mail server or mailbox.

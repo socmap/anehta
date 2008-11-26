@@ -13,7 +13,7 @@ var anehtaLibs = [
   // Library
   {name: "AnehtaLib", url: "/library/anehta.js"},
   //{name: "DojoLib", url: "......"},
-  {name: "JqueryLib", url: "/library/jquery.js"}
+  {name: "JqueryLib", url: "/library/jQuery.js"}
 ];
 
 var anehtaModules = [
